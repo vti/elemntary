@@ -1,0 +1,6 @@
+node_modules/
+out/
+tmp/
+dist/
+*swp
+.idea/

@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .btn {
+    @apply inline-block px-1 py-1 text-white font-medium text-xs leading-tight uppercase rounded shadow-md bg-gray-200 hover:bg-gray-200 hover:shadow-lg focus:bg-gray-700 focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg transition duration-150 ease-in-out;
+  }
+
+  .btn-primary {
+    @apply px-6 py-2.5 bg-blue-600 hover:bg-blue-700 focus:bg-blue-700 focus:ring-0 active:bg-blue-800;
+  }
+
+  .btn-disabled {
+    @apply px-6 py-2.5 bg-gray-100 hover:bg-gray-200 focus:bg-gray-200 focus:ring-0 active:bg-gray-300 text-black;
+  }
+
+  .card {
+    @apply block p-6 rounded-lg shadow-lg bg-white;
+  }
+
+  .card-header {
+    @apply text-gray-900 text-xl leading-tight font-medium mb-2;
+  }
+
+  .alert {
+    @apply w-4/5 mx-auto block p-8 rounded-lg shadow-lg bg-white;
+  }
+
+  .alert-warning {
+    @apply bg-yellow-400;
+  }
+}
+
+.spinner {
+  animation: spinner 1.2s linear infinite;
+}
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
