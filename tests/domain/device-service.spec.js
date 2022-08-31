@@ -12,6 +12,8 @@ describe("suite", () => {
             code: 0,
             stdout: `List of devices attached
 W4IZAMAIBASWV4MR       device usb:1-3 product:tidy_goertek2601_l model:ELEMNT_BOLT device:goertek2601_l transport_id:33
+43212600473            device usb:1-2.2 product:bolt2p0 model:ELEMNT_BOLT2 device:bolt2p0 transport_id:4
+S47T4P7HI7NNTWY9       device usb:1-9 product:elemnt_v2 model:ELEMNT device:goertek2601_l transport_id:4
 
 `,
           },
@@ -23,6 +25,8 @@ W4IZAMAIBASWV4MR       device usb:1-3 product:tidy_goertek2601_l model:ELEMNT_BO
 
     expect(devices).toStrictEqual([
       new Device("W4IZAMAIBASWV4MR", "ELEMNT BOLT", true),
+      new Device("43212600473", "ELEMNT BOLT2", true),
+      new Device("S47T4P7HI7NNTWY9", "ELEMNT BOLT2", true),
     ]);
   });
 

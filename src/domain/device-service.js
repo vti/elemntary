@@ -33,15 +33,25 @@ class DeviceService {
             return new Device(id, model, false);
           }
 
-          v.replace(/model:(ELEMNT_.*?)\s+/, function ($0, $1) {
+          v.replace(/model:(ELEMNT.*?)\s+/, function ($0, $1) {
             model = $1.replace(/_/, " ");
           });
 
-          return new Device(id, model, true);
-        })
-        .sort((a, b) => (a === b ? 0 : a ? -1 : 1));
+          if (model == "ELEMNT") {
+            if (/product:elemnt_v2/.test(v)) {
+              model = "ELEMNT BOLT2";
+            } else {
+              model = "ELEMNT BOLT";
+            }
+          }
 
-      DEBUG && console.log({ devices });
+          return new Device(id, model, true);
+        });
+
+      let authorized = devices.filter((d) => d.isAuthorized());
+      let notAuthorized = devices.filter((d) => !d.isAuthorized());
+
+      DEBUG && console.log({ devices: [...authorized, ...notAuthorized] });
 
       return devices;
     });
