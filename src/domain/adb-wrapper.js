@@ -5,7 +5,11 @@ class AdbWrapper {
 
   run(args) {
     return new Promise((resolve, reject) => {
-      const command = `./contrib/adb/${process.platform}/adb`;
+      const mode = process.env.NODE_ENV || "production";
+
+      const command =
+        (mode === "production" ? process.resourcesPath + "/app/" : "") +
+        `contrib/adb/${process.platform}/adb`;
 
       if (process.platform == "win32") {
         command += ".exe";
