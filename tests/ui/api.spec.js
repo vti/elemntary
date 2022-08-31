@@ -18,6 +18,6 @@ describe("suite", () => {
 
     await api.loadDevices();
 
-    expect(data.devices).toHaveLength(2);
+    expect(data.devices).toHaveLength(3);
   });
 });
