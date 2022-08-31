@@ -4,7 +4,7 @@ const AdbWrapper = require("../domain/adb-wrapper.js");
 const DeviceService = require("../domain/device-service.js");
 
 // Stop the app launching multiple times during install on Windows
-if (require('electron-squirrel-startup')) return app.quit();
+if (require("electron-squirrel-startup")) return app.quit();
 
 const createWindow = () => {
   const win = new BrowserWindow({
