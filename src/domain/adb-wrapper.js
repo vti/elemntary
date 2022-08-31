@@ -7,6 +7,10 @@ class AdbWrapper {
     return new Promise((resolve, reject) => {
       const command = `./contrib/adb/${process.platform}/adb`;
 
+      if (process.platform == 'win32') {
+        command += '.exe';
+      }
+
       console.log(
         "$ " + command + " " + args.map((v) => "'" + v + "'").join(" ")
       );
