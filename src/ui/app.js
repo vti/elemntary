@@ -63,7 +63,7 @@ function device() {
   {{/loaders.device}}
   {{#device}}
   {{^loaders.device}}
-  <div class="space-y-4">
+  <div class="space-y-4 pb-4">
 
   <h1 class="text-xl">{{model}} {{id}}</h1>
 
