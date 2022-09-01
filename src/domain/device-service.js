@@ -6,8 +6,6 @@ const Feature = require("./feature.js");
 const Features = require("./features.js");
 const Device = require("./device.js");
 
-const DEBUG = 0;
-
 class DeviceService {
   constructor(options) {
     this.adb = options.adbWrapper || new AdbWrapper();
@@ -50,9 +48,7 @@ class DeviceService {
       let authorized = devices.filter((d) => d.isAuthorized());
       let notAuthorized = devices.filter((d) => !d.isAuthorized());
 
-      DEBUG && console.log({ devices: [...authorized, ...notAuthorized] });
-
-      return devices;
+      return [...authorized, ...notAuthorized];
     });
   }
 
