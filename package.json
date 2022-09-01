@@ -6,7 +6,7 @@
   "author": "Viacheslav Tykhanovskyi",
   "license": "MIT",
   "scripts": {
-    "start": "webpack --mode production && npx tailwindcss -i ./src/ui/input.css -o ./dist/styles.css && NODE_ENV=development electron-forge start",
+    "start": "webpack --mode production && npx tailwindcss -i ./src/ui/input.css -o ./dist/styles.css && cross-env NODE_ENV=development electron-forge start",
     "package": "webpack --mode production && npx tailwindcss -i ./src/ui/input.css -o ./dist/styles.css && electron-forge package",
     "make": "webpack --mode production && npx tailwindcss -i ./src/ui/input.css -o ./dist/styles.css && electron-forge make",
     "format": "prettier --write '{src,tests}/**/*.{js,jsx,ts,tsx,css,md,json}'",
@@ -27,6 +27,7 @@
     "webpack-cli": "^4.10.0"
   },
   "dependencies": {
+    "cross-env": "^7.0.3",
     "electron-squirrel-startup": "^1.0.0",
     "extract-zip": "^2.0.1"
   },

@@ -7,7 +7,7 @@ class AdbWrapper {
     return new Promise((resolve, reject) => {
       const mode = process.env.NODE_ENV || "production";
 
-      const command =
+      let command =
         (mode === "production" ? process.resourcesPath + "/app/" : "") +
         `contrib/adb/${process.platform}/adb`;
 
