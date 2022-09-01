@@ -1,0 +1,36 @@
+name: Build
+on: [push]
+jobs:
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'yarn'
+      - run: yarn install
+      - run: yarn test
+      - run: yarn make
+      - uses: actions/upload-artifact@v3
+        with:
+          name: linux-bundle
+          path: |
+            out/make/zip/linux/x64/*zip
+          if-no-files-found: error
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'yarn'
+      - run: yarn install
+      - run: yarn test
+      - run: yarn make
+      - uses: actions/upload-artifact@v3
+        with:
+          name: windows-bundle
+          path: out/make/zip/win32/x64/*zip
+          if-no-files-found: error
