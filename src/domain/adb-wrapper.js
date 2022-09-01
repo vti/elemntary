@@ -21,9 +21,9 @@ class AdbWrapper {
 
       const adb = spawn(command, args);
 
-      let stdout = "";
+      let stdout = Buffer.from("");
       adb.stdout.on("data", (data) => {
-        stdout += data;
+        stdout = Buffer.concat([stdout, data]);
       });
 
       let stderr = "";

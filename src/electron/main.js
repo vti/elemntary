@@ -1,10 +1,15 @@
-const { app, BrowserWindow, ipcMain, dialog } = require("electron");
 const path = require("path");
+
+const { app, BrowserWindow, ipcMain, dialog } = require("electron");
+const contextMenu = require("electron-context-menu");
+
 const AdbWrapper = require("../domain/adb-wrapper.js");
 const DeviceService = require("../domain/device-service.js");
 
 // Stop the app launching multiple times during install on Windows
 if (require("electron-squirrel-startup")) return app.quit();
+
+contextMenu({ showSaveImageAs: true });
 
 const createWindow = () => {
   const win = new BrowserWindow({
@@ -77,6 +82,12 @@ app.whenReady().then(() => {
         win.webContents.send("features-saved");
       });
     }
+  });
+
+  ipcMain.handle("takeScreenshot", (_event, deviceId) => {
+    deviceService.takeScreenshot(deviceId).then((image) => {
+      win.webContents.send("screenshot", image);
+    });
   });
 
   win = createWindow();

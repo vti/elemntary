@@ -83,6 +83,20 @@ class Api {
   selectFile() {
     return this.api.selectFile();
   }
+
+  takeScreenshot(deviceId) {
+    if (!deviceId) return;
+
+    this.data.loaders.takeScreenshot = true;
+
+    this.data.device.screenshot = null;
+
+    this.api.takeScreenshot(deviceId).then((image) => {
+      this.data.device.screenshot = image;
+
+      this.data.loaders.takeScreenshot = false;
+    });
+  }
 }
 
 module.exports = Api;

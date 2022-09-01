@@ -16,6 +16,7 @@ class DeviceService {
   listDevices() {
     return this.adb.run(["devices", "-l"]).then((stdout) => {
       let devices = stdout
+        .toString()
         .split(/\r?\n/)
         .filter((v, i) => {
           return /authorized/.test(v) || (/device/.test(v) && /ELEMNT/.test(v));
@@ -41,7 +42,7 @@ class DeviceService {
           if (model == "ELEMNT" && /product:elemnt_v2/.test(v)) model += " V2";
 
           // Fix versioning
-          model = model.replace(/BOLT2/, 'BOLT V2');
+          model = model.replace(/BOLT2/, "BOLT V2");
 
           return new Device(id, model, true);
         });
@@ -59,9 +60,12 @@ class DeviceService {
     return this.adb
       .run(["-s", deviceId, "shell", "ls", "/sdcard/"])
       .then((stdout) => {
-        let files = stdout.split(/\r?\n/).filter((v, i) => {
-          return /^cfg_/i.test(v);
-        });
+        let files = stdout
+          .toString()
+          .split(/\r?\n/)
+          .filter((v, i) => {
+            return /^cfg_/i.test(v);
+          });
 
         let features = [];
 
@@ -165,6 +169,14 @@ class DeviceService {
         "com.wahoofitness.bolt.service.BMapManager.RELOAD_MAP",
       ]),
     ]);
+  }
+
+  takeScreenshot(deviceId) {
+    return this.adb
+      .run(["-s", deviceId, "exec-out", "screencap", "-p"])
+      .then((stdout) => {
+        return stdout.toString("base64");
+      });
   }
 }
 

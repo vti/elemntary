@@ -52,6 +52,16 @@ class ElectronApi {
       });
     });
   }
+
+  takeScreenshot(deviceId) {
+    return new Promise((resolve, reject) => {
+      window.electronAPI.takeScreenshot(deviceId);
+
+      window.electronAPI.onScreenshot((_event, image) => {
+        resolve(image);
+      });
+    });
+  }
 }
 
 module.exports = ElectronApi;
