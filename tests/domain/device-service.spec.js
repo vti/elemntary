@@ -10,12 +10,12 @@ describe("suite", () => {
         replies: [
           {
             code: 0,
-            stdout: `List of devices attached
+            stdout: Buffer.from(`List of devices attached
 W4IZAMAIBASWV4MR       device usb:1-3 product:tidy_goertek2601_l model:ELEMNT_BOLT device:goertek2601_l transport_id:33
 43212600473            device usb:1-2.2 product:bolt2p0 model:ELEMNT_BOLT2 device:bolt2p0 transport_id:4
 S47T4P7HI7NNTWY9       device usb:1-9 product:elemnt_v2 model:ELEMNT device:goertek2601_l transport_id:4
 
-`,
+`),
           },
         ],
       }),
@@ -36,10 +36,10 @@ S47T4P7HI7NNTWY9       device usb:1-9 product:elemnt_v2 model:ELEMNT device:goer
         replies: [
           {
             code: 0,
-            stdout: `List of devices attached
+            stdout: Buffer.from(`List of devices attached
 43212600473            unauthorized usb:1-2.2 transport_id:39
 
-`,
+`),
           },
         ],
       }),
@@ -58,10 +58,10 @@ S47T4P7HI7NNTWY9       device usb:1-9 product:elemnt_v2 model:ELEMNT device:goer
         replies: [
           {
             code: 0,
-            stdout: `List of devices attached
+            stdout: Buffer.from(`List of devices attached
 ZY3266V977             device usb:1-2.2 product:lineage_ocean model:moto_g_7__power device:ocean transport_id:42
 
-`,
+`),
           },
         ],
       }),
@@ -78,7 +78,7 @@ ZY3266V977             device usb:1-2.2 product:lineage_ocean model:moto_g_7__po
         replies: [
           {
             code: 0,
-            stdout: `.crash
+            stdout: Buffer.from(`.crash
 cfg_MapPanZoom
 exports
 factory
@@ -89,7 +89,7 @@ plans
 routes
 system_update
 system_update_elemnt
-`,
+`),
           },
         ],
       }),

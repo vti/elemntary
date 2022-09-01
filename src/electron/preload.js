@@ -15,4 +15,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
   saveFeatures: (deviceId, features) =>
     ipcRenderer.invoke("saveFeatures", deviceId, features),
   onFeaturesSaved: (callback) => ipcRenderer.on("features-saved", callback),
+
+  takeScreenshot: (deviceId) => ipcRenderer.invoke("takeScreenshot", deviceId),
+  onScreenshot: (callback) => ipcRenderer.on("screenshot", callback),
 });

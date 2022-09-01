@@ -106,6 +106,33 @@ function device() {
   </div>
 
   <div class="card">
+    <h5 class="card-header">Screenshots</h5>
+    <div class="flex flex-wrap gap-4">
+      {{#loaders.takeScreenshot}}
+      <div class="w-full mt-10">
+        <img class="spinner mx-auto" src="icons/feather/loader.svg" width="80" />
+      </div>
+      {{/loaders.takeScreenshot}}
+      {{^loaders.takeScreenshot}}
+      <div>
+        <p class="text-gray-700 text-base mb-4">
+          Take a screenshot.
+        </p>
+        <div>
+          <button class="btn btn-primary" data-id="{{id}}" data-click="takeScreenshot">Take screenshot</button>
+        </div>
+      </div>
+      <div class="flex-grow"></div>
+      <div>
+        {{#device.screenshot}}
+        <img src="data:image/png;base64,{{device.screenshot}}">
+        {{/device.screenshot}}
+      </div>
+      {{/loaders.takeScreenshot}}
+    </div>
+  </div>
+
+  <div class="card">
     <div class="flex">
       <h5 class="flex-shrink-0 card-header">Hidden Features</h5>
 
@@ -281,6 +308,13 @@ const handlers = {
     let path = $(".file-browse").text();
 
     api.uploadMap($el.data("id"), path);
+  },
+  takeScreenshot(_event, el) {
+    let $el = $(el);
+
+    let deviceId = $el.data("id");
+
+    api.takeScreenshot(deviceId);
   },
 };
 
