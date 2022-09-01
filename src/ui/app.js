@@ -29,8 +29,16 @@ function devices() {
         <input type="radio" name="device" value="{{id}}" class="device-radio" {{#selected}}checked="checked"{{/selected}}>
       </div>
       <div>
-        {{model}}<br />
-        {{id}}
+        <div>
+          {{model}}
+        </div>
+        <div>{{id}}</div>
+        <div class="flex items-center gap-1">
+          <div class="w-10 bg-gray-200 h-2">
+            <div class="bg-green-600 h-2" style="width: {{batteryInfo.level}}%"></div>
+          </div>
+          <span class="text-xs">{{batteryInfo.level}}%</span>
+        </div>
       </div>
     </div>
   {{/authorized}}

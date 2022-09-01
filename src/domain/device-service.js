@@ -2,9 +2,9 @@ const extract = require("extract-zip");
 const process = require("process");
 const fs = require("fs");
 const AdbWrapper = require("./adb-wrapper.js");
+const AdbResponse = require("./adb-response.js");
 const Feature = require("./feature.js");
 const Features = require("./features.js");
-const Device = require("./device.js");
 
 class DeviceService {
   constructor(options) {
@@ -13,42 +13,27 @@ class DeviceService {
 
   listDevices() {
     return this.adb.run(["devices", "-l"]).then((stdout) => {
-      let devices = stdout
-        .toString()
-        .split(/\r?\n/)
-        .filter((v, i) => {
-          return /authorized/.test(v) || (/device/.test(v) && /ELEMNT/.test(v));
-        })
-        .map((v) => {
-          let id = "";
+      let devices = new AdbResponse().parseDevices(stdout.toString());
 
-          v.replace(/(^[^\s]+)\s+/, function ($0, $1) {
-            id = $1;
-          });
+      let authorized = devices.filter((d) => d.authorized);
+      let notAuthorized = devices.filter((d) => !d.authorized);
 
-          let model = "UNKNOWN";
+      if (authorized.length == 0) {
+        return [...authorized, ...notAuthorized];
+      }
 
-          if (/unauthorized/.test(v)) {
-            return new Device(id, model, false);
-          }
+      let batteryPromises = [];
+      authorized.forEach((device) => {
+        batteryPromises.push(this.getBatteryInfo(device.id));
+      });
 
-          v.replace(/model:(ELEMNT.*?)\s+/, function ($0, $1) {
-            model = $1.replace(/_/, " ");
-          });
-
-          // Old ELEMNT
-          if (model == "ELEMNT" && /product:elemnt_v2/.test(v)) model += " V2";
-
-          // Fix versioning
-          model = model.replace(/BOLT2/, "BOLT V2");
-
-          return new Device(id, model, true);
+      return Promise.all(batteryPromises).then((data) => {
+        data.forEach((batteryInfo, i) => {
+          authorized[i].batteryInfo = batteryInfo;
         });
 
-      let authorized = devices.filter((d) => d.isAuthorized());
-      let notAuthorized = devices.filter((d) => !d.isAuthorized());
-
-      return [...authorized, ...notAuthorized];
+        return [...authorized, ...notAuthorized];
+      });
     });
   }
 
@@ -76,6 +61,12 @@ class DeviceService {
 
         return features;
       });
+  }
+
+  getBatteryInfo(deviceId) {
+    return this.adb
+      .run(["-s", deviceId, "shell", "dumpsys", "battery"])
+      .then((stdout) => new AdbResponse().parseBatteryInfo(stdout.toString()));
   }
 
   enableFeature(deviceId, feature) {
