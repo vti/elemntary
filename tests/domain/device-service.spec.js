@@ -25,8 +25,8 @@ S47T4P7HI7NNTWY9       device usb:1-9 product:elemnt_v2 model:ELEMNT device:goer
 
     expect(devices).toStrictEqual([
       new Device("W4IZAMAIBASWV4MR", "ELEMNT BOLT", true),
-      new Device("43212600473", "ELEMNT BOLT2", true),
-      new Device("S47T4P7HI7NNTWY9", "ELEMNT BOLT2", true),
+      new Device("43212600473", "ELEMNT BOLT V2", true),
+      new Device("S47T4P7HI7NNTWY9", "ELEMNT V2", true),
     ]);
   });
 

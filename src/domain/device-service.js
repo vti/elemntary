@@ -37,13 +37,11 @@ class DeviceService {
             model = $1.replace(/_/, " ");
           });
 
-          if (model == "ELEMNT") {
-            if (/product:elemnt_v2/.test(v)) {
-              model = "ELEMNT BOLT2";
-            } else {
-              model = "ELEMNT BOLT";
-            }
-          }
+          // Old ELEMNT
+          if (model == "ELEMNT" && /product:elemnt_v2/.test(v)) model += " V2";
+
+          // Fix versioning
+          model = model.replace(/BOLT2/, 'BOLT V2');
 
           return new Device(id, model, true);
         });
