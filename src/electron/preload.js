@@ -18,4 +18,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
 
   takeScreenshot: (deviceId) => ipcRenderer.invoke("takeScreenshot", deviceId),
   onScreenshot: (callback) => ipcRenderer.on("screenshot", callback),
+
+  getApkInfo: (deviceId) => ipcRenderer.invoke("getApkInfo", deviceId),
+  onApkInfo: (callback) => ipcRenderer.on("apk-info", callback),
 });

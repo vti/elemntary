@@ -76,6 +76,25 @@ function device() {
   <h1 class="text-xl">{{model}} {{id}}</h1>
 
   <div class="card">
+    <h5 class="card-header">Software</h5>
+    <div class="flex flex-wrap gap-4">
+      {{#loaders.apkInfo}}
+      <div class="w-full">
+        <img class="spinner mx-auto" src="icons/feather/loader.svg" width="80" />
+      </div>
+      {{/loaders.apkInfo}}
+      {{^loaders.apkInfo}}
+      <div>
+        <p class="text-gray-700 text-base mb-4">
+          Version: {{device.apkInfo.versionName}} ({{device.apkInfo.versionCode}})<br />
+          Last updated: {{device.apkInfo.lastUpdated}}
+        </p>
+      </div>
+      {{/loaders.apkInfo}}
+    </div>
+  </div>
+
+  <div class="card">
     <h5 class="card-header">Maps</h5>
     <p class="text-gray-700 text-base mb-4">
       Upload previously generated maps directly to your device. Please choose a ZIP file. Maps are created by using <a

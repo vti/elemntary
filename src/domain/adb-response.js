@@ -60,6 +60,30 @@ class AdbResponse {
 
     return info;
   }
+
+  parseApkInfo(data) {
+    let lines = data.split(/\r?\n/);
+
+    let info = {};
+
+    lines.forEach((line) => {
+      if (/^\s+versionCode=/.test(line)) {
+        line.replace(/versionCode=(\d+)/, function ($0, $1) {
+          info.versionCode = $1;
+        });
+      } else if (/^\s+versionName=/.test(line)) {
+        line.replace(/versionName=([^\s]+)/, function ($0, $1) {
+          info.versionName = $1;
+        });
+      } else if (/^\s+lastUpdateTime=/.test(line)) {
+        line.replace(/lastUpdateTime=(.*)$/, function ($0, $1) {
+          info.lastUpdated = $1;
+        });
+      }
+    });
+
+    return info;
+  }
 }
 
 module.exports = AdbResponse;
