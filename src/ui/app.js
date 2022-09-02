@@ -272,8 +272,8 @@ function app() {
   {{/loaders.devices}}
   {{/devices}}
   {{#devices.0}}
-  <div class="flex">
-      <div class="flex-none w-1/3 pt-4">
+  <div class="grid grid-cols-3">
+      <div class="col-span-1 self-start sticky top-0 pt-4">
           <div class="pl-4 pr-4 pb-4 flex">
             <span>Devices</span>
             <div class="flex-grow"></div>
@@ -282,7 +282,7 @@ function app() {
 
           {{{devicesComponent}}}
       </div>
-      <div class="w-full h-screen bg-gray-50 p-4">
+      <div class="col-span-2 bg-gray-50 p-4">
           {{{device}}}
       </div>
   </div>
