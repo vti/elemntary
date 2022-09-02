@@ -30,6 +30,7 @@ class Api {
     this.data.device = device;
 
     this.loadDeviceFeatures(deviceId);
+    this.loadApkInfo(deviceId);
   }
 
   uploadMap(deviceId, path) {
@@ -70,6 +71,16 @@ class Api {
     });
   }
 
+  loadApkInfo(deviceId) {
+    if (!deviceId) return;
+
+    return this.loaderProxy("apkInfo", () => {
+      return this.api.loadApkInfo(deviceId).then((info) => {
+        this.data.device.apkInfo = info;
+      });
+    });
+  }
+
   saveFeatures(deviceId, features) {
     if (!deviceId) return;
 
@@ -96,6 +107,20 @@ class Api {
 
       this.data.loaders.takeScreenshot = false;
     });
+  }
+
+  loaderProxy(loader, callback) {
+    this.data.loaders[loader] = true;
+
+    return callback()
+      .then((data) => {
+        this.data.loaders[loader] = false;
+
+        return data;
+      })
+      .catch((e) => {
+        this.data.loaders[loader] = false;
+      });
   }
 }
 

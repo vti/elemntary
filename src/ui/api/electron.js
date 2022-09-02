@@ -62,6 +62,16 @@ class ElectronApi {
       });
     });
   }
+
+  loadApkInfo(deviceId) {
+    return new Promise((resolve, reject) => {
+      window.electronAPI.getApkInfo(deviceId);
+
+      window.electronAPI.onApkInfo((_event, info) => {
+        resolve(info);
+      });
+    });
+  }
 }
 
 module.exports = ElectronApi;

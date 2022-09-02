@@ -89,4 +89,55 @@ Current Battery Service state:
       "wireless-powered": "false",
     });
   });
+
+  test("parses apk info", async () => {
+    let apkInfo = new AdbResponse().parseApkInfo(
+      `
+Packages:
+  Package [com.wahoofitness.bolt] (171c052):
+    userId=10057 gids=[3002, 3001, 1028, 1015, 3003]
+    pkg=Package{17740f23 com.wahoofitness.bolt}
+    codePath=/data/app/com.wahoofitness.bolt-1
+    resourcePath=/data/app/com.wahoofitness.bolt-1
+    legacyNativeLibraryDir=/data/app/com.wahoofitness.bolt-1/lib
+    primaryCpuAbi=armeabi-v7a
+    secondaryCpuAbi=null
+    versionCode=15152 targetSdk=30
+    versionName=1.60.0.70
+    splits=[base]
+    applicationInfo=ApplicationInfo{10726b1a com.wahoofitness.bolt}
+    flags=[ HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP LARGE_HEAP ]
+    dataDir=/data/data/com.wahoofitness.bolt
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    timeStamp=2022-08-31 05:51:07
+    firstInstallTime=2017-02-16 16:49:30
+    lastUpdateTime=2022-08-31 05:51:21
+    installerPackageName=com.wahoofitness.bolt
+    signatures=PackageSignatures{31194c20 [1db759d9]}
+    permissionsFixed=true haveGids=true installStatus=1
+    pkgFlags=[ HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP LARGE_HEAP ]
+    User 0:  installed=true hidden=false stopped=false notLaunched=false enabled=0
+    grantedPermissions:
+      android.permission.WRITE_SETTINGS
+      android.permission.ACCESS_FINE_LOCATION
+      android.permission.ACCESS_MOCK_LOCATION
+      android.permission.SET_TIME_ZONE
+      android.permission.BLUETOOTH
+      android.permission.INTERNET
+      android.permission.BLUETOOTH_ADMIN
+      android.permission.READ_EXTERNAL_STORAGE
+      android.permission.CHANGE_WIFI_STATE
+      android.permission.ACCESS_NETWORK_STATE
+      android.permission.WRITE_EXTERNAL_STORAGE
+      android.permission.ACCESS_WIFI_STATE
+      android.permission.WAKE_LOCK
+`
+    );
+
+    expect(apkInfo).toEqual({
+      lastUpdated: "2022-08-31 05:51:21",
+      versionCode: "15152",
+      versionName: "1.60.0.70",
+    });
+  });
 });

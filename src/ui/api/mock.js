@@ -85,6 +85,16 @@ class MockApi {
       }, this.delay);
     });
   }
+
+  loadApkInfo(deviceid) {
+    return new Promise((resolve, reject) => {
+      resolve({
+        lastUpdated: "2022-08-31 05:51:21",
+        versionCode: "15152",
+        versionName: "1.60.0.70",
+      });
+    });
+  }
 }
 
 module.exports = MockApi;

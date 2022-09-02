@@ -90,6 +90,12 @@ app.whenReady().then(() => {
     });
   });
 
+  ipcMain.handle("getApkInfo", (_event, deviceId) => {
+    deviceService.getApkInfo(deviceId).then((info) => {
+      win.webContents.send("apk-info", info);
+    });
+  });
+
   win = createWindow();
 
   app.on("activate", () => {

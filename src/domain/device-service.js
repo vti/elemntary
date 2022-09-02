@@ -69,6 +69,19 @@ class DeviceService {
       .then((stdout) => new AdbResponse().parseBatteryInfo(stdout.toString()));
   }
 
+  getApkInfo(deviceId) {
+    return this.adb
+      .run([
+        "-s",
+        deviceId,
+        "shell",
+        "dumpsys",
+        "package",
+        "com.wahoofitness.bolt",
+      ])
+      .then((stdout) => new AdbResponse().parseApkInfo(stdout.toString()));
+  }
+
   enableFeature(deviceId, feature) {
     return this.adb.run([
       "-s",
