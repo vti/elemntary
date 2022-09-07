@@ -20,7 +20,7 @@ const createWindow = () => {
     },
   });
 
-  win.loadFile("./src/ui/index.html");
+  win.loadFile("./dist/index.html");
 
   return win;
 };

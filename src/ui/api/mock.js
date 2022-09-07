@@ -6,6 +6,7 @@ class MockApi {
       WASDASD898WQDAS1: {
         model: "ELEMNT BOLT",
         authorized: true,
+        selected: false,
         features: [
           { id: "FEATURE-1", name: "Feature 1", enabled: true },
           { id: "FEATURE-2", name: "Feature 2", enabled: false },
@@ -14,6 +15,7 @@ class MockApi {
       WASDASD898WQDAS2: {
         model: "ELEMNT BOLT2",
         authorized: true,
+        selected: false,
         features: [
           { id: "FEATURE-1", name: "Feature 1", enabled: false },
           { id: "FEATURE-2", name: "Feature 2", enabled: false },
@@ -22,6 +24,7 @@ class MockApi {
       WASDASD898WQDAS3: {
         model: "UNKNOWN",
         authorized: false,
+        selected: false,
         features: [],
       },
     };
@@ -34,6 +37,14 @@ class MockApi {
           return { id: k, ...this.data[k] };
         });
         resolve(devices);
+      }, this.delay);
+    });
+  }
+
+  getDevice(deviceId) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve({ id: deviceId, ...this.data[deviceId] });
       }, this.delay);
     });
   }
@@ -88,11 +99,13 @@ class MockApi {
 
   loadApkInfo(deviceid) {
     return new Promise((resolve, reject) => {
-      resolve({
-        lastUpdated: "2022-08-31 05:51:21",
-        versionCode: "15152",
-        versionName: "1.60.0.70",
-      });
+      setTimeout(() => {
+        resolve({
+          lastUpdated: "2022-08-31 05:51:21",
+          versionCode: "15152",
+          versionName: "1.60.0.70",
+        });
+      }, this.delay);
     });
   }
 }
