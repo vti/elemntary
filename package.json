@@ -19,7 +19,6 @@
     "@electron-forge/maker-squirrel": "^6.0.0-beta.65",
     "@electron-forge/maker-zip": "^6.0.0-beta.65",
     "electron": "^20.0.3",
-    "electron-context-menu": "^3.5.0",
     "imports-loader": "^4.0.1",
     "jest": "^29.0.1",
     "prettier": "^2.7.1",
@@ -30,7 +29,8 @@
   "dependencies": {
     "cross-env": "^7.0.3",
     "electron-squirrel-startup": "^1.0.0",
-    "extract-zip": "^2.0.1"
+    "extract-zip": "^2.0.1",
+    "electron-context-menu": "^3.5.0"
   },
   "config": {
     "forge": {
