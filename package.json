@@ -42,26 +42,12 @@
       },
       "makers": [
         {
-          "name": "@electron-forge/maker-squirrel",
-          "config": {
-            "name": "elemntary"
-          }
-        },
-        {
           "name": "@electron-forge/maker-zip",
           "platforms": [
             "linux",
             "win32",
             "darwin"
           ]
-        },
-        {
-          "name": "@electron-forge/maker-deb",
-          "config": {}
-        },
-        {
-          "name": "@electron-forge/maker-rpm",
-          "config": {}
         }
       ]
     }
