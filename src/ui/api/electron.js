@@ -9,6 +9,18 @@ class ElectronApi {
     });
   }
 
+  getDevice(deviceId) {
+    return this.listDevices().then((devices) => {
+      let filtered = devices.filter((d) => d.id == deviceId);
+
+      if (filtered.length == 1) {
+        return filtered[0];
+      }
+
+      return null;
+    });
+  }
+
   listDeviceFeatures(deviceId) {
     return new Promise((resolve, reject) => {
       window.electronAPI.getFeatures(deviceId);
