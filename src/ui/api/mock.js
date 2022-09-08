@@ -108,6 +108,30 @@ class MockApi {
       }, this.delay);
     });
   }
+
+  clearCache(deviceid) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve();
+      }, this.delay);
+    });
+  }
+
+  restartApplication(deviceid) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve();
+      }, this.delay);
+    });
+  }
+
+  reboot(deviceid) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve();
+      }, this.delay);
+    });
+  }
 }
 
 module.exports = MockApi;

@@ -178,6 +178,21 @@ class DeviceService {
         return stdout.toString("base64");
       });
   }
+
+  restartApplication(deviceId) {
+    return this.adb.run([
+      "-s",
+      deviceId,
+      "shell",
+      "am",
+      "force-stop",
+      "com.wahoofitness.bolt",
+    ]);
+  }
+
+  reboot(deviceId) {
+    return this.adb.run(["-s", deviceId, "reboot"]);
+  }
 }
 
 module.exports = DeviceService;
