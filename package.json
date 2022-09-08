@@ -7,6 +7,7 @@
   "license": "MIT",
   "scripts": {
     "start": "vue-cli-service build && cross-env NODE_ENV=development electron-forge start",
+    "start-local-server": "cross-env NODE_ENV=development LOCAL_SERVER=http://localhost:8080 electron-forge start",
     "serve": "yarn run vue-cli-service serve",
     "serve-mock": "yarn run vue-cli-service serve --mode mock",
     "package": "vue-cli-service build && electron-forge package",

@@ -20,7 +20,11 @@ const createWindow = () => {
     },
   });
 
-  win.loadFile("./dist/index.html");
+  if (process.env.LOCAL_SERVER) {
+    win.loadURL(process.env.LOCAL_SERVER);
+  } else {
+    win.loadFile("./dist/index.html");
+  }
 
   return win;
 };
