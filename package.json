@@ -8,6 +8,7 @@
   "scripts": {
     "start": "vue-cli-service build && cross-env NODE_ENV=development electron-forge start",
     "serve": "yarn run vue-cli-service serve",
+    "serve-mock": "yarn run vue-cli-service serve --mode mock",
     "package": "vue-cli-service build && electron-forge package",
     "make": "vue-cli-service build && electron-forge make",
     "format": "prettier --write '{src,tests}/**/*.{js,jsx,ts,tsx,css,md,json,vue}'",
