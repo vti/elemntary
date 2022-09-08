@@ -12,6 +12,8 @@
         <device-screenshots-card :deviceId="device.id" />
 
         <device-features-card :deviceId="device.id" />
+
+        <device-system-card :deviceId="device.id" />
       </div>
     </div>
   </div>
@@ -22,6 +24,7 @@ import DeviceSoftwareCard from "./device-software-card.vue";
 import DeviceUploadMapCard from "./device-upload-map-card.vue";
 import DeviceScreenshotsCard from "./device-screenshots-card.vue";
 import DeviceFeaturesCard from "./device-features-card.vue";
+import DeviceSystemCard from "./device-system-card.vue";
 import Spinner from "./spinner.vue";
 
 export default {
@@ -31,6 +34,7 @@ export default {
     DeviceUploadMapCard,
     DeviceScreenshotsCard,
     DeviceFeaturesCard,
+    DeviceSystemCard,
     Spinner,
   },
   data() {

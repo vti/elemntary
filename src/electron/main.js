@@ -96,6 +96,24 @@ app.whenReady().then(() => {
     });
   });
 
+  ipcMain.handle("clearCache", (_event, deviceId) => {
+    deviceService.clearCache(deviceId).then(() => {
+      win.webContents.send("cache-cleared");
+    });
+  });
+
+  ipcMain.handle("restartApplication", (_event, deviceId) => {
+    deviceService.restartApplication(deviceId).then(() => {
+      win.webContents.send("application-restarted");
+    });
+  });
+
+  ipcMain.handle("reboot", (_event, deviceId) => {
+    deviceService.reboot(deviceId).then(() => {
+      win.webContents.send("rebooted");
+    });
+  });
+
   win = createWindow();
 
   app.on("activate", () => {

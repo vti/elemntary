@@ -21,4 +21,15 @@ contextBridge.exposeInMainWorld("electronAPI", {
 
   getApkInfo: (deviceId) => ipcRenderer.invoke("getApkInfo", deviceId),
   onApkInfo: (callback) => ipcRenderer.on("apk-info", callback),
+
+  clearCache: (deviceId) => ipcRenderer.invoke("clearCache", deviceId),
+  onCacheCleared: (callback) => ipcRenderer.on("cache-cleared", callback),
+
+  restartApplication: (deviceId) =>
+    ipcRenderer.invoke("restartApplication", deviceId),
+  onApplicationRestarted: (callback) =>
+    ipcRenderer.on("application-restarted", callback),
+
+  reboot: (deviceId) => ipcRenderer.invoke("reboot", deviceId),
+  onRebooted: (callback) => ipcRenderer.on("rebooted", callback),
 });
