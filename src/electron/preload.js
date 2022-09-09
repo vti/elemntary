@@ -32,4 +32,14 @@ contextBridge.exposeInMainWorld("electronAPI", {
 
   reboot: (deviceId) => ipcRenderer.invoke("reboot", deviceId),
   onRebooted: (callback) => ipcRenderer.on("rebooted", callback),
+
+  getWebServerInfo: (deviceId) =>
+    ipcRenderer.invoke("getWebServerInfo", deviceId),
+  onWebServerInfo: (callback) => ipcRenderer.on("web-server-info", callback),
+  startWebServer: (deviceId) => ipcRenderer.invoke("startWebServer", deviceId),
+  onWebServerStarted: (callback) =>
+    ipcRenderer.on("web-server-started", callback),
+  stopWebServer: (deviceId) => ipcRenderer.invoke("stopWebServer", deviceId),
+  onWebServerStopped: (callback) =>
+    ipcRenderer.on("web-server-stopped", callback),
 });

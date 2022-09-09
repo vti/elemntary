@@ -140,4 +140,66 @@ Packages:
       versionName: "1.60.0.70",
     });
   });
+
+  test("parses netstat", async () => {
+    let info = new AdbResponse().parseNetstat(
+      `
+Active Internet connections (established and servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program Name
+tcp        0      0 127.0.0.1:5037          0.0.0.0:*               LISTEN      1875/adbd
+tcp6       0      0 :::8080                 :::*                    LISTEN      1164/com.wahoofitness.bolt
+`
+    );
+
+    expect(info).toEqual([
+      {
+        proto: "tcp",
+        localAddress: "127.0.0.1",
+        localPort: 5037,
+        foreignAddress: "0.0.0.0",
+        foreignPort: null,
+        state: "LISTEN",
+        pid: 1875,
+        program: "adbd",
+      },
+      {
+        proto: "tcp6",
+        localAddress: "::",
+        localPort: 8080,
+        foreignAddress: "::",
+        foreignPort: null,
+        state: "LISTEN",
+        pid: 1164,
+        program: "com.wahoofitness.bolt",
+      },
+    ]);
+  });
+
+  test("parses netcfg", async () => {
+    let interfaces = new AdbResponse().parseNetcfg(
+      `
+ip6tnl0  DOWN                                   0.0.0.0/0   0x00000080 00:00:00:00:00:00
+wlan0    UP                               192.168.1.132/24  0x00001043 2c:4d:79:45:2e:dc
+lo       UP                                   127.0.0.1/8   0x00000049 00:00:00:00:00:00
+`
+    );
+
+    expect(interfaces).toEqual([
+      {
+        name: "ip6tnl0",
+        state: "DOWN",
+        address: "0.0.0.0",
+      },
+      {
+        name: "wlan0",
+        state: "UP",
+        address: "192.168.1.132",
+      },
+      {
+        name: "lo",
+        state: "UP",
+        address: "127.0.0.1",
+      },
+    ]);
+  });
 });

@@ -114,6 +114,36 @@ class ElectronApi {
       });
     });
   }
+
+  getWebServerInfo(deviceId) {
+    return new Promise((resolve, reject) => {
+      window.electronAPI.getWebServerInfo(deviceId);
+
+      window.electronAPI.onWebServerInfo((_event, info) => {
+        resolve(info);
+      });
+    });
+  }
+
+  startWebServer(deviceId) {
+    return new Promise((resolve, reject) => {
+      window.electronAPI.startWebServer(deviceId);
+
+      window.electronAPI.onWebServerStarted((_event, info) => {
+        resolve(info);
+      });
+    });
+  }
+
+  stopWebServer(deviceId) {
+    return new Promise((resolve, reject) => {
+      window.electronAPI.stopWebServer(deviceId);
+
+      window.electronAPI.onWebServerStopped((_event, info) => {
+        resolve(info);
+      });
+    });
+  }
 }
 
 module.exports = ElectronApi;

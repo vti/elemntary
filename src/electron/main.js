@@ -118,6 +118,24 @@ app.whenReady().then(() => {
     });
   });
 
+  ipcMain.handle("getWebServerInfo", (_event, deviceId) => {
+    deviceService.getWebServerInfo(deviceId).then((info) => {
+      win.webContents.send("web-server-info", info);
+    });
+  });
+
+  ipcMain.handle("startWebServer", (_event, deviceId) => {
+    deviceService.startWebServer(deviceId).then((info) => {
+      win.webContents.send("web-server-started", info);
+    });
+  });
+
+  ipcMain.handle("stopWebServer", (_event, deviceId) => {
+    deviceService.stopWebServer(deviceId).then((info) => {
+      win.webContents.send("web-server-stopped", info);
+    });
+  });
+
   win = createWindow();
 
   app.on("activate", () => {
