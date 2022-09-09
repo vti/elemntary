@@ -3,6 +3,10 @@
 @tailwind utilities;
 
 @layer components {
+  a {
+    @apply underline;
+  }
+
   .btn {
     @apply inline-block px-1 py-1 text-white font-medium text-xs leading-tight uppercase rounded shadow-md bg-gray-200 hover:bg-gray-200 hover:shadow-lg focus:bg-gray-700 focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg transition duration-150 ease-in-out;
   }

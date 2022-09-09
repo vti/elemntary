@@ -84,6 +84,80 @@ class AdbResponse {
 
     return info;
   }
+
+  parseNetstat(data) {
+    let lines = data.split(/\r?\n/);
+
+    let services = [];
+
+    lines.forEach((line) => {
+      if (/^tcp/.test(line)) {
+        let parts = line.split(/\s+/);
+
+        let localAddress = this.splitAddressAndPort(parts[3]);
+        let foreignAddress = this.splitAddressAndPort(parts[4]);
+
+        let info = {
+          proto: parts[0],
+          localAddress: localAddress[0],
+          localPort: localAddress[1],
+          foreignAddress: foreignAddress[0],
+          foreignPort: foreignAddress[1],
+          state: parts[5],
+        };
+
+        if (parts[6]) {
+          let pidAndProgram = parts[6].split(/\//);
+          info.pid = Number(pidAndProgram[0]);
+          info.program = pidAndProgram[1];
+        }
+
+        services.push(info);
+      }
+    });
+
+    return services;
+  }
+
+  parseNetcfg(data) {
+    let lines = data.split(/\r?\n/);
+
+    let interfaces = [];
+
+    lines.forEach((line) => {
+      let parts = line.split(/\s+/);
+
+      if (parts.length < 5) return;
+
+      let address = parts[2].replace(/\/\d+$/, "");
+
+      let info = {
+        name: parts[0],
+        state: parts[1],
+        address: address,
+      };
+
+      interfaces.push(info);
+    });
+
+    return interfaces;
+  }
+
+  splitAddressAndPort(address) {
+    let port;
+
+    address = address.replace(/:([^:]+)$/, function ($0, $1) {
+      if ($1 == "*") {
+        port = null;
+      } else {
+        port = Number($1);
+      }
+
+      return "";
+    });
+
+    return [address, port];
+  }
 }
 
 module.exports = AdbResponse;

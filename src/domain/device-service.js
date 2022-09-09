@@ -193,6 +193,90 @@ class DeviceService {
   reboot(deviceId) {
     return this.adb.run(["-s", deviceId, "reboot"]);
   }
+
+  getWebServerInfo(deviceId) {
+    return this.adb
+      .run(["-s", deviceId, "shell", "netstat", "-tpna"])
+      .then((stdout) => {
+        let services = new AdbResponse().parseNetstat(stdout.toString());
+
+        if (
+          services.filter(
+            (s) =>
+              s.proto == "tcp6" && s.localPort == 8080 && s.state == "LISTEN"
+          ).length
+        ) {
+          let netcfg = this.adb.run(["-s", deviceId, "shell", "netcfg"]);
+          let ifconfig = this.adb.run(["-s", deviceId, "shell", "ifconfig"]);
+
+          return Promise.any([netcfg, ifconfig])
+            .then((data) => {
+              let info = { running: true };
+
+              let interfaces = new AdbResponse()
+                .parseNetcfg(data.toString())
+                .filter((i) => i.name == "wlan0" && i.state == "UP");
+
+              if (interfaces.length) {
+                info.endpoint = "http://" + interfaces[0].address + ":8080";
+              }
+
+              return info;
+            })
+            .catch((e) => {});
+        } else {
+          return {
+            running: false,
+          };
+        }
+      });
+  }
+
+  startWebServer(deviceId) {
+    return this.adb
+      .run([
+        "-s",
+        deviceId,
+        "shell",
+        "am",
+        "broadcast",
+        "-a",
+        "com.wahoofitness.support.webserver.StdWebServerManager.START",
+      ])
+      .then((stdout) => {
+        return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            this.getWebServerInfo(deviceId).then((info) => {
+              if (info.running) {
+                resolve(info);
+              } else {
+                setTimeout(() => {
+                  this.getWebServerInfo(deviceId).then((info) => {
+                    if (info.running) resolve(info);
+                    else reject();
+                  });
+                }, 5000);
+              }
+            });
+          }, 2000);
+        });
+      });
+  }
+
+  stopWebServer(deviceId) {
+    return this.adb
+      .run([
+        "-s",
+        deviceId,
+        "shell",
+        "am",
+        "force-stop",
+        "com.wahoofitness.bolt",
+      ])
+      .then((stdout) => {
+        return true;
+      });
+  }
 }
 
 module.exports = DeviceService;

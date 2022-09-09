@@ -132,6 +132,14 @@ class MockApi {
       }, this.delay);
     });
   }
+
+  getWebServerInfo(deviceId) {
+    return new Promise((resolve, reject) => {
+      resolve({
+        running: false,
+      });
+    });
+  }
 }
 
 module.exports = MockApi;
