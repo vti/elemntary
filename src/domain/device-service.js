@@ -18,7 +18,7 @@ class DeviceService {
       let authorized = devices.filter((d) => d.authorized);
       let notAuthorized = devices.filter((d) => !d.authorized);
 
-      if (authorized.length == 0) {
+      if (authorized.length === 0) {
         return [...authorized, ...notAuthorized];
       }
 

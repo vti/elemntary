@@ -27,7 +27,7 @@ class AdbResponse {
         });
 
         // Old ELEMNT
-        if (model == "ELEMNT" && /product:elemnt_v2/.test(v)) model += " V2";
+        if (model === "ELEMNT" && /product:elemnt_v2/.test(v)) model += " V2";
 
         // Fix versioning
         model = model.replace(/BOLT2/, "BOLT V2");

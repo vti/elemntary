@@ -11,7 +11,7 @@ class AdbWrapper {
         (mode === "production" ? process.resourcesPath + "/app/" : "") +
         `contrib/adb/${process.platform}/adb`;
 
-      if (process.platform == "win32") {
+      if (process.platform === "win32") {
         command += ".exe";
       }
 
@@ -37,7 +37,7 @@ class AdbWrapper {
       });
 
       adb.on("close", (code) => {
-        if (code == 0) {
+        if (code === 0) {
           console.log(stdout);
           resolve(stdout);
         } else {
