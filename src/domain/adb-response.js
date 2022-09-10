@@ -143,6 +143,33 @@ class AdbResponse {
     return interfaces;
   }
 
+  parseIfconfig(data) {
+    let blocks = data.trim().split(/\r?\n\r?\n/);
+
+    let interfaces = [];
+
+    blocks.forEach((b) => {
+      let lines = b.split(/\r?\n/);
+      let firstLineParts = lines[0].split(/\s+/);
+
+      let info = {
+        name: firstLineParts[0],
+      };
+
+      b.replace(/^\s+inet addr:(.*?)\s+/m, function ($0, $1) {
+        info.address = $1;
+      });
+
+      b.replace(/^\s+([A-Z]+).*?MTU.*$/m, function ($0, $1) {
+        info.state = $1;
+      });
+
+      interfaces.push(info);
+    });
+
+    return interfaces;
+  }
+
   splitAddressAndPort(address) {
     let port;
 

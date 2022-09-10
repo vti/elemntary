@@ -213,9 +213,17 @@ class DeviceService {
             .then((data) => {
               let info = { running: true };
 
-              let interfaces = new AdbResponse()
-                .parseNetcfg(data.toString())
-                .filter((i) => i.name == "wlan0" && i.state == "UP");
+              let interfaces = [];
+
+              if (/MTU/.test(data.toString())) {
+                interfaces = new AdbResponse().parseIfconfig(data.toString());
+              } else {
+                interfaces = new AdbResponse().parseNetcfg(data.toString());
+              }
+
+              interfaces = interfaces.filter(
+                (i) => i.name == "wlan0" && i.state == "UP"
+              );
 
               if (interfaces.length) {
                 info.endpoint = "http://" + interfaces[0].address + ":8080";

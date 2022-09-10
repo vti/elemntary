@@ -202,4 +202,40 @@ lo       UP                                   127.0.0.1/8   0x00000049 00:00:00:
       },
     ]);
   });
+
+  test("parses ifconfig", async () => {
+    let interfaces = new AdbResponse().parseIfconfig(
+      `
+wlan0     Link encap:Ethernet  HWaddr b4:6f:2d:08:81:23  Driver wcnss_wlan
+          inet addr:192.168.1.158  Bcast:192.168.1.255  Mask:255.255.255.0 
+          inet6 addr: fe80::b66f:2dff:fe08:8123/64 Scope: Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:2652 errors:0 dropped:0 overruns:0 frame:0 
+          TX packets:266 errors:0 dropped:0 overruns:0 carrier:0 
+          collisions:0 txqueuelen:1000 
+          RX bytes:273096 TX bytes:32993 
+
+dummy0    Link encap:Ethernet  HWaddr e6:b6:c2:62:de:49
+          inet6 addr: fe80::e4b6:c2ff:fe62:de49/64 Scope: Link
+          UP BROADCAST RUNNING NOARP  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0 
+          TX packets:10 errors:0 dropped:0 overruns:0 carrier:0 
+          collisions:0 txqueuelen:0 
+          RX bytes:0 TX bytes:700 
+
+`
+    );
+
+    expect(interfaces).toEqual([
+      {
+        name: "wlan0",
+        state: "UP",
+        address: "192.168.1.158",
+      },
+      {
+        name: "dummy0",
+        state: "UP",
+      },
+    ]);
+  });
 });
