@@ -1,4 +1,14 @@
 class ElectronApi {
+  getPath(name) {
+    return new Promise((resolve, reject) => {
+      window.electronAPI.getPath(name);
+
+      window.electronAPI.onPath((_event, value) => {
+        resolve(value);
+      });
+    });
+  }
+
   listDevices() {
     return new Promise((resolve, reject) => {
       window.electronAPI.listDevices();
@@ -41,11 +51,21 @@ class ElectronApi {
     });
   }
 
-  selectFile() {
+  selectFile(options) {
     return new Promise((resolve, reject) => {
-      window.electronAPI.selectFile();
+      window.electronAPI.selectFile(options);
 
       window.electronAPI.onFileSelected((_event, path) => {
+        resolve(path);
+      });
+    });
+  }
+
+  selectDirectory() {
+    return new Promise((resolve, reject) => {
+      window.electronAPI.selectDirectory();
+
+      window.electronAPI.onDirectorySelected((_event, path) => {
         resolve(path);
       });
     });
@@ -140,6 +160,56 @@ class ElectronApi {
       window.electronAPI.stopWebServer(deviceId);
 
       window.electronAPI.onWebServerStopped((_event, info) => {
+        resolve(info);
+      });
+    });
+  }
+
+  getBackupInfo(deviceId) {
+    return new Promise((resolve, reject) => {
+      window.electronAPI.getBackupInfo(deviceId);
+
+      window.electronAPI.onBackupInfo((_event, info) => {
+        resolve(info);
+      });
+    });
+  }
+
+  backup(deviceId) {
+    return new Promise((resolve, reject) => {
+      window.electronAPI.backup(deviceId);
+
+      window.electronAPI.onBackup((_event, info) => {
+        resolve(info);
+      });
+    });
+  }
+
+  downloadBackup(deviceId, outputDirectory) {
+    return new Promise((resolve, reject) => {
+      window.electronAPI.downloadBackup(deviceId, outputDirectory);
+
+      window.electronAPI.onBackupDownloaded((_event, localPath) => {
+        resolve(localPath);
+      });
+    });
+  }
+
+  uploadBackup(deviceId, localPath) {
+    return new Promise((resolve, reject) => {
+      window.electronAPI.uploadBackup(deviceId, localPath);
+
+      window.electronAPI.onBackupUploaded((_event) => {
+        resolve();
+      });
+    });
+  }
+
+  deleteBackup(deviceId) {
+    return new Promise((resolve, reject) => {
+      window.electronAPI.deleteBackup(deviceId);
+
+      window.electronAPI.onBackupDeleted((_event, info) => {
         resolve(info);
       });
     });

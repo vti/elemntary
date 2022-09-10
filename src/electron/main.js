@@ -1,6 +1,7 @@
 const path = require("path");
 
 const { app, BrowserWindow, ipcMain, dialog } = require("electron");
+
 const contextMenu = require("electron-context-menu");
 
 const AdbWrapper = require("../domain/adb-wrapper.js");
@@ -34,8 +35,20 @@ let win;
 app.whenReady().then(() => {
   let deviceService = new DeviceService(new AdbWrapper());
 
-  ipcMain.handle("dialog:openFile", async () => {
-    const { canceled, filePaths } = await dialog.showOpenDialog();
+  ipcMain.handle("getPath", (_event, name) => {
+    let localDir;
+
+    if (name === "elemntaryData") {
+      localDir = path.resolve(app.getPath("appData"), "elemntary");
+    } else {
+      localDir = app.getPath(name);
+    }
+
+    win.webContents.send("path", localDir);
+  });
+
+  ipcMain.handle("dialog:openFile", async (_event, options) => {
+    const { canceled, filePaths } = await dialog.showOpenDialog(options);
 
     win.webContents.send("file-selected", canceled ? null : filePaths[0]);
 
@@ -44,6 +57,20 @@ app.whenReady().then(() => {
     } else {
       return filePaths[0];
     }
+  });
+
+  ipcMain.handle("selectDirectory", () => {
+    dialog
+      .showOpenDialog({
+        properties: ["openDirectory"],
+      })
+      .then((data) => {
+        if (!data.canceled && data.filePaths.length > 0) {
+          win.webContents.send("directory-selected", data.filePaths[0]);
+        } else {
+          win.webContents.send("directory-selected", null);
+        }
+      });
   });
 
   ipcMain.handle("uploadMap", (_event, deviceId, path) => {
@@ -133,6 +160,38 @@ app.whenReady().then(() => {
   ipcMain.handle("stopWebServer", (_event, deviceId) => {
     deviceService.stopWebServer(deviceId).then((info) => {
       win.webContents.send("web-server-stopped", info);
+    });
+  });
+
+  ipcMain.handle("getBackupInfo", (_event, deviceId) => {
+    deviceService.getBackupInfo(deviceId).then((info) => {
+      win.webContents.send("backup-info", info);
+    });
+  });
+
+  ipcMain.handle("backup", (_event, deviceId) => {
+    deviceService.backup(deviceId).then((info) => {
+      win.webContents.send("backup", info);
+    });
+  });
+
+  ipcMain.handle("deleteBackup", (_event, deviceId) => {
+    deviceService.deleteBackup(deviceId).then(() => {
+      win.webContents.send("backup-deleted");
+    });
+  });
+
+  ipcMain.handle("downloadBackup", (_event, deviceId, outputDirectory) => {
+    deviceService
+      .downloadBackup(deviceId, outputDirectory)
+      .then((localPath) => {
+        win.webContents.send("backup-downloaded", localPath);
+      });
+  });
+
+  ipcMain.handle("uploadBackup", (_event, deviceId, localPath) => {
+    deviceService.uploadBackup(deviceId, localPath).then(() => {
+      win.webContents.send("backup-uploaded");
     });
   });
 
