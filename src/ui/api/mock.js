@@ -30,6 +30,12 @@ class MockApi {
     };
   }
 
+  getPath(name) {
+    return new Promise((resolve, reject) => {
+      resolve("/Downloads");
+    });
+  }
+
   listDevices() {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
@@ -76,6 +82,12 @@ class MockApi {
   selectFile() {
     return new Promise((resolve, reject) => {
       resolve("/foo/bar.zip");
+    });
+  }
+
+  selectDirectory() {
+    return new Promise((resolve, reject) => {
+      resolve("/foo/bar");
     });
   }
 
@@ -138,6 +150,36 @@ class MockApi {
       resolve({
         running: false,
       });
+    });
+  }
+
+  getBackupInfo(deviceId) {
+    return new Promise((resolve, reject) => {
+      resolve({ available: true });
+    });
+  }
+
+  backup(deviceId) {
+    return new Promise((resolve, reject) => {
+      resolve(true);
+    });
+  }
+
+  downloadBackup(deviceId, outputDirectory) {
+    return new Promise((resolve, reject) => {
+      resolve("/path/to/file.zip");
+    });
+  }
+
+  uploadBackup(deviceId, localPath) {
+    return new Promise((resolve, reject) => {
+      resolve();
+    });
+  }
+
+  deleteBackup(deviceId) {
+    return new Promise((resolve, reject) => {
+      resolve();
     });
   }
 }

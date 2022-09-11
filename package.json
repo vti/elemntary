@@ -38,9 +38,9 @@
   },
   "dependencies": {
     "cross-env": "^7.0.3",
+    "electron-context-menu": "^3.5.0",
     "electron-squirrel-startup": "^1.0.0",
-    "extract-zip": "^2.0.1",
-    "electron-context-menu": "^3.5.0"
+    "extract-zip": "^2.0.1"
   },
   "config": {
     "forge": {

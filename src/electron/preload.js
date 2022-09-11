@@ -1,8 +1,16 @@
 const { contextBridge, ipcRenderer } = require("electron");
 
 contextBridge.exposeInMainWorld("electronAPI", {
-  selectFile: () => ipcRenderer.invoke("dialog:openFile"),
+  getPath: (name) => ipcRenderer.invoke("getPath", name),
+  onPath: (callback) => ipcRenderer.once("path", callback),
+
+  selectFile: (options) => ipcRenderer.invoke("dialog:openFile", options),
   onFileSelected: (callback) => ipcRenderer.once("file-selected", callback),
+
+  selectDirectory: () => ipcRenderer.invoke("selectDirectory"),
+  onDirectorySelected: (callback) =>
+    ipcRenderer.once("directory-selected", callback),
+
   uploadMap: (deviceId, path) =>
     ipcRenderer.invoke("uploadMap", deviceId, path),
   onMapUploaded: (callback) => ipcRenderer.once("map-uploaded", callback),
@@ -42,4 +50,18 @@ contextBridge.exposeInMainWorld("electronAPI", {
   stopWebServer: (deviceId) => ipcRenderer.invoke("stopWebServer", deviceId),
   onWebServerStopped: (callback) =>
     ipcRenderer.once("web-server-stopped", callback),
+
+  getBackupInfo: (deviceId) => ipcRenderer.invoke("getBackupInfo", deviceId),
+  onBackupInfo: (callback) => ipcRenderer.once("backup-info", callback),
+  backup: (deviceId) => ipcRenderer.invoke("backup", deviceId),
+  onBackup: (callback) => ipcRenderer.once("backup", callback),
+  downloadBackup: (deviceId, outputDirectory) =>
+    ipcRenderer.invoke("downloadBackup", deviceId, outputDirectory),
+  onBackupDownloaded: (callback) =>
+    ipcRenderer.once("backup-downloaded", callback),
+  uploadBackup: (deviceId, localPath) =>
+    ipcRenderer.invoke("uploadBackup", deviceId, localPath),
+  onBackupUploaded: (callback) => ipcRenderer.once("backup-uploaded", callback),
+  deleteBackup: (deviceId) => ipcRenderer.invoke("deleteBackup", deviceId),
+  onBackupDeleted: (callback) => ipcRenderer.once("backup-deleted", callback),
 });

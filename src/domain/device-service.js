@@ -1,10 +1,15 @@
-const extract = require("extract-zip");
 const process = require("process");
 const fs = require("fs");
+const path = require("path");
+
+const extract = require("extract-zip");
+
 const AdbWrapper = require("./adb-wrapper.js");
 const AdbResponse = require("./adb-response.js");
 const Feature = require("./feature.js");
 const Features = require("./features.js");
+
+const BACKUP_FILE = "elemnt_config.zip";
 
 class DeviceService {
   constructor(options) {
@@ -283,6 +288,85 @@ class DeviceService {
       ])
       .then((stdout) => {
         return true;
+      });
+  }
+
+  backup(deviceId) {
+    return this.adb
+      .run(["-s", deviceId, "shell", "mkdir", "-p", "/sdcard/config_backup"])
+      .then((stdout) => {
+        return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            this.getBackupInfo(deviceId).then((info) => {
+              if (info.available) resolve();
+              else
+                setTimeout(() => {
+                  this.getBackupInfo(deviceId).then((info) => {
+                    if (info.available) resolve();
+                    else resolve();
+                  });
+                }, 5000);
+            });
+          }, 2000);
+        });
+      });
+  }
+
+  deleteBackup(deviceId) {
+    return this.adb
+      .run(["-s", deviceId, "shell", "rm", "-rf", "/sdcard/config_backup"])
+      .then((stdout) => {});
+  }
+
+  getBackupInfo(deviceId) {
+    return this.adb
+      .run([
+        "-s",
+        deviceId,
+        "shell",
+        "ls",
+        "-lah",
+        `/sdcard/config_backup/${BACKUP_FILE}`,
+      ])
+      .then((stdout) => {
+        return { available: true };
+      })
+      .catch((e) => {
+        return { available: false };
+      });
+  }
+
+  downloadBackup(deviceId, outputDirectory) {
+    const localPath = path.resolve(outputDirectory, BACKUP_FILE);
+
+    return this.adb
+      .run([
+        "-s",
+        deviceId,
+        "pull",
+        `/sdcard/config_backup/${BACKUP_FILE}`,
+        localPath,
+      ])
+      .then(() => {
+        return localPath;
+      });
+  }
+
+  uploadBackup(deviceId, localPath) {
+    return this.adb
+      .run(["-s", deviceId, "shell", "mkdir", "-p", "/sdcard/config_restore"])
+      .then(() => {
+        return this.adb
+          .run([
+            "-s",
+            deviceId,
+            "push",
+            localPath,
+            `/sdcard/config_restore/${BACKUP_FILE}`,
+          ])
+          .then(() => {
+            return true;
+          });
       });
   }
 }

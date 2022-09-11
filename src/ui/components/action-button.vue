@@ -8,7 +8,17 @@
     </button>
   </div>
   <div v-else>
-    <button type="button" class="btn btn-primary" @click="perform">
+    <button
+      type="button"
+      class="btn"
+      :class="{
+        'btn-primary': !danger && !disabled,
+        'btn-disabled': disabled,
+        'btn-danger': danger,
+      }"
+      :disabled="disabled"
+      @click="perform"
+    >
       {{ label }}
     </button>
   </div>
@@ -22,6 +32,8 @@ export default {
     action: { type: Function, required: true },
     label: { type: String, required: true },
     loadingLabel: { type: String, required: true },
+    disabled: { type: Boolean, default: false },
+    danger: { type: Boolean },
   },
   components: {
     InlineSpinner,
