@@ -1,7 +1,7 @@
 <template>
-  <div class="alert alert-warning mt-10">
-    <div class="flex gap-4 content-top">
-      <div class="mx-auto w-60 shrink-0">
+  <div class="alert alert-warning my-4 mx-10">
+    <div class="flex gap-6 content-top">
+      <div class="mx-auto shrink-0">
         <img src="@/ui/assets/icons/feather/alert-circle.svg" width="60" />
       </div>
       <div>

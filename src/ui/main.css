@@ -32,7 +32,7 @@
   }
 
   .alert {
-    @apply w-4/5 mx-auto block p-8 rounded-lg shadow-lg bg-white;
+    @apply block p-8 rounded-lg shadow-lg bg-white;
   }
 
   .alert-warning {
