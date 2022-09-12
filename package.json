@@ -29,6 +29,7 @@
     "electron": "^20.0.3",
     "imports-loader": "^4.0.1",
     "jest": "^29.0.1",
+    "mitt": "^3.0.0",
     "postcss": "^8.4.16",
     "prettier": "^2.7.1",
     "tailwindcss": "^3.1.8",

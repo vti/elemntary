@@ -1,5 +1,6 @@
 import { createApp } from "vue";
 import App from "./App.vue";
+import mitt from "mitt";
 import "./main.css";
 
 const app = createApp(App);
@@ -18,5 +19,6 @@ if (process.env.VUE_APP_BACKEND == "Electron") {
 }
 
 app.provide("backend", backend);
+app.provide("emitter", mitt());
 
 app.mount("#app");

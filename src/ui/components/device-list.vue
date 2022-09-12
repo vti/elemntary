@@ -1,14 +1,14 @@
 <template>
   <div v-if="loading"><spinner /></div>
   <div v-else>
-    <div v-if="devices.length">
+    <div>
       <div class="pl-4 pr-4 pb-4 flex">
         <span>Devices</span>
         <div class="flex-grow"></div>
         <refresh-button @click="loadDeviceList" />
       </div>
 
-      <ul>
+      <ul v-if="devices.length">
         <li v-for="device in devices">
           <div v-if="device.authorized">
             <div
@@ -45,7 +45,9 @@
             </div>
           </div>
           <div v-else>
-            <div class="flex border-t-2 border-gray-200 py-4">
+            <div
+              class="flex border-t-2 border-gray-200 py-4 cursor-not-allowed"
+            >
               <div class="flex-none w-12 text-center self-center"></div>
               <div>
                 {{ device.model }}<br />
@@ -92,13 +94,16 @@ export default {
           }
 
           this.loading = false;
+
+          this.$emit("device-list-loaded", devices.length);
+
           resolve(devices.length > 0);
         });
       });
     },
     selectDevice(deviceId) {
       this.devices.forEach(
-        (d) => (d.selected = d.id == deviceId ? true : false)
+        (d) => (d.selected = d.id === deviceId ? true : false)
       );
 
       this.$emit("deviceSelected", deviceId);

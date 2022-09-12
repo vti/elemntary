@@ -47,11 +47,15 @@ export default {
   },
   data() {
     return {
-      loading: true,
+      loading: false,
       device: null,
     };
   },
   methods: {
+    reset() {
+      this.loading = false;
+      this.device = null;
+    },
     selectDevice(deviceId) {
       this.loading = true;
       this.backend.getDevice(deviceId).then((device) => {
