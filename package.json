@@ -27,6 +27,7 @@
     "autoprefixer": "^10.4.8",
     "core-js": "^3.8.3",
     "electron": "^20.0.3",
+    "html-to-image": "^1.10.8",
     "imports-loader": "^4.0.1",
     "jest": "^29.0.1",
     "mitt": "^3.0.0",

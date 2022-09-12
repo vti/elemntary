@@ -1,6 +1,13 @@
 const path = require("path");
 
-const { app, BrowserWindow, ipcMain, dialog } = require("electron");
+const {
+  app,
+  Menu,
+  MenuItem,
+  BrowserWindow,
+  ipcMain,
+  dialog,
+} = require("electron");
 
 const contextMenu = require("electron-context-menu");
 
@@ -21,6 +28,18 @@ const createWindow = () => {
     },
   });
 
+  const menu = Menu.getApplicationMenu();
+  const viewMenu = menu.items.filter((m) => m.role === "viewmenu")[0];
+  viewMenu.submenu.insert(
+    3,
+    new MenuItem({
+      label: "Take screenshot",
+      click: (e) => {
+        win.webContents.send("capture-body");
+      },
+    })
+  );
+
   if (process.env.LOCAL_SERVER) {
     win.loadURL(process.env.LOCAL_SERVER);
   } else {
@@ -34,6 +53,11 @@ let win;
 
 app.whenReady().then(() => {
   let deviceService = new DeviceService(new AdbWrapper());
+
+  ipcMain.on("body-captured", (_event, image) => {
+    const fs = require("fs");
+    fs.writeFile("screenshots/screenshot.png", Buffer.from(image, "base64"), (e) => {});
+  });
 
   ipcMain.handle("getPath", (_event, name) => {
     let localDir;
