@@ -10,6 +10,7 @@ Current features:
 - take device screenshots;
 - enable/disable hidden features;
 - web server management;
+- config backup/restore;
 - run system actions (clear cache, restart, reboot).
 
 ## Installation
