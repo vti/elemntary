@@ -325,10 +325,13 @@ class DeviceService {
         deviceId,
         "shell",
         "ls",
-        "-lah",
+        "-la",
         `/sdcard/config_backup/${BACKUP_FILE}`,
       ])
       .then((stdout) => {
+        if (/no such file or directory/i.test(stdout)) {
+          return { available: false };
+        }
         return { available: true };
       })
       .catch((e) => {
