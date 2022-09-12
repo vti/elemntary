@@ -11,7 +11,7 @@ class AdbWrapper {
         (mode === "production" ? process.resourcesPath + "/app/" : "") +
         `contrib/adb/${process.platform}/adb`;
 
-      if (process.platform == "win32") {
+      if (process.platform === "win32") {
         command += ".exe";
       }
 
@@ -21,9 +21,9 @@ class AdbWrapper {
 
       const adb = spawn(command, args);
 
-      let stdout = "";
+      let stdout = Buffer.from("");
       adb.stdout.on("data", (data) => {
-        stdout += data;
+        stdout = Buffer.concat([stdout, data]);
       });
 
       let stderr = "";
@@ -37,7 +37,7 @@ class AdbWrapper {
       });
 
       adb.on("close", (code) => {
-        if (code == 0) {
+        if (code === 0) {
           console.log(stdout);
           resolve(stdout);
         } else {

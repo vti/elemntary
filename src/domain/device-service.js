@@ -1,12 +1,15 @@
-const extract = require("extract-zip");
 const process = require("process");
 const fs = require("fs");
+const path = require("path");
+
+const extract = require("extract-zip");
+
 const AdbWrapper = require("./adb-wrapper.js");
+const AdbResponse = require("./adb-response.js");
 const Feature = require("./feature.js");
 const Features = require("./features.js");
-const Device = require("./device.js");
 
-const DEBUG = 0;
+const BACKUP_FILE = "elemnt_config.zip";
 
 class DeviceService {
   constructor(options) {
@@ -15,45 +18,27 @@ class DeviceService {
 
   listDevices() {
     return this.adb.run(["devices", "-l"]).then((stdout) => {
-      let devices = stdout
-        .split(/\r?\n/)
-        .filter((v, i) => {
-          return /authorized/.test(v) || (/device/.test(v) && /ELEMNT/.test(v));
-        })
-        .map((v) => {
-          let id = "";
+      let devices = new AdbResponse().parseDevices(stdout.toString());
 
-          v.replace(/(^[^\s]+)\s+/, function ($0, $1) {
-            id = $1;
-          });
+      let authorized = devices.filter((d) => d.authorized);
+      let notAuthorized = devices.filter((d) => !d.authorized);
 
-          let model = "UNKNOWN";
+      if (authorized.length === 0) {
+        return [...authorized, ...notAuthorized];
+      }
 
-          if (/unauthorized/.test(v)) {
-            return new Device(id, model, false);
-          }
+      let batteryPromises = [];
+      authorized.forEach((device) => {
+        batteryPromises.push(this.getBatteryInfo(device.id));
+      });
 
-          v.replace(/model:(ELEMNT.*?)\s+/, function ($0, $1) {
-            model = $1.replace(/_/, " ");
-          });
-
-          if (model == "ELEMNT") {
-            if (/product:elemnt_v2/.test(v)) {
-              model = "ELEMNT BOLT2";
-            } else {
-              model = "ELEMNT BOLT";
-            }
-          }
-
-          return new Device(id, model, true);
+      return Promise.all(batteryPromises).then((data) => {
+        data.forEach((batteryInfo, i) => {
+          authorized[i].batteryInfo = batteryInfo;
         });
 
-      let authorized = devices.filter((d) => d.isAuthorized());
-      let notAuthorized = devices.filter((d) => !d.isAuthorized());
-
-      DEBUG && console.log({ devices: [...authorized, ...notAuthorized] });
-
-      return devices;
+        return [...authorized, ...notAuthorized];
+      });
     });
   }
 
@@ -61,9 +46,12 @@ class DeviceService {
     return this.adb
       .run(["-s", deviceId, "shell", "ls", "/sdcard/"])
       .then((stdout) => {
-        let files = stdout.split(/\r?\n/).filter((v, i) => {
-          return /^cfg_/i.test(v);
-        });
+        let files = stdout
+          .toString()
+          .split(/\r?\n/)
+          .filter((v, i) => {
+            return /^cfg_/i.test(v);
+          });
 
         let features = [];
 
@@ -78,6 +66,25 @@ class DeviceService {
 
         return features;
       });
+  }
+
+  getBatteryInfo(deviceId) {
+    return this.adb
+      .run(["-s", deviceId, "shell", "dumpsys", "battery"])
+      .then((stdout) => new AdbResponse().parseBatteryInfo(stdout.toString()));
+  }
+
+  getApkInfo(deviceId) {
+    return this.adb
+      .run([
+        "-s",
+        deviceId,
+        "shell",
+        "dumpsys",
+        "package",
+        "com.wahoofitness.bolt",
+      ])
+      .then((stdout) => new AdbResponse().parseApkInfo(stdout.toString()));
   }
 
   enableFeature(deviceId, feature) {
@@ -167,6 +174,203 @@ class DeviceService {
         "com.wahoofitness.bolt.service.BMapManager.RELOAD_MAP",
       ]),
     ]);
+  }
+
+  takeScreenshot(deviceId) {
+    return this.adb
+      .run(["-s", deviceId, "exec-out", "screencap", "-p"])
+      .then((stdout) => {
+        return stdout.toString("base64");
+      });
+  }
+
+  restartApplication(deviceId) {
+    return this.adb.run([
+      "-s",
+      deviceId,
+      "shell",
+      "am",
+      "force-stop",
+      "com.wahoofitness.bolt",
+    ]);
+  }
+
+  reboot(deviceId) {
+    return this.adb.run(["-s", deviceId, "reboot"]);
+  }
+
+  getWebServerInfo(deviceId) {
+    return this.adb
+      .run(["-s", deviceId, "shell", "netstat", "-tpna"])
+      .then((stdout) => {
+        let services = new AdbResponse().parseNetstat(stdout.toString());
+
+        if (
+          services.filter(
+            (s) =>
+              s.proto == "tcp6" && s.localPort == 8080 && s.state == "LISTEN"
+          ).length
+        ) {
+          let netcfg = this.adb.run(["-s", deviceId, "shell", "netcfg"]);
+          let ifconfig = this.adb.run(["-s", deviceId, "shell", "ifconfig"]);
+
+          return Promise.any([netcfg, ifconfig])
+            .then((data) => {
+              let info = { running: true };
+
+              let interfaces = [];
+
+              if (/MTU/.test(data.toString())) {
+                interfaces = new AdbResponse().parseIfconfig(data.toString());
+              } else {
+                interfaces = new AdbResponse().parseNetcfg(data.toString());
+              }
+
+              interfaces = interfaces.filter(
+                (i) => i.name == "wlan0" && i.state == "UP"
+              );
+
+              if (interfaces.length) {
+                info.endpoint = "http://" + interfaces[0].address + ":8080";
+              }
+
+              return info;
+            })
+            .catch((e) => {});
+        } else {
+          return {
+            running: false,
+          };
+        }
+      });
+  }
+
+  startWebServer(deviceId) {
+    return this.adb
+      .run([
+        "-s",
+        deviceId,
+        "shell",
+        "am",
+        "broadcast",
+        "-a",
+        "com.wahoofitness.support.webserver.StdWebServerManager.START",
+      ])
+      .then((stdout) => {
+        return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            this.getWebServerInfo(deviceId).then((info) => {
+              if (info.running) {
+                resolve(info);
+              } else {
+                setTimeout(() => {
+                  this.getWebServerInfo(deviceId).then((info) => {
+                    if (info.running) resolve(info);
+                    else reject();
+                  });
+                }, 5000);
+              }
+            });
+          }, 2000);
+        });
+      });
+  }
+
+  stopWebServer(deviceId) {
+    return this.adb
+      .run([
+        "-s",
+        deviceId,
+        "shell",
+        "am",
+        "force-stop",
+        "com.wahoofitness.bolt",
+      ])
+      .then((stdout) => {
+        return true;
+      });
+  }
+
+  backup(deviceId) {
+    return this.adb
+      .run(["-s", deviceId, "shell", "mkdir", "-p", "/sdcard/config_backup"])
+      .then((stdout) => {
+        return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            this.getBackupInfo(deviceId).then((info) => {
+              if (info.available) resolve();
+              else
+                setTimeout(() => {
+                  this.getBackupInfo(deviceId).then((info) => {
+                    if (info.available) resolve();
+                    else resolve();
+                  });
+                }, 5000);
+            });
+          }, 2000);
+        });
+      });
+  }
+
+  deleteBackup(deviceId) {
+    return this.adb
+      .run(["-s", deviceId, "shell", "rm", "-rf", "/sdcard/config_backup"])
+      .then((stdout) => {});
+  }
+
+  getBackupInfo(deviceId) {
+    return this.adb
+      .run([
+        "-s",
+        deviceId,
+        "shell",
+        "ls",
+        "-la",
+        `/sdcard/config_backup/${BACKUP_FILE}`,
+      ])
+      .then((stdout) => {
+        if (/no such file or directory/i.test(stdout)) {
+          return { available: false };
+        }
+        return { available: true };
+      })
+      .catch((e) => {
+        return { available: false };
+      });
+  }
+
+  downloadBackup(deviceId, outputDirectory) {
+    const localPath = path.resolve(outputDirectory, BACKUP_FILE);
+
+    return this.adb
+      .run([
+        "-s",
+        deviceId,
+        "pull",
+        `/sdcard/config_backup/${BACKUP_FILE}`,
+        localPath,
+      ])
+      .then(() => {
+        return localPath;
+      });
+  }
+
+  uploadBackup(deviceId, localPath) {
+    return this.adb
+      .run(["-s", deviceId, "shell", "mkdir", "-p", "/sdcard/config_restore"])
+      .then(() => {
+        return this.adb
+          .run([
+            "-s",
+            deviceId,
+            "push",
+            localPath,
+            `/sdcard/config_restore/${BACKUP_FILE}`,
+          ])
+          .then(() => {
+            return true;
+          });
+      });
   }
 }
 

@@ -29,8 +29,16 @@ function devices() {
         <input type="radio" name="device" value="{{id}}" class="device-radio" {{#selected}}checked="checked"{{/selected}}>
       </div>
       <div>
-        {{model}}<br />
-        {{id}}
+        <div>
+          {{model}}
+        </div>
+        <div>{{id}}</div>
+        <div class="flex items-center gap-1">
+          <div class="w-10 bg-gray-200 h-2">
+            <div class="bg-green-600 h-2" style="width: {{batteryInfo.level}}%"></div>
+          </div>
+          <span class="text-xs">{{batteryInfo.level}}%</span>
+        </div>
       </div>
     </div>
   {{/authorized}}
@@ -63,9 +71,28 @@ function device() {
   {{/loaders.device}}
   {{#device}}
   {{^loaders.device}}
-  <div class="space-y-4">
+  <div class="space-y-4 pb-4">
 
   <h1 class="text-xl">{{model}} {{id}}</h1>
+
+  <div class="card">
+    <h5 class="card-header">Software</h5>
+    <div class="flex flex-wrap gap-4">
+      {{#loaders.apkInfo}}
+      <div class="w-full">
+        <img class="spinner mx-auto" src="icons/feather/loader.svg" width="80" />
+      </div>
+      {{/loaders.apkInfo}}
+      {{^loaders.apkInfo}}
+      <div>
+        <p class="text-gray-700 text-base mb-4">
+          Version: {{device.apkInfo.versionName}} ({{device.apkInfo.versionCode}})<br />
+          Last updated: {{device.apkInfo.lastUpdated}}
+        </p>
+      </div>
+      {{/loaders.apkInfo}}
+    </div>
+  </div>
 
   <div class="card">
     <h5 class="card-header">Maps</h5>
@@ -102,6 +129,33 @@ function device() {
         </div>
       {{/errors.uploadMap}}
       </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h5 class="card-header">Screenshots</h5>
+    <div class="flex flex-wrap gap-4">
+      {{#loaders.takeScreenshot}}
+      <div class="w-full mt-10">
+        <img class="spinner mx-auto" src="icons/feather/loader.svg" width="80" />
+      </div>
+      {{/loaders.takeScreenshot}}
+      {{^loaders.takeScreenshot}}
+      <div>
+        <p class="text-gray-700 text-base mb-4">
+          Take a screenshot.
+        </p>
+        <div>
+          <button class="btn btn-primary" data-id="{{id}}" data-click="takeScreenshot">Take screenshot</button>
+        </div>
+      </div>
+      <div class="flex-grow"></div>
+      <div>
+        {{#device.screenshot}}
+        <img src="data:image/png;base64,{{device.screenshot}}">
+        {{/device.screenshot}}
+      </div>
+      {{/loaders.takeScreenshot}}
     </div>
   </div>
 
@@ -218,8 +272,8 @@ function app() {
   {{/loaders.devices}}
   {{/devices}}
   {{#devices.0}}
-  <div class="flex">
-      <div class="flex-none w-1/3 pt-4">
+  <div class="grid grid-cols-3">
+      <div class="col-span-1 self-start sticky top-0 pt-4">
           <div class="pl-4 pr-4 pb-4 flex">
             <span>Devices</span>
             <div class="flex-grow"></div>
@@ -228,7 +282,7 @@ function app() {
 
           {{{devicesComponent}}}
       </div>
-      <div class="w-full h-screen bg-gray-50 p-4">
+      <div class="col-span-2 bg-gray-50 p-4">
           {{{device}}}
       </div>
   </div>
@@ -281,6 +335,13 @@ const handlers = {
     let path = $(".file-browse").text();
 
     api.uploadMap($el.data("id"), path);
+  },
+  takeScreenshot(_event, el) {
+    let $el = $(el);
+
+    let deviceId = $el.data("id");
+
+    api.takeScreenshot(deviceId);
   },
 };
 

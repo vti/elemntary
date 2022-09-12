@@ -1,33 +1,45 @@
 {
   "name": "elemntary",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Wahoo Missing Configuration GUI App",
   "main": "src/electron/main.js",
   "author": "Viacheslav Tykhanovskyi",
   "license": "MIT",
   "scripts": {
-    "start": "webpack --mode production && npx tailwindcss -i ./src/ui/input.css -o ./dist/styles.css && cross-env NODE_ENV=development electron-forge start",
-    "package": "webpack --mode production && npx tailwindcss -i ./src/ui/input.css -o ./dist/styles.css && electron-forge package",
-    "make": "webpack --mode production && npx tailwindcss -i ./src/ui/input.css -o ./dist/styles.css && electron-forge make",
-    "format": "prettier --write '{src,tests}/**/*.{js,jsx,ts,tsx,css,md,json}'",
+    "start": "vue-cli-service build && cross-env NODE_ENV=development electron-forge start",
+    "start-local-server": "cross-env NODE_ENV=development LOCAL_SERVER=http://localhost:8080 electron-forge start",
+    "serve": "yarn run vue-cli-service serve",
+    "serve-mock": "yarn run vue-cli-service serve --mode mock",
+    "package": "vue-cli-service build && electron-forge package",
+    "make": "vue-cli-service build && electron-forge make",
+    "format": "prettier --write '{src,tests}/**/*.{js,jsx,ts,tsx,css,md,json,vue}'",
     "test": "jest"
   },
   "devDependencies": {
+    "@babel/core": "^7.12.16",
     "@electron-forge/cli": "^6.0.0-beta.65",
     "@electron-forge/maker-deb": "^6.0.0-beta.65",
     "@electron-forge/maker-rpm": "^6.0.0-beta.65",
     "@electron-forge/maker-squirrel": "^6.0.0-beta.65",
     "@electron-forge/maker-zip": "^6.0.0-beta.65",
+    "@vue/cli-plugin-babel": "~5.0.0",
+    "@vue/cli-service": "~5.0.0",
+    "autoprefixer": "^10.4.8",
+    "core-js": "^3.8.3",
     "electron": "^20.0.3",
     "imports-loader": "^4.0.1",
     "jest": "^29.0.1",
+    "mitt": "^3.0.0",
+    "postcss": "^8.4.16",
     "prettier": "^2.7.1",
     "tailwindcss": "^3.1.8",
+    "vue": "^3.2.13",
     "webpack": "^5.74.0",
     "webpack-cli": "^4.10.0"
   },
   "dependencies": {
     "cross-env": "^7.0.3",
+    "electron-context-menu": "^3.5.0",
     "electron-squirrel-startup": "^1.0.0",
     "extract-zip": "^2.0.1"
   },
@@ -41,28 +53,20 @@
       },
       "makers": [
         {
-          "name": "@electron-forge/maker-squirrel",
-          "config": {
-            "name": "elemntary"
-          }
-        },
-        {
           "name": "@electron-forge/maker-zip",
           "platforms": [
             "linux",
             "win32",
             "darwin"
           ]
-        },
-        {
-          "name": "@electron-forge/maker-deb",
-          "config": {}
-        },
-        {
-          "name": "@electron-forge/maker-rpm",
-          "config": {}
         }
       ]
     }
-  }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "not ie 11"
+  ]
 }
