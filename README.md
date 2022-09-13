@@ -21,9 +21,9 @@ insights and hidden features.
 
 The easiest way to install it is to download a pre-built release zip-file for your Operating System:
 
-- Windows
+- [Windows](https://github.com/vti/elemntary/releases/download/v0.3.0/elemntary-win32-x64-0.3.0.zip)
 - MacOS
-- Linux
+- [Linux](https://github.com/vti/elemntary/releases/download/v0.3.0/elemntary-linux-x64-0.3.0.zip)
 
 ## Usage
 
