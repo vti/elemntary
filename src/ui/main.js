@@ -21,4 +21,21 @@ if (process.env.VUE_APP_BACKEND == "Electron") {
 app.provide("backend", backend);
 app.provide("emitter", mitt());
 
+if (window.electronAPI) {
+  window.electronAPI.onBodyCapture((event) => {
+    const htmlToImage = require("html-to-image");
+
+    htmlToImage
+      .toPng(document.querySelectorAll("body")[0], {
+        filter: (node) => node.tagName !== "NOSCRIPT",
+      })
+      .then((image) => {
+        event.sender.send(
+          "body-captured",
+          String(image).replace(/^data:image\/\w+;base64,/, "")
+        );
+      });
+  });
+}
+
 app.mount("#app");

@@ -3,6 +3,11 @@
 @tailwind utilities;
 
 @layer components {
+  html,
+  body {
+    @apply bg-white;
+  }
+
   a {
     @apply underline;
   }

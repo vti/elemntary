@@ -1,6 +1,8 @@
 const { contextBridge, ipcRenderer } = require("electron");
 
 contextBridge.exposeInMainWorld("electronAPI", {
+  onBodyCapture: (callback) => ipcRenderer.on("capture-body", callback),
+
   getPath: (name) => ipcRenderer.invoke("getPath", name),
   onPath: (callback) => ipcRenderer.once("path", callback),
 
