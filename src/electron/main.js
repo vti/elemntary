@@ -1,4 +1,6 @@
 const path = require("path");
+const log4js = require("log4js");
+const unhandled = require("electron-unhandled");
 
 const {
   app,
@@ -19,7 +21,45 @@ if (require("electron-squirrel-startup")) return app.quit();
 
 contextMenu({ showSaveImageAs: true });
 
+const setupLogger = () => {
+  const logPath = path.resolve(app.getPath("logs"), "elemntary.log");
+  console.log(`Logging to ${logPath}`);
+
+  let appenders = ["file"];
+
+  if (process.env.NODE_ENV !== "production") appenders.push("console");
+
+  log4js.configure({
+    appenders: {
+      console: { type: "stderr" },
+      file: {
+        type: "file",
+        filename: logPath,
+        maxLogSize: 10 * 1024 * 1024, // 10Mb
+        backups: 3,
+        compress: true,
+      },
+    },
+    categories: {
+      default: { appenders: appenders, level: "debug" },
+    },
+  });
+
+  const log = log4js.getLogger("main");
+  log.level = "debug";
+
+  log.info(
+    `Starting ${app.getName()}-${app.getVersion()} ${process.platform}-${
+      process.arch
+    }-${process.version} (${process.env.NODE_ENV})...`
+  );
+
+  return log;
+};
+
 const createWindow = () => {
+  log.debug("Creating window...");
+
   const win = new BrowserWindow({
     width: 800,
     height: 600,
@@ -49,14 +89,34 @@ const createWindow = () => {
   return win;
 };
 
+const cleanup = () => {
+  log.info("Shutting down...");
+
+  log4js.shutdown();
+};
+
 let win;
+
+const log = setupLogger();
+
+unhandled({logger: (e) => log.error(e)});
 
 app.whenReady().then(() => {
   let deviceService = new DeviceService(new AdbWrapper());
 
+  log.debug("Registering ipc handlers...");
+
+  ipcMain.handle("log", (_event, level, msg) => {
+    log4js.getLogger("ui").log(level, msg);
+  });
+
   ipcMain.on("body-captured", (_event, image) => {
     const fs = require("fs");
-    fs.writeFile("screenshots/screenshot.png", Buffer.from(image, "base64"), (e) => {});
+    fs.writeFile(
+      "screenshots/screenshot.png",
+      Buffer.from(image, "base64"),
+      (e) => {}
+    );
   });
 
   ipcMain.handle("getPath", (_event, name) => {
@@ -219,13 +279,23 @@ app.whenReady().then(() => {
     });
   });
 
+  log.debug("IPC handlers registered");
+
   win = createWindow();
 
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
+
+  app.on("quit", () => {
+    cleanup();
+  });
+
+  log.info("Ready");
 });
 
 app.on("window-all-closed", () => {
+  cleanup();
+
   if (process.platform !== "darwin") app.quit();
 });

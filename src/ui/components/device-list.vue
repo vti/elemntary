@@ -78,9 +78,6 @@ export default {
       devices: [],
     };
   },
-  created() {
-    this.loadDeviceList();
-  },
   methods: {
     loadDeviceList() {
       this.loading = true;

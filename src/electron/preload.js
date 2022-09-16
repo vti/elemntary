@@ -1,6 +1,8 @@
 const { contextBridge, ipcRenderer } = require("electron");
 
 contextBridge.exposeInMainWorld("electronAPI", {
+  log: (level, msg) => ipcRenderer.invoke("log", level, msg),
+
   onBodyCapture: (callback) => ipcRenderer.on("capture-body", callback),
 
   getPath: (name) => ipcRenderer.invoke("getPath", name),
