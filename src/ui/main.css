@@ -13,7 +13,7 @@
   }
 
   .btn {
-    @apply px-6 py-2.5 inline-block text-black font-medium text-xs leading-tight uppercase rounded shadow-md bg-gray-200 hover:bg-gray-200 hover:shadow-lg focus:bg-gray-700 focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg transition duration-150 ease-in-out;
+    @apply px-6 py-2.5 inline-block text-black font-medium text-xs leading-tight uppercase rounded shadow-md bg-gray-200 hover:bg-gray-200 hover:shadow-lg focus:bg-gray-400 focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg transition duration-150 ease-in-out;
   }
 
   .btn-primary {

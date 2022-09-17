@@ -4,21 +4,23 @@ describe("suite", () => {
   test("successfully executes", async () => {
     let adb = new AdbWrapper();
 
-    let data = await adb.run(["--version"]);
+    let result = await adb.run(["--version"], { accumulateStreams: true });
 
-    expect(data.toString()).toMatch(/Android Debug Bridge/);
+    expect(result.code).toBe(0);
+    expect(result.stdout.toString()).toMatch(/Android Debug Bridge/);
   });
 
   test("handles failure", async () => {
     let adb = new AdbWrapper();
 
-    let error;
+    let result;
     try {
-      await adb.run(["--unknown-option"]);
+      await adb.run(["--unknown-option"], { accumulateStreams: true });
     } catch (e) {
-      error = e;
+      result = e;
     }
 
-    expect(error).toMatch(/unknown command/);
+    expect(result.code).not.toBe(0);
+    expect(result.stderr).toMatch(/unknown command/);
   });
 });

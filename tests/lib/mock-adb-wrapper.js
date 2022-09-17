@@ -7,10 +7,10 @@ class MockAdbWrapper {
     return new Promise((resolve, reject) => {
       let reply = this.replies.pop();
 
-      if (reply.code == 0) {
-        resolve(reply.stdout);
+      if (reply.code === 0) {
+        resolve({ code: 0, stdout: reply.stdout });
       } else {
-        reject(reply.stderr);
+        reject({ code: 1, stdout: reply.stdout, stderr: reply.stderr });
       }
     });
   }

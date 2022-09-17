@@ -15,9 +15,13 @@ contextBridge.exposeInMainWorld("electronAPI", {
   onDirectorySelected: (callback) =>
     ipcRenderer.once("directory-selected", callback),
 
-  uploadMap: (deviceId, path) =>
-    ipcRenderer.invoke("uploadMap", deviceId, path),
+  uploadMap: (deviceId, files) =>
+    ipcRenderer.invoke("uploadMap", deviceId, files),
   onMapUploaded: (callback) => ipcRenderer.once("map-uploaded", callback),
+  onMapUploadedProgress: (callback) =>
+    ipcRenderer.on("map-uploaded-progress", callback),
+  findMapTiles: (path) => ipcRenderer.invoke("findMapTiles", path),
+  onMapTiles: (callback) => ipcRenderer.once("map-tiles", callback),
 
   listDevices: () => ipcRenderer.invoke("listDevices"),
   onDeviceList: (callback) => ipcRenderer.once("device-list", callback),

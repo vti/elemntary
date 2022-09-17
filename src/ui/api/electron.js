@@ -1,4 +1,12 @@
 class ElectronApi {
+  constructor() {
+    window.electronAPI.onMapUploadedProgress((_event, progress) => {
+      if (this.onMapUploadedProgress) {
+        this.onMapUploadedProgress(progress);
+      }
+    });
+  }
+
   getPath(name) {
     return new Promise((resolve, reject) => {
       window.electronAPI.getPath(name);
@@ -71,11 +79,25 @@ class ElectronApi {
     });
   }
 
-  uploadMap(deviceId, path) {
+  findMapTiles(dir) {
     return new Promise((resolve, reject) => {
-      window.electronAPI.uploadMap(deviceId, path);
+      window.electronAPI.findMapTiles(dir);
+
+      window.electronAPI.onMapTiles((_event, files) => {
+        resolve(files);
+      });
+    });
+  }
+
+  uploadMap(deviceId, files, progress) {
+    return new Promise((resolve, reject) => {
+      this.onMapUploadedProgress = progress;
+
+      window.electronAPI.uploadMap(deviceId, JSON.parse(JSON.stringify(files)));
 
       window.electronAPI.onMapUploaded((_event, err) => {
+        this.onMapUploadedProgress = null;
+
         if (err) {
           reject(err);
         } else {

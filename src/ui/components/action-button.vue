@@ -3,6 +3,7 @@
     <button type="button" class="btn btn-disabled" disabled="disabled">
       <span class="flex">
         {{ loadingLabel }}&nbsp;
+        <span v-if="progress" class="pr-1"> {{ progress }}% </span>
         <inline-spinner />
       </span>
     </button>
@@ -34,6 +35,7 @@ export default {
     loadingLabel: { type: String, required: true },
     disabled: { type: Boolean, default: false },
     danger: { type: Boolean },
+    progress: { type: Number },
   },
   components: {
     InlineSpinner,
