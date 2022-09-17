@@ -29,7 +29,7 @@ import Spinner from "./components/spinner.vue";
 
 export default {
   name: "App",
-  inject: ["backend"],
+  inject: ["backend", "log"],
   components: {
     Device,
     DeviceList,
@@ -43,6 +43,8 @@ export default {
     };
   },
   mounted() {
+    this.log.info("Ready");
+
     this.loadDeviceList();
   },
   methods: {
@@ -54,7 +56,7 @@ export default {
     },
     loadDeviceList() {
       this.loading = true;
-      this.$refs.deviceList.loadDeviceList().then((available) => {
+      this.$refs.deviceList.loadDeviceList().then(() => {
         this.loading = false;
       });
     },

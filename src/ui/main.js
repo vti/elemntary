@@ -21,6 +21,12 @@ if (process.env.VUE_APP_BACKEND == "Electron") {
 app.provide("backend", backend);
 app.provide("emitter", mitt());
 
+app.provide("log", {
+  info: (msg) => {
+    window.electronAPI.log("info", msg);
+  },
+});
+
 if (window.electronAPI) {
   window.electronAPI.onBodyCapture((event) => {
     const htmlToImage = require("html-to-image");

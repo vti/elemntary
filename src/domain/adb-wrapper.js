@@ -1,25 +1,30 @@
 const { spawn } = require("child_process");
+const log4js = require("log4js");
+
+const log = log4js.getLogger("adb");
 
 class AdbWrapper {
-  constructor(options) {}
+  constructor(options) {
+    const mode = process.env.NODE_ENV || "production";
+
+    let command =
+      (mode === "production" ? process.resourcesPath + "/app/" : "") +
+      `contrib/adb/${process.platform}/adb`;
+
+    if (process.platform === "win32") {
+      command += ".exe";
+    }
+
+    this.command = command;
+  }
 
   run(args) {
     return new Promise((resolve, reject) => {
-      const mode = process.env.NODE_ENV || "production";
-
-      let command =
-        (mode === "production" ? process.resourcesPath + "/app/" : "") +
-        `contrib/adb/${process.platform}/adb`;
-
-      if (process.platform === "win32") {
-        command += ".exe";
-      }
-
-      console.log(
-        "$ " + command + " " + args.map((v) => "'" + v + "'").join(" ")
+      log.info(
+        "$ " + this.command + " " + args.map((v) => "'" + v + "'").join(" ")
       );
 
-      const adb = spawn(command, args);
+      const adb = spawn(this.command, args);
 
       let stdout = Buffer.from("");
       adb.stdout.on("data", (data) => {
@@ -32,16 +37,16 @@ class AdbWrapper {
       });
 
       adb.on("error", (err) => {
-        console.log(err);
+        log.error(err);
         reject(err);
       });
 
       adb.on("close", (code) => {
         if (code === 0) {
-          console.log(stdout);
+          log.info(stdout);
           resolve(stdout);
         } else {
-          console.log(stderr);
+          log.error(stderr);
           reject(stderr);
         }
       });
