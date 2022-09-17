@@ -12,16 +12,19 @@ class AdbWrapper {
 
     let pathFragments = ["contrib", "adb", process.platform, binary];
 
-    if (mode === "production") {
+    if (mode === "production" && process.resourcesPath) {
       pathFragments.unshift("app");
       pathFragments.unshift(process.resourcesPath);
     }
 
-    this.binary = binary;
     this.command = path.resolve(...pathFragments);
   }
 
-  run(args) {
+  push(deviceId, from, to) {
+    return this.run(["-s", deviceId, "push", from, to]);
+  }
+
+  run(args, options) {
     return new Promise((resolve, reject) => {
       log.info(
         "$ " + this.command + " " + args.map((v) => "'" + v + "'").join(" ")
@@ -31,26 +34,30 @@ class AdbWrapper {
 
       let stdout = Buffer.from("");
       adb.stdout.on("data", (data) => {
-        stdout = Buffer.concat([stdout, data]);
+        if (options && options.accumulateStreams)
+          stdout = Buffer.concat([stdout, data]);
       });
 
       let stderr = "";
       adb.stderr.on("data", (data) => {
-        stderr += data;
+        if (options && options.accumulateStreams) stderr += data;
       });
 
-      adb.on("error", (err) => {
-        log.error(err);
-        reject(err);
+      adb.on("error", (error) => {
+        log.error(error);
+
+        reject({ error });
       });
 
       adb.on("close", (code) => {
         if (code === 0) {
           log.info(stdout);
-          resolve(stdout);
+
+          resolve({ code, stdout, stderr });
         } else {
           log.error(stderr);
-          reject(stderr);
+
+          reject({ code, stdout, stderr });
         }
       });
     });

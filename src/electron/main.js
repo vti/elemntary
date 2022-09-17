@@ -157,10 +157,19 @@ app.whenReady().then(() => {
       });
   });
 
-  ipcMain.handle("uploadMap", (_event, deviceId, path) => {
-    console.log(`ipc: uploadMap: ${deviceId} ${path}`);
+  ipcMain.handle("findMapTiles", (_event, path) => {
+    console.log(`ipc: findTiles: ${path}`);
+    deviceService.findMapTiles(path).then((files) => {
+      win.webContents.send("map-tiles", files);
+    });
+  });
+
+  ipcMain.handle("uploadMap", (_event, deviceId, files) => {
+    //console.log(`ipc: uploadMap: ${deviceId} ${path}`);
     deviceService
-      .copyMap(deviceId, path)
+      .copyMap(deviceId, files, (progress) => {
+        win.webContents.send("map-uploaded-progress", progress);
+      })
       .then(() => {
         win.webContents.send("map-uploaded");
       })

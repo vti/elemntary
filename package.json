@@ -44,7 +44,8 @@
     "electron-squirrel-startup": "^1.0.0",
     "electron-unhandled": "^4.0.1",
     "extract-zip": "^2.0.1",
-    "log4js": "^6.6.1"
+    "log4js": "^6.6.1",
+    "walker": "^1.0.8"
   },
   "config": {
     "forge": {
