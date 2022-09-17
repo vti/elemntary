@@ -1,3 +1,4 @@
+const path = require("path");
 const { spawn } = require("child_process");
 const log4js = require("log4js");
 
@@ -7,15 +8,17 @@ class AdbWrapper {
   constructor(options) {
     const mode = process.env.NODE_ENV || "production";
 
-    let command =
-      (mode === "production" ? process.resourcesPath + "/app/" : "") +
-      `contrib/adb/${process.platform}/adb`;
+    const binary = process.platform === "win32" ? "adb.exe" : "adb";
 
-    if (process.platform === "win32") {
-      command += ".exe";
+    let pathFragments = ["contrib", "adb", process.platform, binary];
+
+    if (mode === "production") {
+      pathFragments.unshift("app");
+      pathFragments.unshift(process.resourcesPath);
     }
 
-    this.command = command;
+    this.binary = binary;
+    this.command = path.resolve(...pathFragments);
   }
 
   run(args) {

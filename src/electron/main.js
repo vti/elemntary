@@ -99,7 +99,7 @@ let win;
 
 const log = setupLogger();
 
-unhandled({logger: (e) => log.error(e)});
+unhandled({ logger: (e) => log.error(e) });
 
 app.whenReady().then(() => {
   let deviceService = new DeviceService(new AdbWrapper());
