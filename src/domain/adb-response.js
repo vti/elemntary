@@ -62,7 +62,7 @@ class AdbResponse {
   }
 
   parseApkInfo(data) {
-    let lines = data.split(/\r?\n/);
+    let lines = data.split(/\r*\n/);
 
     let info = {};
 
