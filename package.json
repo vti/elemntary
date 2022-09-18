@@ -1,6 +1,6 @@
 {
   "name": "elemntary",
-  "version": "0.3.1-unstable",
+  "version": "0.4.0",
   "description": "Wahoo Missing Configuration GUI App",
   "main": "src/electron/main.js",
   "author": "Viacheslav Tykhanovskyi",
