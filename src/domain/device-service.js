@@ -222,19 +222,23 @@ class DeviceService {
               s.proto == "tcp6" && s.localPort == 8080 && s.state == "LISTEN"
           ).length
         ) {
-          let netcfg = this.adb.run(["-s", deviceId, "shell", "netcfg"]);
-          let ifconfig = this.adb.run(["-s", deviceId, "shell", "ifconfig"]);
+          let netcfg = this.adb.run(["-s", deviceId, "shell", "netcfg"], {
+            accumulateStreams: true,
+          });
+          let ifconfig = this.adb.run(["-s", deviceId, "shell", "ifconfig"], {
+            accumulateStreams: true,
+          });
 
           return Promise.any([netcfg, ifconfig])
-            .then((data) => {
+            .then(({ stdout }) => {
               let info = { running: true };
 
               let interfaces = [];
 
-              if (/MTU/.test(data.toString())) {
-                interfaces = new AdbResponse().parseIfconfig(data.toString());
+              if (/MTU/.test(stdout.toString())) {
+                interfaces = new AdbResponse().parseIfconfig(stdout.toString());
               } else {
-                interfaces = new AdbResponse().parseNetcfg(data.toString());
+                interfaces = new AdbResponse().parseNetcfg(stdout.toString());
               }
 
               interfaces = interfaces.filter(
