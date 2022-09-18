@@ -53,7 +53,7 @@ class DeviceService {
       .then(({ stdout }) => {
         let files = stdout
           .toString()
-          .split(/\r?\n/)
+          .split(/\r*\n/)
           .filter((v, i) => {
             return /^cfg_/i.test(v);
           });
