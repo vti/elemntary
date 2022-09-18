@@ -2,6 +2,7 @@ const process = require("process");
 const fs = require("fs");
 const path = require("path");
 
+const Walker = require("walker");
 const extract = require("extract-zip");
 
 const AdbWrapper = require("./adb-wrapper.js");
@@ -17,35 +18,39 @@ class DeviceService {
   }
 
   listDevices() {
-    return this.adb.run(["devices", "-l"]).then((stdout) => {
-      let devices = new AdbResponse().parseDevices(stdout.toString());
+    return this.adb
+      .run(["devices", "-l"], { accumulateStreams: true })
+      .then(({ stdout }) => {
+        let devices = new AdbResponse().parseDevices(stdout.toString());
 
-      let authorized = devices.filter((d) => d.authorized);
-      let notAuthorized = devices.filter((d) => !d.authorized);
+        let authorized = devices.filter((d) => d.authorized);
+        let notAuthorized = devices.filter((d) => !d.authorized);
 
-      if (authorized.length === 0) {
-        return [...authorized, ...notAuthorized];
-      }
+        if (authorized.length === 0) {
+          return [...authorized, ...notAuthorized];
+        }
 
-      let batteryPromises = [];
-      authorized.forEach((device) => {
-        batteryPromises.push(this.getBatteryInfo(device.id));
-      });
-
-      return Promise.all(batteryPromises).then((data) => {
-        data.forEach((batteryInfo, i) => {
-          authorized[i].batteryInfo = batteryInfo;
+        let batteryPromises = [];
+        authorized.forEach((device) => {
+          batteryPromises.push(this.getBatteryInfo(device.id));
         });
 
-        return [...authorized, ...notAuthorized];
+        return Promise.all(batteryPromises).then((data) => {
+          data.forEach((batteryInfo, i) => {
+            authorized[i].batteryInfo = batteryInfo;
+          });
+
+          return [...authorized, ...notAuthorized];
+        });
       });
-    });
   }
 
   getFeatures(deviceId) {
     return this.adb
-      .run(["-s", deviceId, "shell", "ls", "/sdcard/"])
-      .then((stdout) => {
+      .run(["-s", deviceId, "shell", "ls", "/sdcard/"], {
+        accumulateStreams: true,
+      })
+      .then(({ stdout }) => {
         let files = stdout
           .toString()
           .split(/\r?\n/)
@@ -70,21 +75,28 @@ class DeviceService {
 
   getBatteryInfo(deviceId) {
     return this.adb
-      .run(["-s", deviceId, "shell", "dumpsys", "battery"])
-      .then((stdout) => new AdbResponse().parseBatteryInfo(stdout.toString()));
+      .run(["-s", deviceId, "shell", "dumpsys", "battery"], {
+        accumulateStreams: true,
+      })
+      .then(({ stdout }) =>
+        new AdbResponse().parseBatteryInfo(stdout.toString())
+      );
   }
 
   getApkInfo(deviceId) {
     return this.adb
-      .run([
-        "-s",
-        deviceId,
-        "shell",
-        "dumpsys",
-        "package",
-        "com.wahoofitness.bolt",
-      ])
-      .then((stdout) => new AdbResponse().parseApkInfo(stdout.toString()));
+      .run(
+        [
+          "-s",
+          deviceId,
+          "shell",
+          "dumpsys",
+          "package",
+          "com.wahoofitness.bolt",
+        ],
+        { accumulateStreams: true }
+      )
+      .then(({ stdout }) => new AdbResponse().parseApkInfo(stdout.toString()));
   }
 
   enableFeature(deviceId, feature) {
@@ -101,56 +113,51 @@ class DeviceService {
     return this.adb.run(["-s", deviceId, "shell", "rm", `/sdcard/${feature}`]);
   }
 
-  copyMap(deviceId, mapFile) {
+  findMapTiles(dir) {
     return new Promise((resolve, reject) => {
-      fs.stat(mapFile, function (err, stat) {
-        if (err == null) {
-          resolve({ path: mapFile, stat: stat });
-        } else if (err.code === "ENOENT") {
-          reject("Cannot read file");
-        } else {
-          reject("Cannot read file");
-        }
-      });
-    })
-      .then((fileData) => {
-        let mapFile = fileData.path;
-        let stat = fileData.stat;
+      const re = new RegExp("(\\d+).(\\d+).map.lzma$");
 
-        return new Promise((resolve, reject) => {
-          if (stat.isFile()) {
-            let basename = mapFile
-              .split(/[\\/]/)
-              .pop()
-              .replace(/\.zip$/, "");
-            let mapDir = process.cwd() + "/tmp";
+      let files = [];
+      Walker(dir)
+        .on("file", (file, stat) => {
+          const match = re.exec(file);
 
-            extract(mapFile, { dir: mapDir })
-              .then(() => {
-                resolve(mapDir + "/" + basename);
-              })
-              .catch((err) => {
-                reject(`Can't unzip file: ${err}`);
-              });
-          } else if (stat.isDirectory()) {
-            resolve(mapFile);
-          } else {
-            reject("Unknown file");
+          if (match) {
+            files.push({
+              path: path.resolve(file),
+              basename: path.basename(file),
+              size: stat.size,
+              x: match[1],
+              y: match[2],
+            });
           }
+        })
+        .on("end", () => {
+          resolve(files);
         });
-      })
-      .then((mapDir) => {
-        return this.adb.run([
-          "-s",
+    });
+  }
+
+  copyMap(deviceId, files, callback) {
+    let queue = Promise.resolve();
+    files.forEach((file, idx) => {
+      queue = queue.then((result) => {
+        if (callback)
+          callback({
+            totalFiles: files.length,
+            uploadedFiles: idx + 1,
+          });
+        return this.adb.push(
           deviceId,
-          "push",
-          mapDir,
-          `/sdcard/maps/tiles/8/`,
-        ]);
-      })
-      .then(() => {
-        this.clearCache(deviceId);
+          file.path,
+          `/sdcard/maps/tiles/8/${file.x}/${file.basename}`
+        );
       });
+    });
+
+    return queue.then(() => {
+      return this.clearCache(deviceId);
+    });
   }
 
   clearCache(deviceId) {
@@ -178,8 +185,10 @@ class DeviceService {
 
   takeScreenshot(deviceId) {
     return this.adb
-      .run(["-s", deviceId, "exec-out", "screencap", "-p"])
-      .then((stdout) => {
+      .run(["-s", deviceId, "exec-out", "screencap", "-p"], {
+        accumulateStreams: true,
+      })
+      .then(({ stdout }) => {
         return stdout.toString("base64");
       });
   }
@@ -201,8 +210,10 @@ class DeviceService {
 
   getWebServerInfo(deviceId) {
     return this.adb
-      .run(["-s", deviceId, "shell", "netstat", "-tpna"])
-      .then((stdout) => {
+      .run(["-s", deviceId, "shell", "netstat", "-tpna"], {
+        accumulateStreams: true,
+      })
+      .then(({ stdout }) => {
         let services = new AdbResponse().parseNetstat(stdout.toString());
 
         if (
@@ -256,7 +267,7 @@ class DeviceService {
         "-a",
         "com.wahoofitness.support.webserver.StdWebServerManager.START",
       ])
-      .then((stdout) => {
+      .then(() => {
         return new Promise((resolve, reject) => {
           setTimeout(() => {
             this.getWebServerInfo(deviceId).then((info) => {
@@ -286,7 +297,7 @@ class DeviceService {
         "force-stop",
         "com.wahoofitness.bolt",
       ])
-      .then((stdout) => {
+      .then(() => {
         return true;
       });
   }
@@ -294,7 +305,7 @@ class DeviceService {
   backup(deviceId) {
     return this.adb
       .run(["-s", deviceId, "shell", "mkdir", "-p", "/sdcard/config_backup"])
-      .then((stdout) => {
+      .then(() => {
         return new Promise((resolve, reject) => {
           setTimeout(() => {
             this.getBackupInfo(deviceId).then((info) => {
@@ -315,20 +326,23 @@ class DeviceService {
   deleteBackup(deviceId) {
     return this.adb
       .run(["-s", deviceId, "shell", "rm", "-rf", "/sdcard/config_backup"])
-      .then((stdout) => {});
+      .then(() => {});
   }
 
   getBackupInfo(deviceId) {
     return this.adb
-      .run([
-        "-s",
-        deviceId,
-        "shell",
-        "ls",
-        "-la",
-        `/sdcard/config_backup/${BACKUP_FILE}`,
-      ])
-      .then((stdout) => {
+      .run(
+        [
+          "-s",
+          deviceId,
+          "shell",
+          "ls",
+          "-la",
+          `/sdcard/config_backup/${BACKUP_FILE}`,
+        ],
+        { accumulateStreams: true }
+      )
+      .then(({ stdout }) => {
         if (/no such file or directory/i.test(stdout)) {
           return { available: false };
         }

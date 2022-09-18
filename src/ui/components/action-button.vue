@@ -3,6 +3,7 @@
     <button type="button" class="btn btn-disabled" disabled="disabled">
       <span class="flex">
         {{ loadingLabel }}&nbsp;
+        <span v-if="progress" class="pr-1"> {{ progress }}% </span>
         <inline-spinner />
       </span>
     </button>
@@ -17,6 +18,7 @@
         'btn-danger': danger,
       }"
       :disabled="disabled"
+      :title="title"
       @click="perform"
     >
       {{ label }}
@@ -32,8 +34,10 @@ export default {
     action: { type: Function, required: true },
     label: { type: String, required: true },
     loadingLabel: { type: String, required: true },
+    disabledLabel: { type: String },
     disabled: { type: Boolean, default: false },
     danger: { type: Boolean },
+    progress: { type: Number },
   },
   components: {
     InlineSpinner,
@@ -42,6 +46,14 @@ export default {
     return {
       loading: false,
     };
+  },
+  computed: {
+    title() {
+      if (this.disabled && this.disabledLabel) {
+        return this.disabledLabel;
+      }
+      return "";
+    },
   },
   methods: {
     perform() {

@@ -1,10 +1,10 @@
 {
   "name": "elemntary",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Wahoo Missing Configuration GUI App",
   "main": "src/electron/main.js",
   "author": "Viacheslav Tykhanovskyi",
-  "license": "MIT",
+  "license": "GPL-3.0-or-later",
   "scripts": {
     "start": "vue-cli-service build && cross-env NODE_ENV=development electron-forge start",
     "start-local-server": "cross-env NODE_ENV=development LOCAL_SERVER=http://localhost:8080 electron-forge start",
@@ -27,6 +27,7 @@
     "autoprefixer": "^10.4.8",
     "core-js": "^3.8.3",
     "electron": "^20.0.3",
+    "html-to-image": "^1.10.8",
     "imports-loader": "^4.0.1",
     "jest": "^29.0.1",
     "mitt": "^3.0.0",
@@ -41,7 +42,10 @@
     "cross-env": "^7.0.3",
     "electron-context-menu": "^3.5.0",
     "electron-squirrel-startup": "^1.0.0",
-    "extract-zip": "^2.0.1"
+    "electron-unhandled": "^4.0.1",
+    "extract-zip": "^2.0.1",
+    "log4js": "^6.6.1",
+    "walker": "^1.0.8"
   },
   "config": {
     "forge": {

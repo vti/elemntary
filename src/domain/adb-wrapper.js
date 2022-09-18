@@ -1,48 +1,63 @@
+const path = require("path");
 const { spawn } = require("child_process");
+const log4js = require("log4js");
+
+const log = log4js.getLogger("adb");
 
 class AdbWrapper {
-  constructor(options) {}
+  constructor(options) {
+    const mode = process.env.NODE_ENV || "production";
 
-  run(args) {
+    const binary = process.platform === "win32" ? "adb.exe" : "adb";
+
+    let pathFragments = ["contrib", "adb", process.platform, binary];
+
+    if (mode === "production" && process.resourcesPath) {
+      pathFragments.unshift("app");
+      pathFragments.unshift(process.resourcesPath);
+    }
+
+    this.command = path.resolve(...pathFragments);
+  }
+
+  push(deviceId, from, to) {
+    return this.run(["-s", deviceId, "push", from, to]);
+  }
+
+  run(args, options) {
     return new Promise((resolve, reject) => {
-      const mode = process.env.NODE_ENV || "production";
-
-      let command =
-        (mode === "production" ? process.resourcesPath + "/app/" : "") +
-        `contrib/adb/${process.platform}/adb`;
-
-      if (process.platform === "win32") {
-        command += ".exe";
-      }
-
-      console.log(
-        "$ " + command + " " + args.map((v) => "'" + v + "'").join(" ")
+      log.info(
+        "$ " + this.command + " " + args.map((v) => "'" + v + "'").join(" ")
       );
 
-      const adb = spawn(command, args);
+      const adb = spawn(this.command, args);
 
       let stdout = Buffer.from("");
       adb.stdout.on("data", (data) => {
-        stdout = Buffer.concat([stdout, data]);
+        if (options && options.accumulateStreams)
+          stdout = Buffer.concat([stdout, data]);
       });
 
       let stderr = "";
       adb.stderr.on("data", (data) => {
-        stderr += data;
+        if (options && options.accumulateStreams) stderr += data;
       });
 
-      adb.on("error", (err) => {
-        console.log(err);
-        reject(err);
+      adb.on("error", (error) => {
+        log.error(error);
+
+        reject({ error });
       });
 
       adb.on("close", (code) => {
         if (code === 0) {
-          console.log(stdout);
-          resolve(stdout);
+          log.info(stdout);
+
+          resolve({ code, stdout, stderr });
         } else {
-          console.log(stderr);
-          reject(stderr);
+          log.error(stderr);
+
+          reject({ code, stdout, stderr });
         }
       });
     });
