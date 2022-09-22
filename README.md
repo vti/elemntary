@@ -21,9 +21,9 @@ insights and hidden features.
 
 The easiest way to install it is to download a pre-built release zip-file for your Operating System:
 
-- [Windows](https://github.com/vti/elemntary/releases/download/v0.4.2/elemntary-win32-x64-0.4.2.zip) (application is not signed, you might need to add a security exception)
-- [MacOS](https://github.com/vti/elemntary/releases/download/v0.4.2/elemntary-darwin-x64-0.4.2.zip) (application is not signed, you might need to add a security exception)
-- [Linux](https://github.com/vti/elemntary/releases/download/v0.4.2/elemntary-linux-x64-0.4.2.zip)
+- [Windows](https://github.com/vti/elemntary/releases/download/v0.4.3/elemntary-win32-x64-0.4.3.zip) (application is not signed, you might need to add a security exception)
+- [MacOS](https://github.com/vti/elemntary/releases/download/v0.4.3/elemntary-darwin-x64-0.4.3.zip) (application is not signed, you might need to add a security exception)
+- [Linux](https://github.com/vti/elemntary/releases/download/v0.4.3/elemntary-linux-x64-0.4.3.zip)
 
 ## Usage
 
