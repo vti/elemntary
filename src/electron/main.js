@@ -11,6 +11,10 @@ const {
   dialog,
 } = require("electron");
 
+if (app.getGPUFeatureStatus().gpu_compositing.includes("disabled")) {
+  app.disableHardwareAcceleration();
+}
+
 const contextMenu = require("electron-context-menu");
 
 const AdbWrapper = require("../domain/adb-wrapper.js");
