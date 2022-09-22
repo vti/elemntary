@@ -21,8 +21,8 @@ insights and hidden features.
 
 The easiest way to install it is to download a pre-built release zip-file for your Operating System:
 
-- [Windows](https://github.com/vti/elemntary/releases/download/v0.4.2/elemntary-win32-x64-0.4.2.zip)
-- MacOS
+- [Windows](https://github.com/vti/elemntary/releases/download/v0.4.2/elemntary-win32-x64-0.4.2.zip) (application is not signed, you might need to add a security exception)
+- [MacOS](https://github.com/vti/elemntary/releases/download/v0.4.2/elemntary-darwin-x64-0.4.2.zip) (application is not signed, you might need to add a security exception)
 - [Linux](https://github.com/vti/elemntary/releases/download/v0.4.2/elemntary-linux-x64-0.4.2.zip)
 
 ## Usage
@@ -43,6 +43,25 @@ depends on the model. Follow the instructions:
 ## Development
 
 This is an Electron app, so JavaScript/Node knowledge is required.
+
+### Environment
+
+You need to have the following software to be installed:
+
+- `node` (>= v16)
+- `yarn` (or use `npm`)
+
+NodeJS can be downloaded and installed for your operation system from the [official NodeJS downloads
+page](https://nodejs.org/en/download/).
+
+Yarn is optional and can be installed by following [their guide](https://yarnpkg.com/getting-started/install).
+
+For MacOS it is also possible to use `brew`:
+
+```bash
+$ brew install node
+$ brew install yarn
+```
 
 ### Building
 
@@ -71,3 +90,14 @@ This project is standing on the shoulders of the giants:
 [@Intyre](https://github.com/Intyre) for reverse engineering
 
 [@treee111](https://github.com/treee111) for [wahooMapsCreator](https://github.com/treee111/wahooMapsCreator)
+
+## Author
+
+Viacheslav Tykhanovskyi (vti AT uptosmth.com)
+
+## Copyright and License
+
+Copyright (C) 2022, Viacheslav Tykhanovskyi
+
+This program is free software, you can redistribute it and/or modify it under the terms of the GNU GENERAL PUBLIC
+LICENSE v3 or later. See LICENSE file for details.
