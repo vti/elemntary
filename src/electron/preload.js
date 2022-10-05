@@ -23,6 +23,12 @@ contextBridge.exposeInMainWorld("electronAPI", {
   findMapTiles: (path) => ipcRenderer.invoke("findMapTiles", path),
   onMapTiles: (callback) => ipcRenderer.once("map-tiles", callback),
 
+  findThemeFiles: (path) => ipcRenderer.invoke("findThemeFiles", path),
+  onThemeFiles: (callback) => ipcRenderer.once("theme-files", callback),
+  uploadTheme: (deviceId, files) =>
+    ipcRenderer.invoke("uploadTheme", deviceId, files),
+  onThemeUploaded: (callback) => ipcRenderer.once("theme-uploaded", callback),
+
   listDevices: () => ipcRenderer.invoke("listDevices"),
   onDeviceList: (callback) => ipcRenderer.once("device-list", callback),
 
