@@ -79,6 +79,11 @@ export default {
     selected(path) {
       this.path = path;
 
+      if (path === null) {
+        this.$refs.directorySelector.reset();
+        return;
+      }
+
       this.backend.findMapTiles(path).then((files) => {
         if (files.length > 0) {
           let totalSizeFormatted = this.readableBytes(
