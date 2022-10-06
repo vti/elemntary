@@ -10,8 +10,8 @@
 
     <div v-else>
       <p class="text-gray-700 text-base mb-4">
-        Start Web Server (to stop use "Restart" or "Reboot"). A running web server will stop the device from
-        shutting down automatically.
+        Start Web Server (to stop use "Restart" or "Reboot"). A running web
+        server will stop the device from shutting down automatically.
       </p>
 
       <div class="mb-4 font-bold">

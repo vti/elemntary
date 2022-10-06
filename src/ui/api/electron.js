@@ -107,6 +107,33 @@ class ElectronApi {
     });
   }
 
+  findThemeFiles(dir) {
+    return new Promise((resolve, reject) => {
+      window.electronAPI.findThemeFiles(dir);
+
+      window.electronAPI.onThemeFiles((_event, files) => {
+        resolve(files);
+      });
+    });
+  }
+
+  uploadTheme(deviceId, files) {
+    return new Promise((resolve, reject) => {
+      window.electronAPI.uploadTheme(
+        deviceId,
+        JSON.parse(JSON.stringify(files))
+      );
+
+      window.electronAPI.onThemeUploaded((_event, err) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
+    });
+  }
+
   takeScreenshot(deviceId) {
     return new Promise((resolve, reject) => {
       window.electronAPI.takeScreenshot(deviceId);

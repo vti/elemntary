@@ -1,15 +1,12 @@
 <template>
   <div class="card">
-    <h5 class="card-header">Maps</h5>
+    <h5 class="card-header">Themes</h5>
     <p class="text-gray-700 text-base mb-4">
-      Upload previously generated maps directly to your device. Please choose a
-      directory that contains tiles. Maps are created by using
-      <a
-        href="https://github.com/treee111/wahooMapsCreator"
-        class="underline"
+      Upload map themes. Only VTM themes are supported at the moment (<a
+        href="https://github.com/treee111/wahooMapsCreator/tree/develop/device_themes/vtm_theme_poi"
         target="_blank"
-        >wahooMapsCreator</a
-      >.
+        >example</a
+      >).
     </p>
 
     <div class="upload-map">
@@ -19,8 +16,8 @@
           label="Choose directory"
           ref="directorySelector"
         />
-        <div v-if="tilesInfo" class="text-xs p-1 mt-2 rounded-md">
-          {{ tilesInfo }}
+        <div v-if="themeInfo" class="text-xs p-1 mt-2 rounded-md">
+          {{ themeInfo }}
         </div>
       </div>
 
@@ -30,12 +27,9 @@
           loadingLabel="Uploading..."
           :disabled="!path"
           disabledLabel="Please, choose directory first"
-          :action="uploadMap"
-          :progress="progress"
+          :action="uploadTheme"
         />
-        <button v-if="path && !progress" class="btn" @click="reset">
-          Reset
-        </button>
+        <button v-if="path" class="btn" @click="reset">Reset</button>
       </div>
       <div
         v-if="message"
@@ -59,7 +53,7 @@ import SelectDirectory from "./select-directory.vue";
 
 export default {
   props: ["deviceId"],
-  inject: ["backend"],
+  inject: ["backend", "log"],
   components: {
     ActionButton,
     SelectDirectory,
@@ -68,50 +62,61 @@ export default {
     return {
       loader: false,
       message: null,
-      tilesInfo: null,
+      themeInfo: null,
       error: null,
       path: null,
-      progress: 0,
       files: [],
     };
   },
   methods: {
     selected(path) {
       this.path = path;
+      this.error = null;
 
       if (path === null) {
         this.$refs.directorySelector.reset();
         return;
       }
 
-      this.backend.findMapTiles(path).then((files) => {
+      this.backend.findThemeFiles(path).then((files) => {
         if (files.length > 0) {
-          let totalSizeFormatted = this.readableBytes(
-            files.reduce((prev, v) => prev + v.size, 0)
+          let themes = files.reduce(
+            (total, current) => (current.type === "theme" ? total + 1 : total),
+            0
           );
-          this.tilesInfo = `Found ${files.length} tile(s) with total size of ${totalSizeFormatted}`;
-          this.files = files;
+          let colors = files.reduce(
+            (total, current) => (current.type === "colors" ? total + 1 : total),
+            0
+          );
+          let icons = files.reduce(
+            (total, current) => (current.type === "icon" ? total + 1 : total),
+            0
+          );
+
+          if (themes === 1 && colors <= 1) {
+            this.themeInfo = `Found ${files.length} file(s): ${themes} theme(s) ${colors} color(s) ${icons} icons(s)`;
+            this.files = files;
+          } else {
+            this.error =
+              "Theme should contain: vtm-elemnt.xml and optional COLORS.html and .svg files, select another directory";
+            this.$refs.directorySelector.reset();
+            this.path = null;
+          }
         } else {
-          this.error = "No map tiles found, select another directory";
+          this.error = "No theme files found, select another directory";
           this.$refs.directorySelector.reset();
           this.path = null;
         }
       });
     },
-    uploadMap() {
+    uploadTheme() {
       this.error = null;
       this.message = null;
 
       return this.backend
-        .uploadMap(this.deviceId, this.files, (progress) => {
-          this.progress = (
-            (progress.uploadedFiles / progress.totalFiles) *
-            100
-          ).toFixed(1);
-        })
+        .uploadTheme(this.deviceId, this.files)
         .then(() => {
-          this.message = "Map tiles successfully uploaded";
-          this.progress = 0;
+          this.message = "Theme successfully uploaded";
 
           setTimeout(() => {
             this.message = null;
@@ -123,18 +128,11 @@ export default {
     },
     reset() {
       this.message = null;
-      this.tilesInfo = null;
+      this.themeInfo = null;
       this.error = null;
       this.path = null;
       this.files = [];
-      this.progress = 0;
       this.$refs.directorySelector.reset();
-    },
-    readableBytes(bytes) {
-      let i = Math.floor(Math.log(bytes) / Math.log(1024)),
-        sizes = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
-
-      return (bytes / Math.pow(1024, i)).toFixed(2) * 1 + " " + sizes[i];
     },
   },
 };
