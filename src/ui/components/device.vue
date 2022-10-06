@@ -9,6 +9,8 @@
 
         <device-upload-map-card :deviceId="device.id" />
 
+        <device-upload-theme-card :deviceId="device.id" />
+
         <device-screenshots-card :deviceId="device.id" />
 
         <device-features-card :deviceId="device.id" />
@@ -26,6 +28,7 @@
 <script>
 import DeviceSoftwareCard from "./device-software-card.vue";
 import DeviceUploadMapCard from "./device-upload-map-card.vue";
+import DeviceUploadThemeCard from "@/ui/components/device-upload-theme-card.vue";
 import DeviceScreenshotsCard from "./device-screenshots-card.vue";
 import DeviceFeaturesCard from "./device-features-card.vue";
 import DeviceWebServerCard from "@/ui/components/device-web-server-card";
@@ -38,6 +41,7 @@ export default {
   components: {
     DeviceSoftwareCard,
     DeviceUploadMapCard,
+    DeviceUploadThemeCard,
     DeviceScreenshotsCard,
     DeviceWebServerCard,
     DeviceFeaturesCard,

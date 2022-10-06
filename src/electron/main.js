@@ -182,6 +182,23 @@ app.whenReady().then(() => {
       });
   });
 
+  ipcMain.handle("findThemeFiles", (_event, path) => {
+    deviceService.findThemeFiles(path).then((files) => {
+      win.webContents.send("theme-files", files);
+    });
+  });
+
+  ipcMain.handle("uploadTheme", (_event, deviceId, files) => {
+    deviceService
+      .copyTheme(deviceId, files)
+      .then(() => {
+        win.webContents.send("theme-uploaded");
+      })
+      .catch((err) => {
+        win.webContents.send("theme-uploaded", err);
+      });
+  });
+
   ipcMain.handle("listDevices", () => {
     deviceService.listDevices().then((devices) => {
       win.webContents.send("device-list", devices);

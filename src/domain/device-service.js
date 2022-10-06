@@ -160,6 +160,62 @@ class DeviceService {
     });
   }
 
+  findThemeFiles(dir) {
+    return new Promise((resolve, reject) => {
+      let files = [];
+      Walker(dir)
+        .on("file", (file, stat) => {
+          let basename = path.basename(file);
+          let type = null;
+
+          if (basename === "vtm-elemnt.xml") {
+            type = "theme";
+          } else if (basename === "COLORS.html") {
+            type = "colors";
+          } else if (/\.svg$/.test(file)) {
+            type = "icon";
+          }
+
+          if (type != null) {
+            files.push({
+              path: path.resolve(file),
+              basename: path.basename(file),
+              relative: path.relative(dir, file),
+              type,
+            });
+          }
+        })
+        .on("end", () => {
+          resolve(files);
+        });
+    });
+  }
+
+  copyTheme(deviceId, files) {
+    let queue = Promise.resolve();
+    files.forEach((file, idx) => {
+      queue = queue.then((result) => {
+        if (file.type === "theme" || file.type === "colors") {
+          return this.adb.push(
+            deviceId,
+            file.path,
+            `/sdcard/maps/vtm-elemnt/${file.basename}`
+          );
+        } else if (file.type === "icon") {
+          return this.adb.push(
+            deviceId,
+            file.path,
+            `/sdcard/maps/vtm-elemnt/${file.relative}`
+          );
+        }
+      });
+    });
+
+    return queue.then(() => {
+      return this.clearCache(deviceId);
+    });
+  }
+
   clearCache(deviceId) {
     return Promise.all([
       this.adb.run([
