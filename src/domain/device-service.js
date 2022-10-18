@@ -202,10 +202,16 @@ class DeviceService {
             `/sdcard/maps/vtm-elemnt/${file.basename}`
           );
         } else if (file.type === "icon") {
+          let relativePath = file.relative;
+
+          if (process.platform === "win32") {
+            relativePath = relativePath.replaceAll("\\", "/");
+          }
+
           return this.adb.push(
             deviceId,
             file.path,
-            `/sdcard/maps/vtm-elemnt/${file.relative}`
+            `/sdcard/maps/vtm-elemnt/${relativePath}`
           );
         }
       });
