@@ -22,9 +22,9 @@ insights and hidden features.
 
 The easiest way to install it is to download a pre-built release zip-file for your Operating System:
 
-- [Windows](https://github.com/vti/elemntary/releases/download/v0.5.0/elemntary-win32-x64-0.5.0.zip) (application is not signed, you might need to add a security exception)
-- [MacOS](https://github.com/vti/elemntary/releases/download/v0.5.0/elemntary-darwin-x64-0.5.0.zip) (application is not signed, you might need to add a security exception)
-- [Linux](https://github.com/vti/elemntary/releases/download/v0.5.0/elemntary-linux-x64-0.5.0.zip)
+- [Windows](https://github.com/vti/elemntary/releases/download/v0.5.1/elemntary-win32-x64-0.5.1.zip) (application is not signed, you might need to add a security exception)
+- [MacOS](https://github.com/vti/elemntary/releases/download/v0.5.1/elemntary-darwin-x64-0.5.1.zip) (application is not signed, you might need to add a security exception)
+- [Linux](https://github.com/vti/elemntary/releases/download/v0.5.1/elemntary-linux-x64-0.5.1.zip)
 
 ## Usage
 
