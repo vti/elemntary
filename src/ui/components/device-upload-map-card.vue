@@ -56,6 +56,7 @@
 <script>
 import ActionButton from "./action-button.vue";
 import SelectDirectory from "./select-directory.vue";
+import { readableBytes } from "@/ui/file-utils.js";
 
 export default {
   props: ["deviceId"],
@@ -87,7 +88,7 @@ export default {
 
       this.backend.findMapTiles(path).then((files) => {
         if (files.length > 0) {
-          let totalSizeFormatted = this.readableBytes(
+          let totalSizeFormatted = readableBytes(
             files.reduce((prev, v) => prev + v.size, 0)
           );
           this.tilesInfo = `Found ${files.length} tile(s) with total size of ${totalSizeFormatted}`;
@@ -131,12 +132,6 @@ export default {
       this.files = [];
       this.progress = 0;
       this.$refs.directorySelector.reset();
-    },
-    readableBytes(bytes) {
-      let i = Math.floor(Math.log(bytes) / Math.log(1024)),
-        sizes = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
-
-      return (bytes / Math.pow(1024, i)).toFixed(2) * 1 + " " + sizes[i];
     },
   },
 };
