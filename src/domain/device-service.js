@@ -138,6 +138,32 @@ class DeviceService {
     });
   }
 
+  findRoutingTiles(dir) {
+    return new Promise((resolve, reject) => {
+      const re = new RegExp("(\\d+).(\\d+).gph.lzma$");
+
+      let files = [];
+      Walker(dir)
+        .on("file", (file, stat) => {
+          const match = re.exec(file);
+
+          if (match) {
+            files.push({
+              path: path.resolve(file),
+              basename: path.basename(file),
+              size: stat.size,
+              x: match[1],
+              y: match[2],
+            });
+            console.log(files); // TODO Remove
+          }
+        })
+        .on("end", () => {
+          resolve(files);
+        });
+    });
+  }
+
   copyMap(deviceId, files, callback) {
     let queue = Promise.resolve();
     files.forEach((file, idx) => {
@@ -151,6 +177,28 @@ class DeviceService {
           deviceId,
           file.path,
           `/sdcard/maps/tiles/8/${file.x}/${file.basename}`
+        );
+      });
+    });
+
+    return queue.then(() => {
+      return this.clearCache(deviceId);
+    });
+  }
+
+  copyRouting(deviceId, files, callback) {
+    let queue = Promise.resolve();
+    files.forEach((file, idx) => {
+      queue = queue.then((result) => {
+        if (callback)
+          callback({
+            totalFiles: files.length,
+            uploadedFiles: idx + 1,
+          });
+        return this.adb.push(
+          deviceId,
+          file.path,
+          `/sdcard/maps/routing/2/000/${file.x}/${file.basename}`
         );
       });
     });
