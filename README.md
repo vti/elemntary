@@ -92,6 +92,8 @@ This project is standing on the shoulders of the giants:
 
 [@treee111](https://github.com/treee111) for [wahooMapsCreator](https://github.com/treee111/wahooMapsCreator)
 
+[@thoughtgap](https://github.com/thoughtgap) for routing tiles upload
+
 ## Author
 
 Viacheslav Tykhanovskyi (vti AT uptosmth.com)
