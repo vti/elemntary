@@ -89,6 +89,16 @@ class ElectronApi {
     });
   }
 
+  findRoutingTiles(dir) {
+    return new Promise((resolve, reject) => {
+      window.electronAPI.findRoutingTiles(dir);
+
+      window.electronAPI.onRoutingTiles((_event, files) => {
+        resolve(files);
+      });
+    });
+  }
+
   uploadMap(deviceId, files, progress) {
     return new Promise((resolve, reject) => {
       this.onMapUploadedProgress = progress;
@@ -97,6 +107,24 @@ class ElectronApi {
 
       window.electronAPI.onMapUploaded((_event, err) => {
         this.onMapUploadedProgress = null;
+
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
+    });
+  }
+
+  uploadRouting(deviceId, files, progress) {
+    return new Promise((resolve, reject) => {
+      this.onRoutingUploadedProgress = progress;
+
+      window.electronAPI.uploadRouting(deviceId, JSON.parse(JSON.stringify(files)));
+
+      window.electronAPI.onRoutingUploaded((_event, err) => {
+        this.onRoutingUploadedProgress = null;
 
         if (err) {
           reject(err);

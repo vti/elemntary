@@ -23,6 +23,14 @@ contextBridge.exposeInMainWorld("electronAPI", {
   findMapTiles: (path) => ipcRenderer.invoke("findMapTiles", path),
   onMapTiles: (callback) => ipcRenderer.once("map-tiles", callback),
 
+  uploadRouting: (deviceId, files) =>
+    ipcRenderer.invoke("uploadRouting", deviceId, files),
+  onRoutingUploaded: (callback) => ipcRenderer.once("routing-uploaded", callback),
+  onRoutingUploadedProgress: (callback) =>
+    ipcRenderer.on("Routing-uploaded-progress", callback),
+  findRoutingTiles: (path) => ipcRenderer.invoke("findRoutingTiles", path),
+  onRoutingTiles: (callback) => ipcRenderer.once("routing-tiles", callback),
+
   findThemeFiles: (path) => ipcRenderer.invoke("findThemeFiles", path),
   onThemeFiles: (callback) => ipcRenderer.once("theme-files", callback),
   uploadTheme: (deviceId, files) =>

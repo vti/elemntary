@@ -168,6 +168,13 @@ app.whenReady().then(() => {
     });
   });
 
+  ipcMain.handle("findRoutingTiles", (_event, path) => {
+    console.log(`ipc: findRoutingTiles: ${path}`);
+    deviceService.findRoutingTiles(path).then((files) => {
+      win.webContents.send("routing-tiles", files);
+    });
+  });
+
   ipcMain.handle("uploadMap", (_event, deviceId, files) => {
     //console.log(`ipc: uploadMap: ${deviceId} ${path}`);
     deviceService
@@ -179,6 +186,20 @@ app.whenReady().then(() => {
       })
       .catch((err) => {
         win.webContents.send("map-uploaded", err);
+      });
+  });
+
+  ipcMain.handle("uploadRouting", (_event, deviceId, files) => {
+    console.log(`ipc: uploadRouting: ${deviceId} ${path}`);
+    deviceService
+      .copyRouting(deviceId, files, (progress) => {
+        win.webContents.send("routing-uploaded-progress", progress);
+      })
+      .then(() => {
+        win.webContents.send("routing-uploaded");
+      })
+      .catch((err) => {
+        win.webContents.send("routing-uploaded", err);
       });
   });
 
