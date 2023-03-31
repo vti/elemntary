@@ -78,6 +78,7 @@ export default {
   methods: {
     selected(path) {
       this.path = path;
+      this.error = null;
 
       if (path === null) {
         this.$refs.directorySelector.reset();
