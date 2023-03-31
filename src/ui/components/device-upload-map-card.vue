@@ -1,9 +1,9 @@
 <template>
   <div class="card">
-    <h5 class="card-header">Maps</h5>
+    <h5 class="card-header">Map Tiles</h5>
     <p class="text-gray-700 text-base mb-4">
-      Upload previously generated maps directly to your device. Please choose a
-      directory that contains tiles. Maps are created by using
+      Upload previously generated map tiles directly to your device. Please
+      choose a directory that contains tiles. Maps are created by using
       <a
         href="https://github.com/treee111/wahooMapsCreator"
         class="underline"
@@ -93,7 +93,8 @@ export default {
           this.tilesInfo = `Found ${files.length} tile(s) with total size of ${totalSizeFormatted}`;
           this.files = files;
         } else {
-          this.error = "No map tiles found, select another directory";
+          this.error =
+            "No map tiles found (*.map.lzma), select another directory";
           this.$refs.directorySelector.reset();
           this.path = null;
         }
