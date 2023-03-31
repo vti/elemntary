@@ -155,7 +155,6 @@ class DeviceService {
               x: match[1],
               y: match[2],
             });
-            console.log(files); // TODO Remove
           }
         })
         .on("end", () => {
