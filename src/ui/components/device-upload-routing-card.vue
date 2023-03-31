@@ -1,18 +1,18 @@
 <template>
   <div class="card">
-    <h5 class="card-header">Routing</h5>
+    <h5 class="card-header">Routing Tiles</h5>
     <p class="text-gray-700 text-base mb-4">
       Upload previously generated routing tiles directly to your device. Please choose a
-      directory that contains routing tiles. Maps are created by using
+      directory that contains routing tiles. You can read more on routing tiles in the docs: 
       <a
-        href="https://github.com/treee111/wahooMapsCreator"
+        href="https://github.com/treee111/wahooMapsCreator/blob/develop/docs/HOWTO_ADD_ROUTING_TILES_MANUALLY.MD"
         class="underline"
         target="_blank"
-        >wahooMapsCreator</a
+        >docs of wahooMapsCreator</a
       >.
     </p>
 
-    <div class="upload-map">
+    <div class="upload-routing">
       <div>
         <select-directory
           @selected="selected"
@@ -92,7 +92,7 @@ export default {
           this.tilesInfo = `Found ${files.length} tile(s) with total size of ${totalSizeFormatted}`;
           this.files = files;
         } else {
-          this.error = "No map tiles found, select another directory";
+          this.error = "No routing tiles (*.gph.lzma) found, select another directory";
           this.$refs.directorySelector.reset();
           this.path = null;
         }
@@ -110,7 +110,7 @@ export default {
           ).toFixed(1);
         })
         .then(() => {
-          this.message = "Map tiles successfully uploaded";
+          this.message = "Routing tiles successfully uploaded";
           this.progress = 0;
 
           setTimeout(() => {
