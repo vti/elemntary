@@ -25,6 +25,9 @@ if (require("electron-squirrel-startup")) return app.quit();
 
 contextMenu({ showSaveImageAs: true });
 
+let settings = {};
+const settingsFile = path.resolve(app.getPath("userData"), "settings.json");
+
 const setupLogger = () => {
   const logPath = path.resolve(app.getPath("logs"), "elemntary.log");
   console.log(`Logging to ${logPath}`);
@@ -61,17 +64,81 @@ const setupLogger = () => {
   return log;
 };
 
-const createWindow = () => {
-  log.debug("Creating window...");
+const loadI18n = () => {
+  const fs = require("fs");
+  const path = require("path");
+  const files = fs.readdirSync(path.resolve("src", "messages"));
 
-  const win = new BrowserWindow({
-    width: 800,
-    height: 600,
-    webPreferences: {
-      preload: path.join(__dirname, "preload.js"),
-    },
+  var messages = {};
+
+  files
+    .filter((f) => f.match(/\.json$/))
+    .forEach((f) => {
+      let lang = f.replace(/\.json$/, "");
+
+      messages[lang] = JSON.parse(
+        fs.readFileSync(path.resolve("src", "messages", f))
+      );
+    });
+
+  return messages;
+};
+
+const loadSettings = () => {
+  const fs = require("fs");
+
+  log.info(`Loading settings: ${settingsFile}`);
+
+  try {
+    settings = JSON.parse(fs.readFileSync(settingsFile));
+
+    log.info(`Settings: ${JSON.stringify(settings)}`);
+  } catch (e) {
+    log.error(`Error loading settings: ${e}`);
+  }
+};
+
+const storeSettings = () => {
+  const fs = require("fs");
+
+  log.info(`Storing settings: ${settingsFile}`);
+
+  try {
+    fs.writeFileSync(settingsFile, JSON.stringify(settings));
+  } catch (e) {
+    log.error(`Error storing settings: ${e}`);
+  }
+};
+
+const changeLocale = (win, newLocale) => {
+  win.webContents.send("change-locale", newLocale);
+
+  const menu = Menu.getApplicationMenu();
+
+  menu.getMenuItemById("language").submenu.items.forEach((sm) => {
+    if (sm.id === "language-" + newLocale) {
+      sm.checked = true;
+    } else {
+      sm.checked = false;
+    }
   });
+};
 
+const setupLocale = (win) => {
+  let userData = app.getPath("userData");
+
+  log.info(`System locale: ${app.getLocale()}`);
+  let selectedLocale = app.getLocale();
+
+  if (settings.locale) {
+    selectedLocale = settings.locale;
+  }
+
+  log.info(`Selected locale: ${selectedLocale}`);
+  changeLocale(win, selectedLocale);
+};
+
+const buildMenuTemplate = () => {
   const isMac = process.platform === "darwin";
 
   const template = [
@@ -161,6 +228,22 @@ const createWindow = () => {
       ],
     },
     {
+      id: "language",
+      label: "Language",
+      submenu: Object.keys(messages).map((locale) => {
+        return {
+          id: "language-" + locale,
+          type: "checkbox",
+          label: messages[locale].menu,
+          click: (e) => {
+            changeLocale(win, locale);
+
+            settings.locale = locale;
+          },
+        };
+      }),
+    },
+    {
       role: "help",
       submenu: [
         {
@@ -174,7 +257,21 @@ const createWindow = () => {
     },
   ];
 
-  const menu = Menu.buildFromTemplate(template);
+  return template;
+};
+
+const createWindow = () => {
+  log.debug("Creating window...");
+
+  const win = new BrowserWindow({
+    width: 800,
+    height: 600,
+    webPreferences: {
+      preload: path.join(__dirname, "preload.js"),
+    },
+  });
+
+  const menu = Menu.buildFromTemplate(buildMenuTemplate());
   Menu.setApplicationMenu(menu);
 
   if (process.env.LOCAL_SERVER) {
@@ -183,11 +280,18 @@ const createWindow = () => {
     win.loadFile("./dist/index.html");
   }
 
+  // When UI is ready
+  win.webContents.once("dom-ready", () => {
+    setupLocale(win);
+  });
+
   return win;
 };
 
 const cleanup = () => {
   log.info("Shutting down...");
+
+  storeSettings();
 
   log4js.shutdown();
 };
@@ -195,6 +299,10 @@ const cleanup = () => {
 let win;
 
 const log = setupLogger();
+
+loadSettings();
+
+const messages = loadI18n();
 
 unhandled({ logger: (e) => log.error(e) });
 
@@ -226,6 +334,10 @@ app.whenReady().then(() => {
     }
 
     win.webContents.send("path", localDir);
+  });
+
+  ipcMain.handle("getMessages", (_event) => {
+    win.webContents.send("messages", messages);
   });
 
   ipcMain.handle("dialog:openFile", async (_event, options) => {

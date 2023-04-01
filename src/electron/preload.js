@@ -3,10 +3,15 @@ const { contextBridge, ipcRenderer } = require("electron");
 contextBridge.exposeInMainWorld("electronAPI", {
   log: (level, msg) => ipcRenderer.invoke("log", level, msg),
 
+  onLocaleChange: (callback) => ipcRenderer.on("change-locale", callback),
+
   onBodyCapture: (callback) => ipcRenderer.on("capture-body", callback),
 
   getPath: (name) => ipcRenderer.invoke("getPath", name),
   onPath: (callback) => ipcRenderer.once("path", callback),
+
+  getMessages: (name) => ipcRenderer.invoke("getMessages", name),
+  onMessages: (callback) => ipcRenderer.once("messages", callback),
 
   selectFile: (options) => ipcRenderer.invoke("dialog:openFile", options),
   onFileSelected: (callback) => ipcRenderer.once("file-selected", callback),

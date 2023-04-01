@@ -45,6 +45,7 @@
     "electron-unhandled": "^4.0.1",
     "extract-zip": "^2.0.1",
     "log4js": "^6.6.1",
+    "vue-i18n": "^9.2.2",
     "walker": "^1.0.8"
   },
   "config": {

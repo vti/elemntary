@@ -1,7 +1,7 @@
 <template>
   <div class="card">
     <div class="flex">
-      <h5 class="card-header">Software</h5>
+      <h5 class="card-header">{{ $t("card.software.title") }}</h5>
       <div class="flex-grow"></div>
       <refresh-button @click="loadApkInfo" />
     </div>
@@ -9,8 +9,10 @@
       <div v-if="loading"><spinner /></div>
       <div v-else>
         <p class="text-gray-700 text-base mb-4">
-          Version: {{ apkInfo.versionName }} ({{ apkInfo.versionCode }})<br />
-          Last updated: {{ apkInfo.lastUpdated }}
+          {{ $t("card.software.version") }}: {{ apkInfo.versionName }} ({{
+            apkInfo.versionCode
+          }})<br />
+          {{ $t("card.software.lastUpdated") }}: {{ apkInfo.lastUpdated }}
         </p>
       </div>
     </div>

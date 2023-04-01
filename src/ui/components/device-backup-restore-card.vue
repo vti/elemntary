@@ -1,7 +1,9 @@
 <template>
   <div class="card">
     <div class="flex">
-      <h2 class="flex-shrink-0 card-header">Backup / Restore</h2>
+      <h2 class="flex-shrink-0 card-header">
+        {{ $t("card.backupAndRestore.title") }}
+      </h2>
       <div class="flex-grow"></div>
       <refresh-button @click="getBackupInfo" />
     </div>
@@ -10,22 +12,30 @@
 
     <div v-else class="space-y-4">
       <p class="text-gray-700 text-base mb-4">
-        Backup/Restore device configuration.
+        {{ $t("card.backupAndRestore.description") }}
       </p>
 
       <div>
-        <h3 class="text-lg">Backup</h3>
+        <h3 class="text-lg">{{ $t("card.backupAndRestore.backup.title") }}</h3>
         <div v-if="info.available">
-          <p class="mb-4">Backup is available on the device.</p>
+          <p class="mb-4">
+            {{ $t("card.backupAndRestore.backup.available.description") }}
+          </p>
           <div class="space-y-4">
             <div class="space-y-4">
               <div class="flex flex-wrap gap-2 items-center">
                 <action-button
-                  label="Download"
-                  loading-label="Downloading..."
+                  :label="
+                    $t('card.backupAndRestore.backup.action.download.label')
+                  "
+                  :loading-label="
+                    $t('card.backupAndRestore.backup.action.download.progress')
+                  "
                   :action="downloadBackup"
                 />
-                to
+                {{
+                  $t("card.backupAndRestore.backup.action.download.message.to")
+                }}
                 <button
                   class="btn text-ellipsis overflow-hidden flex gap-2"
                   @click="selectDownloadDirectory"
@@ -38,8 +48,7 @@
                 </button>
               </div>
               <div class="text-xs">
-                NOTE: If the destination file already exists, it will be
-                replaced
+                {{ $t("card.backupAndRestore.backup.action.download.note") }}
               </div>
               <div
                 v-if="messages.downloadResult"
@@ -50,12 +59,15 @@
             </div>
             <div>
               <p class="mb-4">
-                Delete current backup from the device (local files are not
-                removed).
+                {{
+                  $t("card.backupAndRestore.backup.action.delete.description")
+                }}
               </p>
               <action-button
-                label="Delete"
-                loading-label="Deleting..."
+                :label="$t('card.backupAndRestore.backup.action.delete.label')"
+                :loading-label="
+                  $t('card.backupAndRestore.backup.action.delete.progress')
+                "
                 :action="deleteBackup"
                 :danger="true"
               />
@@ -64,13 +76,13 @@
         </div>
         <div v-else>
           <p class="mb-4">
-            No backup is available, create one. It could take a minute or two,
-            if that doesn't happen try restarting the Wahoo Application from the
-            System section below.
+            {{ $t("card.backupAndRestore.backup.notAvailable.description") }}
           </p>
           <action-button
-            label="Backup"
-            loading-label="Backing up..."
+            :label="$t('card.backupAndRestore.backup.action.backup.label')"
+            :loading-label="
+              $t('card.backupAndRestore.backup.action.backup.progress')
+            "
             :action="backup"
           />
         </div>
@@ -123,7 +135,9 @@ export default {
   data() {
     return {
       downloadDirectory: null,
-      downloadDirectoryLabel: "Downloads",
+      downloadDirectoryLabel: this.$i18n.t(
+        "card.backupAndRestore.backup.action.download.destinationLabel"
+      ),
       uploadFile: null,
       uploadFileLabel: "Choose file",
       messages: {},
@@ -179,7 +193,10 @@ export default {
       return this.backend
         .downloadBackup(this.deviceId, this.downloadDirectory)
         .then((path) => {
-          this.messages.downloadResult = `Backup downloaded to: ${path}`;
+          this.messages.downloadResult = this.$i18n.t(
+            "card.backupAndRestore.action.download.downloadedTo",
+            { path: path }
+          );
         });
     },
     uploadBackup() {

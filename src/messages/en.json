@@ -1,0 +1,179 @@
+{
+  "menu": "English",
+  "devices": {
+    "title": "Devices"
+  },
+  "noDevices": {
+    "title": "No usable devices available",
+    "description": "Make sure your device is in \"Debugging\" mode and is connected to your computer via a Data cable (not just a charging one)."
+  },
+  "deviceAuthorization": {
+    "step1": "turn the device on (do not plug it in yet)",
+    "step2": "press keys on device",
+    "step3": "connect the device to your pc",
+    "bolt1AndRoam1": "BOLT v1 and ROAM",
+    "bolt2AndRoam2": "BOLT v2 and ROAM v2",
+    "instruction": {
+      "bolt1AndRoam1": {
+        "step1": "press the power button (you enter the settings menu)",
+        "step2": "press the power button again (you return to the normal screen)"
+      },
+      "bolt2AndRoam2": {
+        "step1": "press the power, up and down buttons at the same time (this could be a bit tricky)"
+      }
+    }
+  },
+  "card": {
+    "software": {
+      "title": "Software",
+      "version": "Version",
+      "lastUpdated": "Last updated"
+    },
+    "mapUpload": {
+      "title": "Map Tiles",
+      "description": "Upload previously generated map tiles directly to your device. Please choose a directory that contains tiles. Maps are created by using {0}.",
+      "action": {
+        "selectDirectory": {
+          "label": "Choose directory",
+          "foundTiles": "Found {totalFiles} tile(s) with total size of {totalSize}",
+          "noTilesFound": "No map tiles found (*.map.lzma), select another directory",
+          "success": "Map tiles successfully uploaded"
+        },
+        "upload": {
+          "label": "Upload",
+          "progress": "Uploading...",
+          "noDirectorySelected": "Please, choose directory first"
+        },
+        "reset": {
+          "label": "Reset"
+        }
+      }
+    },
+    "routingUpload": {
+      "title": "Routing Tiles",
+      "description": "Upload previously generated routing tiles directly to your device. Please choose a directory that contains routing tiles. You can read more on routing tiles in the docs: {0}",
+      "action": {
+        "selectDirectory": {
+          "label": "Choose directory",
+          "foundTiles": "Found {totalFiles} tile(s) with total size of {totalSize}",
+          "noTilesFound": "No routing tiles found (*.gph.lzma), select another directory"
+        },
+        "upload": {
+          "label": "Upload",
+          "progress": "Uploading...",
+          "noDirectorySelected": "Please, choose directory first",
+          "success": "Routing tiles successfully uploaded"
+        },
+        "reset": {
+          "label": "Reset"
+        }
+      }
+    },
+    "themes": {
+      "title": "Themes",
+      "description": "Upload map themes. Only VTM themes are supported at the moment ({0}).",
+      "action": {
+        "selectDirectory": {
+          "label": "Choose directory",
+          "foundThemeFiles": "Found {totalFiles} theme file(s)",
+          "noFilesFound": "No theme files found, select another directory",
+          "noThemeFilesFound": "Theme should contain: vtm-elemnt.xml and optional COLORS.html and .svg files, select another directory"
+        },
+        "upload": {
+          "label": "Upload",
+          "progress": "Uploading...",
+          "noDirectorySelected": "Please, choose directory first",
+          "success": "Theme successfully uploaded"
+        },
+        "reset": {
+          "label": "Reset"
+        }
+      }
+    },
+    "screenshot": {
+      "title": "Screenshots",
+      "description": "Take a screenshot.",
+      "action": {
+        "take": {
+          "label": "Take screenshot",
+          "progress": "Taking..."
+        }
+      }
+    },
+    "features": {
+      "title": "Hidden features",
+      "description": "Enable or disable some hidden features.",
+      "action": {
+        "save": {
+          "label": "Save",
+          "progress": "Saving..."
+        }
+      }
+    },
+    "webserver": {
+      "title": "Web Server",
+      "description": "Start Web Server (to stop use \"Restart\" or \"Reboot\"). A running web server will stop the device from shutting down automatically.",
+      "action": {
+        "start": {
+          "label": "Start",
+          "progress": "Starting..."
+        }
+      },
+      "status": {
+        "running": "RUNNING",
+        "notRunning": "NOT RUNNING"
+      },
+      "runningAddress": "at {0}"
+    },
+    "backupAndRestore": {
+      "title": "Backup / Restore",
+      "description": "Backup/Restore device configuration.",
+      "backup": {
+        "title": "Backup",
+        "notAvailable": {
+          "description": "No backup is available, create one. It could take a minute or two, if that doesn't happen try restarting the Wahoo Application from the System section below."
+        },
+        "available": {
+          "description": "Backup is available on the device."
+        },
+        "action": {
+          "backup": {
+            "label": "Backup",
+            "progress": "Backing up..."
+          },
+          "download": {
+            "label": "Download",
+            "progress": "Downloading...",
+            "note": "NOTE: If the destination file already exists, it will be replaced",
+            "destinationLabel": "Downloads",
+            "downloadedTo": "Backup downloaded to: {path}",
+            "message": {
+              "to": "to"
+            }
+          },
+          "delete": {
+            "description": "Delete current backup from the device (local files are not removed).",
+            "label": "Delete",
+            "progress": "Deleting..."
+          }
+        }
+      },
+      "restore": {}
+    },
+    "system": {
+      "title": "System",
+      "description": "Various system actions.",
+      "action": {
+        "clearCache": {
+          "label": "Clear cache",
+          "progress": "Clearing cache..."
+        },
+        "restartApp": {
+          "label": "Restart Wahoo application",
+          "progress": "Restarting..."
+        },
+        "reboot": { "label": "Reboot device", "progress": "Rebooting..." }
+      }
+    }
+  }
+}

@@ -1,4 +1,5 @@
 import { createApp } from "vue";
+import { createI18n } from "vue-i18n";
 import App from "./App.vue";
 import mitt from "mitt";
 import "./main.css";
@@ -27,6 +28,13 @@ app.provide("log", {
   },
 });
 
+const i18n = createI18n({
+  locale: "en",
+  fallbackLocale: "en",
+  // We load them later
+  messages: {},
+});
+
 if (window.electronAPI) {
   window.electronAPI.onBodyCapture((event) => {
     const htmlToImage = require("html-to-image");
@@ -42,6 +50,19 @@ if (window.electronAPI) {
         );
       });
   });
+
+  window.electronAPI.onMessages((event, messages) => {
+    Object.keys(messages).forEach((lang) => {
+      i18n.global.setLocaleMessage(lang, messages[lang]);
+    });
+  });
+  window.electronAPI.getMessages();
+
+  window.electronAPI.onLocaleChange((event, newLocale) => {
+    i18n.global.locale = newLocale;
+  });
 }
+
+app.use(i18n);
 
 app.mount("#app");
