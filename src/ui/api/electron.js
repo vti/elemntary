@@ -5,6 +5,12 @@ class ElectronApi {
         this.onMapUploadedProgress(progress);
       }
     });
+
+    window.electronAPI.onRoutingUploadedProgress((_event, progress) => {
+      if (this.onRoutingUploadedProgress) {
+        this.onRoutingUploadedProgress(progress);
+      }
+    });
   }
 
   getPath(name) {
