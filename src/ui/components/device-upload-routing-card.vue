@@ -1,23 +1,22 @@
 <template>
   <div class="card">
-    <h5 class="card-header">Routing Tiles</h5>
+    <h5 class="card-header">{{ $t("card.routingUpload.title") }}</h5>
     <p class="text-gray-700 text-base mb-4">
-      Upload previously generated routing tiles directly to your device. Please
-      choose a directory that contains routing tiles. You can read more on
-      routing tiles in the docs:
-      <a
-        href="https://github.com/treee111/wahooMapsCreator/blob/develop/docs/HOWTO_ADD_ROUTING_TILES_MANUALLY.MD"
-        class="underline"
-        target="_blank"
-        >docs of wahooMapsCreator</a
-      >.
+      <i18n-t keypath="card.routingUpload.description">
+        <a
+          href="https://github.com/treee111/wahooMapsCreator/blob/develop/docs/HOWTO_ADD_ROUTING_TILES_MANUALLY.MD"
+          class="underline"
+          target="_blank"
+          >docs of wahooMapsCreator</a
+        >
+      </i18n-t>
     </p>
 
     <div class="upload-routing">
       <div>
         <select-directory
           @selected="selected"
-          label="Choose directory"
+          :label="$t('card.routingUpload.action.selectDirectory.label')"
           ref="directorySelector"
         />
         <div v-if="tilesInfo" class="text-xs p-1 mt-2 rounded-md">
@@ -27,15 +26,17 @@
 
       <div class="pt-4 flex gap-2">
         <action-button
-          label="Upload"
-          loadingLabel="Uploading..."
+          :label="$t('card.routingUpload.action.upload.label')"
+          :loadingLabel="$t('card.routingUpload.action.upload.progress')"
           :disabled="!path"
-          disabledLabel="Please, choose directory first"
+          :disabledLabel="
+            $t('card.routingUpload.action.upload.noDirectorySelected')
+          "
           :action="uploadRouting"
           :progress="progress"
         />
         <button v-if="path && !progress" class="btn" @click="reset">
-          Reset
+          {{ $t("card.routingUpload.action.reset.label") }}
         </button>
       </div>
       <div
@@ -92,11 +93,15 @@ export default {
           let totalSizeFormatted = readableBytes(
             files.reduce((prev, v) => prev + v.size, 0)
           );
-          this.tilesInfo = `Found ${files.length} tile(s) with total size of ${totalSizeFormatted}`;
+          this.tilesInfo = this.$i18n.t(
+            "card.routingUpload.action.selectDirectory.foundTiles",
+            { totalFiles: files.length, totalSize: totalSizeFormatted }
+          );
           this.files = files;
         } else {
-          this.error =
-            "No routing tiles (*.gph.lzma) found, select another directory";
+          this.error = this.$i18n.t(
+            "card.routingUpload.action.selectDirectory.noTilesFound"
+          );
           this.$refs.directorySelector.reset();
           this.path = null;
         }
@@ -114,7 +119,9 @@ export default {
           ).toFixed(1);
         })
         .then(() => {
-          this.message = "Routing tiles successfully uploaded";
+          this.message = this.$i18n.t(
+            "card.routingUpload.action.upload.success"
+          );
           this.progress = 0;
 
           setTimeout(() => {

@@ -3,6 +3,8 @@ const { contextBridge, ipcRenderer } = require("electron");
 contextBridge.exposeInMainWorld("electronAPI", {
   log: (level, msg) => ipcRenderer.invoke("log", level, msg),
 
+  onLocaleChange: (callback) => ipcRenderer.on("change-locale", callback),
+
   onBodyCapture: (callback) => ipcRenderer.on("capture-body", callback),
 
   getPath: (name) => ipcRenderer.invoke("getPath", name),

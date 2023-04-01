@@ -19,22 +19,25 @@ export default {
   },
   data() {
     return {
-      currentLabel: this.label,
       path: null,
     };
+  },
+  computed: {
+    currentLabel() {
+      if (this.path) return this.path;
+
+      return this.label;
+    },
   },
   methods: {
     select() {
       this.backend.selectDirectory().then((path) => {
         this.path = path;
 
-        this.currentLabel = path;
-
         this.$emit("selected", path);
       });
     },
     reset() {
-      this.currentLabel = this.label;
       this.path = null;
     },
   },

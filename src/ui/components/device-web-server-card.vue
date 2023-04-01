@@ -1,7 +1,9 @@
 <template>
   <div class="card">
     <div class="flex">
-      <h5 class="flex-shrink-0 card-header">Web Server</h5>
+      <h5 class="flex-shrink-0 card-header">
+        {{ $t("card.webserver.title") }}
+      </h5>
       <div class="flex-grow"></div>
       <refresh-button @click="loadWebServerInfo" />
     </div>
@@ -10,28 +12,28 @@
 
     <div v-else>
       <p class="text-gray-700 text-base mb-4">
-        Start Web Server (to stop use "Restart" or "Reboot"). A running web
-        server will stop the device from shutting down automatically.
+        {{ $t("card.webserver.description") }}
       </p>
 
       <div class="mb-4 font-bold">
         <div v-if="info.running">
-          RUNNING
-          <span class="font-normal" v-if="info.endpoint"
-            >at
-            <a :href="info.endpoint" target="_blank">{{
-              info.endpoint
-            }}</a></span
-          >
+          {{ $t("card.webserver.status.running") }}
+          <span class="font-normal" v-if="info.endpoint">
+            <i18n-t keypath="card.webserver.runningAddress">
+              <a :href="info.endpoint" target="_blank">{{ info.endpoint }}</a>
+            </i18n-t>
+          </span>
         </div>
-        <div v-else>NOT RUNNING</div>
+        <div v-else>
+          {{ $t("card.webserver.status.notRunning") }}
+        </div>
       </div>
       <div>
         <div v-if="info.running"></div>
         <div v-else>
           <action-button
-            label="Start"
-            loading-label="Starting..."
+            :label="$t('card.webserver.action.start.label')"
+            :loading-label="$t('card.webserver.action.start.progress')"
             :action="startWebServer"
           />
         </div>

@@ -1,12 +1,14 @@
 <template>
   <div class="card">
-    <h5 class="card-header">Screenshots</h5>
+    <h5 class="card-header">{{ $t("card.screenshot.title") }}</h5>
     <div class="flex flex-wrap gap-4">
       <div>
-        <p class="text-gray-700 text-base mb-4">Take a screenshot.</p>
+        <p class="text-gray-700 text-base mb-4">
+          {{ $t("card.screenshot.description") }}
+        </p>
         <action-button
-          label="Take screenshot"
-          loadingLabel="Taking..."
+          :label="$t('card.screenshot.action.take.label')"
+          :loadingLabel="$t('card.screenshot.action.take.progress')"
           :action="takeScreenshot"
         />
       </div>

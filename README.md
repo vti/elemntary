@@ -94,6 +94,11 @@ This project is standing on the shoulders of the giants:
 
 [@thoughtgap](https://github.com/thoughtgap) for routing tiles upload
 
+### Translations
+
+- Dutch — [Ebe66](https://github.com/Ebe66)
+- German — [@treee111](https://github.com/treee111)
+
 ## Author
 
 Viacheslav Tykhanovskyi (vti AT uptosmth.com)

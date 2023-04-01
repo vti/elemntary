@@ -25,6 +25,7 @@
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
     "autoprefixer": "^10.4.8",
+    "compare-json": "^0.4.0",
     "core-js": "^3.8.3",
     "electron": "^20.0.3",
     "html-to-image": "^1.10.8",
@@ -45,6 +46,7 @@
     "electron-unhandled": "^4.0.1",
     "extract-zip": "^2.0.1",
     "log4js": "^6.6.1",
+    "vue-i18n": "^9.2.2",
     "walker": "^1.0.8"
   },
   "config": {

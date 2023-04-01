@@ -3,7 +3,7 @@
   <div v-else>
     <div>
       <div class="pl-4 pr-4 pb-4 flex">
-        <span>Devices</span>
+        <span>{{ $t("devices.title") }}</span>
         <div class="flex-grow"></div>
         <refresh-button @click="loadDeviceList" />
       </div>
@@ -52,7 +52,9 @@
               <div>
                 {{ device.model }}<br />
                 {{ device.id }}
-                <div class="bg-yellow-400 rounded-lg px-1">not authorized</div>
+                <div class="bg-yellow-400 rounded-lg px-1 text-center">
+                  {{ $t("devices.notAuthorized") }}
+                </div>
               </div>
             </div>
           </div>
