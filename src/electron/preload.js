@@ -28,7 +28,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
   onRoutingUploaded: (callback) =>
     ipcRenderer.once("routing-uploaded", callback),
   onRoutingUploadedProgress: (callback) =>
-    ipcRenderer.on("Routing-uploaded-progress", callback),
+    ipcRenderer.on("routing-uploaded-progress", callback),
   findRoutingTiles: (path) => ipcRenderer.invoke("findRoutingTiles", path),
   onRoutingTiles: (callback) => ipcRenderer.once("routing-tiles", callback),
 
