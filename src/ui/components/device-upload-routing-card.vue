@@ -1,18 +1,19 @@
 <template>
   <div class="card">
-    <h5 class="card-header">Map Tiles</h5>
+    <h5 class="card-header">Routing Tiles</h5>
     <p class="text-gray-700 text-base mb-4">
-      Upload previously generated map tiles directly to your device. Please
-      choose a directory that contains tiles. Maps are created by using
+      Upload previously generated routing tiles directly to your device. Please
+      choose a directory that contains routing tiles. You can read more on
+      routing tiles in the docs:
       <a
-        href="https://github.com/treee111/wahooMapsCreator"
+        href="https://github.com/treee111/wahooMapsCreator/blob/develop/docs/HOWTO_ADD_ROUTING_TILES_MANUALLY.MD"
         class="underline"
         target="_blank"
-        >wahooMapsCreator</a
+        >docs of wahooMapsCreator</a
       >.
     </p>
 
-    <div class="upload-map">
+    <div class="upload-routing">
       <div>
         <select-directory
           @selected="selected"
@@ -30,7 +31,7 @@
           loadingLabel="Uploading..."
           :disabled="!path"
           disabledLabel="Please, choose directory first"
-          :action="uploadMap"
+          :action="uploadRouting"
           :progress="progress"
         />
         <button v-if="path && !progress" class="btn" @click="reset">
@@ -86,7 +87,7 @@ export default {
         return;
       }
 
-      this.backend.findMapTiles(path).then((files) => {
+      this.backend.findRoutingTiles(path).then((files) => {
         if (files.length > 0) {
           let totalSizeFormatted = readableBytes(
             files.reduce((prev, v) => prev + v.size, 0)
@@ -95,25 +96,25 @@ export default {
           this.files = files;
         } else {
           this.error =
-            "No map tiles found (*.map.lzma), select another directory";
+            "No routing tiles (*.gph.lzma) found, select another directory";
           this.$refs.directorySelector.reset();
           this.path = null;
         }
       });
     },
-    uploadMap() {
+    uploadRouting() {
       this.error = null;
       this.message = null;
 
       return this.backend
-        .uploadMap(this.deviceId, this.files, (progress) => {
+        .uploadRouting(this.deviceId, this.files, (progress) => {
           this.progress = (
             (progress.uploadedFiles / progress.totalFiles) *
             100
           ).toFixed(1);
         })
         .then(() => {
-          this.message = "Map tiles successfully uploaded";
+          this.message = "Routing tiles successfully uploaded";
           this.progress = 0;
 
           setTimeout(() => {
