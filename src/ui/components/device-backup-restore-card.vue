@@ -92,15 +92,12 @@
         <h3 class="text-lg">{{ $t("card.backupAndRestore.restore.title") }}</h3>
 
         <div class="flex flex-wrap gap-2 items-center">
-          <button
-            class="btn text-ellipsis overflow-hidden flex gap-2"
-            @click="selectUploadFile"
-            :title="uploadFile"
-          >
-            <img src="@/ui/assets/icons/feather/file.svg" width="16" />{{
-              uploadFileLabel
-            }}
-          </button>
+          <select-file
+            @selected="uploadFileSelected"
+            :filters="uploadFileFilters"
+            :label="$t('card.backupAndRestore.restore.action.selectFile.label')"
+            ref="fileSelector"
+          />
           <action-button
             :label="$t('card.backupAndRestore.restore.action.upload.label')"
             :loading-label="
@@ -124,6 +121,7 @@
 <script>
 import ActionButton from "./action-button.vue";
 import RefreshButton from "./refresh-button.vue";
+import SelectFile from "@/ui/components/select-file.vue";
 import Spinner from "./spinner.vue";
 
 export default {
@@ -132,6 +130,7 @@ export default {
   components: {
     ActionButton,
     RefreshButton,
+    SelectFile,
     Spinner,
   },
   data() {
@@ -139,6 +138,20 @@ export default {
       systemDownloadDirectory: null,
       downloadDirectory: null,
       uploadFile: null,
+      uploadFileFilters: [
+        {
+          name: this.$i18n.t(
+            "card.backupAndRestore.restore.action.selectFile.filter.zipFiles"
+          ),
+          extensions: ["zip"],
+        },
+        {
+          name: this.$i18n.t(
+            "card.backupAndRestore.restore.action.selectFile.filter.allFiles"
+          ),
+          extensions: ["*"],
+        },
+      ],
       messages: {},
       loading: false,
       info: null,
@@ -155,15 +168,6 @@ export default {
 
       return this.$i18n.t(
         "card.backupAndRestore.backup.action.download.destinationLabel"
-      );
-    },
-    uploadFileLabel() {
-      if (this.uploadFile) {
-        return this.uploadFile;
-      }
-
-      return this.$i18n.t(
-        "card.backupAndRestore.restore.action.selectFile.label"
       );
     },
   },
@@ -184,29 +188,8 @@ export default {
         this.loading = false;
       });
     },
-    selectUploadFile() {
-      this.backend
-        .selectFile({
-          filters: [
-            {
-              name: this.$i18n.t(
-                "card.backupAndRestore.restore.action.selectFile.filter.zipFiles"
-              ),
-              extensions: ["zip"],
-            },
-            {
-              name: this.$i18n.t(
-                "card.backupAndRestore.restore.action.selectFile.filter.allFiles"
-              ),
-              extensions: ["*"],
-            },
-          ],
-        })
-        .then((path) => {
-          if (path) {
-            this.uploadFile = path;
-          }
-        });
+    uploadFileSelected(path) {
+      this.uploadFile = path;
     },
     selectDownloadDirectory() {
       this.backend.selectDirectory().then((path) => {
