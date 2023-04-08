@@ -105,7 +105,7 @@ Viacheslav Tykhanovskyi (vti AT uptosmth.com)
 
 ## Copyright and License
 
-Copyright (C) 2022, Viacheslav Tykhanovskyi
+Copyright (C) 2022-2023, Viacheslav Tykhanovskyi
 
 This program is free software, you can redistribute it and/or modify it under the terms of the GNU GENERAL PUBLIC
 LICENSE v3 or later. See LICENSE file for details.
