@@ -1,7 +1,7 @@
 <template>
   <div class="card">
     <div class="flex">
-      <h5 class="flex-shrink-0 card-header">Hidden Features</h5>
+      <h5 class="flex-shrink-0 card-header">{{ $t("card.features.title") }}</h5>
       <div class="flex-grow"></div>
       <refresh-button @click="loadFeatures" />
     </div>
@@ -10,7 +10,7 @@
 
     <div v-else>
       <p class="text-gray-700 text-base mb-4">
-        Enable or disable some hidden features.
+        {{ $t("card.features.description") }}
       </p>
 
       <div>
@@ -28,8 +28,8 @@
         </div>
         <div class="pt-4">
           <action-button
-            label="Save"
-            loadingLabel="Saving..."
+            :label="$t('card.features.action.save.label')"
+            :loadingLabel="$t('card.features.action.save.progress')"
             :action="saveFeatures"
           />
         </div>

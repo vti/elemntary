@@ -1,19 +1,21 @@
 <template>
   <div class="card">
-    <h5 class="card-header">Themes</h5>
+    <h5 class="card-header">{{ $t("card.themes.title") }}</h5>
     <p class="text-gray-700 text-base mb-4">
-      Upload map themes. Only VTM themes are supported at the moment (<a
-        href="https://github.com/treee111/wahooMapsCreator/tree/develop/device_themes/vtm_theme_poi"
-        target="_blank"
-        >example</a
-      >).
+      <i18n-t keypath="card.themes.description">
+        <a
+          href="https://github.com/treee111/wahooMapsCreator/tree/develop/device_themes/vtm_theme_poi"
+          target="_blank"
+          >{{ $t("card.themes.message.example") }}</a
+        >
+      </i18n-t>
     </p>
 
     <div class="upload-map">
       <div>
         <select-directory
           @selected="selected"
-          label="Choose directory"
+          :label="$t('card.themes.action.selectDirectory.label')"
           ref="directorySelector"
         />
         <div v-if="themeInfo" class="text-xs p-1 mt-2 rounded-md">
@@ -23,13 +25,15 @@
 
       <div class="pt-4 flex gap-2">
         <action-button
-          label="Upload"
-          loadingLabel="Uploading..."
+          :label="$t('card.themes.action.upload.label')"
+          :loadingLabel="$t('card.themes.action.upload.progress')"
           :disabled="!path"
-          disabledLabel="Please, choose directory first"
+          :disabledLabel="$t('card.themes.action.upload.noDirectorySelected')"
           :action="uploadTheme"
         />
-        <button v-if="path" class="btn" @click="reset">Reset</button>
+        <button v-if="path" class="btn" @click="reset">
+          {{ $t("card.themes.action.reset.label") }}
+        </button>
       </div>
       <div
         v-if="message"
@@ -94,16 +98,22 @@ export default {
           );
 
           if (themes === 1 && colors <= 1) {
-            this.themeInfo = `Found ${files.length} file(s): ${themes} theme(s) ${colors} color(s) ${icons} icons(s)`;
+            this.themeInfo = this.$i18n.t(
+              "card.themes.action.selectDirectory.foundThemeFiles",
+              { totalFiles: files.length }
+            );
             this.files = files;
           } else {
-            this.error =
-              "Theme should contain: vtm-elemnt.xml and optional COLORS.html and .svg files, select another directory";
+            this.error = this.$i18n.t(
+              "card.themes.action.selectDirectory.noThemeFilesFound"
+            );
             this.$refs.directorySelector.reset();
             this.path = null;
           }
         } else {
-          this.error = "No theme files found, select another directory";
+          this.error = this.$i18n.t(
+            "card.themes.action.selectDirectory.noFilesFound"
+          );
           this.$refs.directorySelector.reset();
           this.path = null;
         }
@@ -116,7 +126,7 @@ export default {
       return this.backend
         .uploadTheme(this.deviceId, this.files)
         .then(() => {
-          this.message = "Theme successfully uploaded";
+          this.message = this.$i18n.t("card.themes.action.upload.sucess");
 
           setTimeout(() => {
             this.message = null;

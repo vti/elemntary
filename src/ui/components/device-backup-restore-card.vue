@@ -1,7 +1,9 @@
 <template>
   <div class="card">
     <div class="flex">
-      <h2 class="flex-shrink-0 card-header">Backup / Restore</h2>
+      <h2 class="flex-shrink-0 card-header">
+        {{ $t("card.backupAndRestore.title") }}
+      </h2>
       <div class="flex-grow"></div>
       <refresh-button @click="getBackupInfo" />
     </div>
@@ -10,22 +12,30 @@
 
     <div v-else class="space-y-4">
       <p class="text-gray-700 text-base mb-4">
-        Backup/Restore device configuration.
+        {{ $t("card.backupAndRestore.description") }}
       </p>
 
       <div>
-        <h3 class="text-lg">Backup</h3>
+        <h3 class="text-lg">{{ $t("card.backupAndRestore.backup.title") }}</h3>
         <div v-if="info.available">
-          <p class="mb-4">Backup is available on the device.</p>
+          <p class="mb-4">
+            {{ $t("card.backupAndRestore.backup.available.description") }}
+          </p>
           <div class="space-y-4">
             <div class="space-y-4">
               <div class="flex flex-wrap gap-2 items-center">
                 <action-button
-                  label="Download"
-                  loading-label="Downloading..."
+                  :label="
+                    $t('card.backupAndRestore.backup.action.download.label')
+                  "
+                  :loading-label="
+                    $t('card.backupAndRestore.backup.action.download.progress')
+                  "
                   :action="downloadBackup"
                 />
-                to
+                {{
+                  $t("card.backupAndRestore.backup.action.download.message.to")
+                }}
                 <button
                   class="btn text-ellipsis overflow-hidden flex gap-2"
                   @click="selectDownloadDirectory"
@@ -38,8 +48,7 @@
                 </button>
               </div>
               <div class="text-xs">
-                NOTE: If the destination file already exists, it will be
-                replaced
+                {{ $t("card.backupAndRestore.backup.action.download.note") }}
               </div>
               <div
                 v-if="messages.downloadResult"
@@ -50,12 +59,15 @@
             </div>
             <div>
               <p class="mb-4">
-                Delete current backup from the device (local files are not
-                removed).
+                {{
+                  $t("card.backupAndRestore.backup.action.delete.description")
+                }}
               </p>
               <action-button
-                label="Delete"
-                loading-label="Deleting..."
+                :label="$t('card.backupAndRestore.backup.action.delete.label')"
+                :loading-label="
+                  $t('card.backupAndRestore.backup.action.delete.progress')
+                "
                 :action="deleteBackup"
                 :danger="true"
               />
@@ -64,34 +76,33 @@
         </div>
         <div v-else>
           <p class="mb-4">
-            No backup is available, create one. It could take a minute or two,
-            if that doesn't happen try restarting the Wahoo Application from the
-            System section below.
+            {{ $t("card.backupAndRestore.backup.notAvailable.description") }}
           </p>
           <action-button
-            label="Backup"
-            loading-label="Backing up..."
+            :label="$t('card.backupAndRestore.backup.action.backup.label')"
+            :loading-label="
+              $t('card.backupAndRestore.backup.action.backup.progress')
+            "
             :action="backup"
           />
         </div>
       </div>
 
       <div>
-        <h3 class="text-lg">Restore</h3>
+        <h3 class="text-lg">{{ $t("card.backupAndRestore.restore.title") }}</h3>
 
         <div class="flex flex-wrap gap-2 items-center">
-          <button
-            class="btn text-ellipsis overflow-hidden flex gap-2"
-            @click="selectUploadFile"
-            :title="uploadFile"
-          >
-            <img src="@/ui/assets/icons/feather/file.svg" width="16" />{{
-              uploadFileLabel
-            }}
-          </button>
+          <select-file
+            @selected="uploadFileSelected"
+            :filters="uploadFileFilters"
+            :label="$t('card.backupAndRestore.restore.action.selectFile.label')"
+            ref="fileSelector"
+          />
           <action-button
-            label="Upload"
-            loading-label="Uploading..."
+            :label="$t('card.backupAndRestore.restore.action.upload.label')"
+            :loading-label="
+              $t('card.backupAndRestore.restore.action.upload.progress')
+            "
             :action="uploadBackup"
             :disabled="!uploadFile"
           />
@@ -110,6 +121,7 @@
 <script>
 import ActionButton from "./action-button.vue";
 import RefreshButton from "./refresh-button.vue";
+import SelectFile from "@/ui/components/select-file.vue";
 import Spinner from "./spinner.vue";
 
 export default {
@@ -118,23 +130,52 @@ export default {
   components: {
     ActionButton,
     RefreshButton,
+    SelectFile,
     Spinner,
   },
   data() {
     return {
+      systemDownloadDirectory: null,
       downloadDirectory: null,
-      downloadDirectoryLabel: "Downloads",
       uploadFile: null,
-      uploadFileLabel: "Choose file",
+      uploadFileFilters: [
+        {
+          name: this.$i18n.t(
+            "card.backupAndRestore.restore.action.selectFile.filter.zipFiles"
+          ),
+          extensions: ["zip"],
+        },
+        {
+          name: this.$i18n.t(
+            "card.backupAndRestore.restore.action.selectFile.filter.allFiles"
+          ),
+          extensions: ["*"],
+        },
+      ],
       messages: {},
       loading: false,
       info: null,
     };
   },
+  computed: {
+    downloadDirectoryLabel() {
+      if (
+        this.downloadDirectory &&
+        this.downloadDirectory != this.systemDownloadDirectory
+      ) {
+        return this.downloadDirectory;
+      }
+
+      return this.$i18n.t(
+        "card.backupAndRestore.backup.action.download.destinationLabel"
+      );
+    },
+  },
   created() {
     this.getBackupInfo();
 
     this.backend.getPath("downloads").then((path) => {
+      this.systemDownloadDirectory = path;
       this.downloadDirectory = path;
     });
   },
@@ -147,26 +188,13 @@ export default {
         this.loading = false;
       });
     },
-    selectUploadFile() {
-      this.backend
-        .selectFile({
-          filters: [
-            { name: "Zip Files", extensions: ["zip"] },
-            { name: "All Files", extensions: ["*"] },
-          ],
-        })
-        .then((path) => {
-          if (path) {
-            this.uploadFile = path;
-            this.uploadFileLabel = path;
-          }
-        });
+    uploadFileSelected(path) {
+      this.uploadFile = path;
     },
     selectDownloadDirectory() {
       this.backend.selectDirectory().then((path) => {
         if (path && this.downloadDirectory !== path) {
           this.downloadDirectory = path;
-          this.downloadDirectoryLabel = this.downloadDirectory;
         }
       });
     },
@@ -179,19 +207,25 @@ export default {
       return this.backend
         .downloadBackup(this.deviceId, this.downloadDirectory)
         .then((path) => {
-          this.messages.downloadResult = `Backup downloaded to: ${path}`;
+          this.messages.downloadResult = this.$i18n.t(
+            "card.backupAndRestore.backup.action.download.downloadedTo",
+            { path: path }
+          );
         });
     },
     uploadBackup() {
       return this.backend
         .uploadBackup(this.deviceId, this.uploadFile)
         .then(() => {
-          this.messages.uploadResult = `Backup uploaded, you may restart the device now`;
+          this.messages.uploadResult = this.$i18n.t(
+            "card.backupAndRestore.restore.action.upload.success"
+          );
           this.uploadFile = null;
-          this.uploadFileLabel = "Choose file";
         })
         .catch(() => {
-          this.messages.uploadResult = `Backup upload failed`;
+          this.messages.uploadResult = this.$i18n.t(
+            "card.backupAndRestore.restore.action.upload.failure"
+          );
         });
     },
     deleteBackup() {

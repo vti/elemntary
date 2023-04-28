@@ -1,6 +1,11 @@
 <template>
   <div>
-    <button class="btn" @click="select" :title="path">
+    <button
+      class="btn text-ellipsis overflow-hidden flex gap-2"
+      @click="select"
+      :title="path"
+    >
+      <img src="@/ui/assets/icons/feather/file.svg" width="16" />
       {{ currentLabel }}
     </button>
   </div>
@@ -12,6 +17,7 @@ import ActionButton from "./action-button.vue";
 export default {
   props: {
     label: { type: String, required: true },
+    filters: { type: Array },
   },
   inject: ["backend"],
   components: {
@@ -31,7 +37,7 @@ export default {
   },
   methods: {
     select() {
-      this.backend.selectDirectory().then((path) => {
+      this.backend.selectFile({ filters: this.filters }).then((path) => {
         this.path = path;
 
         this.$emit("selected", path);

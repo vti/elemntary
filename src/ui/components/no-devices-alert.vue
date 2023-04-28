@@ -7,38 +7,43 @@
         class="pr-4 float-left"
       />
       <div>
-        <h5 class="text-xl font-bold">No usable devices available</h5>
-        <p class="pb-4">
-          Make sure your device is in "Debugging" mode and is connected to your
-          computer via a Data cable (not just a charging one).
-        </p>
+        <h5 class="text-xl font-bold">{{ $t("noDevices.title") }}</h5>
+        <p class="pb-4">{{ $t("noDevices.description") }}</p>
         <ol class="list-decimal list-inside text-sm">
-          <li>turn the device on (do not plug it in yet)</li>
+          <li>{{ $t("deviceAuthorization.step1") }}</li>
           <li>
-            press keys on device
+            {{ $t("deviceAuthorization.step2") }}
             <ul class="pl-4 list-disc list-inside">
               <li>
-                BOLT v1 and ROAM
+                {{ $t("deviceAuthorization.bolt1AndRoam1") }}
                 <ul class="pl-4 list-disc list-inside">
-                  <li>press the power button (you enter the settings menu)</li>
                   <li>
-                    press the power button again (you return to the normal
-                    screen)
+                    {{
+                      $t("deviceAuthorization.instruction.bolt1AndRoam1.step1")
+                    }}
+                  </li>
+                  <li>
+                    {{
+                      $t("deviceAuthorization.instruction.bolt1AndRoam1.step2")
+                    }}
                   </li>
                 </ul>
               </li>
               <li>
-                BOLT v2
+                {{ $t("deviceAuthorization.bolt2AndRoam2") }}
                 <ul class="pl-4 list-disc list-inside">
                   <li>
-                    press the power, up and down buttons at the same time (this
-                    could be a bit tricky)
+                    {{
+                      $t("deviceAuthorization.instruction.bolt2AndRoam2.step1")
+                    }}
                   </li>
                 </ul>
               </li>
             </ul>
           </li>
-          <li>connect the device to your pc</li>
+          <li>
+            {{ $t("deviceAuthorization.step3") }}
+          </li>
         </ol>
       </div>
     </div>

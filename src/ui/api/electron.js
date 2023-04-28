@@ -67,7 +67,7 @@ class ElectronApi {
 
   selectFile(options) {
     return new Promise((resolve, reject) => {
-      window.electronAPI.selectFile(options);
+      window.electronAPI.selectFile(JSON.parse(JSON.stringify(options)));
 
       window.electronAPI.onFileSelected((_event, path) => {
         resolve(path);

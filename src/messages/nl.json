@@ -1,0 +1,229 @@
+{
+  "menu": {
+    "file": {
+      "label": "Bestand",
+      "quit": { "label": "Afsluiten" }
+    },
+    "view": {
+      "label": "Beeld",
+      "reload": { "label": "Ververs" },
+      "forceReload": { "label": "Forceer verversen" },
+      "toggleDevTools": { "label": "Ontwikkelaarsopties aan/uit" },
+      "screenshot": { "label": "Schermafbeelding" },
+      "resetZoom": { "label": "Herstel zoom" },
+      "zoomIn": { "label": "Inzoomen" },
+      "zoomOut": { "label": "Uitzoomen" },
+      "togglefullscreen": { "label": "Volledig scherm aan/uit" }
+    },
+    "language": {
+      "label": "Taal",
+      "selection": { "label": "Nederlands (Dutch)" }
+    },
+    "help": {
+      "label": "Hulp",
+      "about": {
+        "label": "Over"
+      }
+    }
+  },
+  "devices": {
+    "title": "Apparaten",
+    "notAuthorized": "niet geautoriseerd"
+  },
+  "noDevices": {
+    "title": "Geen bruikbaar apparaat gevonden",
+    "description": "Contoleer dat het apparaat in \"Debugging\" mode staat en met de computer verbonden is met een datakabel (geen laadkabel)."
+  },
+  "deviceAuthorization": {
+    "step1": "Zet het apparaat aan(nog niet aansluiten)",
+    "step2": "Druk toetsen op het apparaat",
+    "step3": "Verbind het apparaat met je pc",
+    "bolt1AndRoam1": "BOLT v1 en ROAM",
+    "bolt2AndRoam2": "BOLT v2 en ROAM v2",
+    "instruction": {
+      "bolt1AndRoam1": {
+        "step1": "Druk de aan/uit knop in(je komt in het instellingen menu)",
+        "step2": "Druk nogmaals de aan/uit knop in (je gaat terug naar het startscherm)"
+      },
+      "bolt2AndRoam2": {
+        "step1": "Druk tegelijkertijd de aan/uit knop en de op en neer toetsen in. (kan een beetje lastig zijn)"
+      }
+    }
+  },
+  "card": {
+    "software": {
+      "title": "Software",
+      "version": "Versie",
+      "lastUpdated": "Bijgewerkt op"
+    },
+    "mapUpload": {
+      "title": "Kaart tegels",
+      "description": "Eerder gegenereerde kaarten naar het apparaat verzenden. Selecteer een folder met kaarten. Kaarten worden gemaakt met {0}.",
+      "action": {
+        "selectDirectory": {
+          "label": "Selecteer folder",
+          "foundTiles": "{totalFiles} kaart bestanden gevonden met een totale grote van {totalSize}",
+          "noTilesFound": "Geen kaart bestanden gevonden (*.map.lzma), selecteer andere folder"
+        },
+        "upload": {
+          "label": "Verzenden",
+          "progress": "Verzenden...",
+          "noDirectorySelected": "Selecteer s.v.p. eerst een folder",
+          "success": "Kaart bestanden met succes verzonden"
+        },
+        "reset": {
+          "label": "Herstel"
+        }
+      }
+    },
+    "routingUpload": {
+      "title": "Route tegels",
+      "description": "Verzend eerder gegenereerde route tegels naar het apparaat. Selecteer een folder met route tegels. Je kan in de documentatie {0} meer lezen over route tegels",
+      "action": {
+        "selectDirectory": {
+          "label": "Selecteer folder",
+          "foundTiles": "{totalFiles} tegel(s) gevonden met een totale grote van {totalSize}",
+          "noTilesFound": "Geen route tegels gevonden (*.gph.lzma), selecteer andere folder"
+        },
+        "upload": {
+          "label": "Verzenden",
+          "progress": "Verzenden...",
+          "noDirectorySelected": "Selecteer s.v.p. eerst een folder",
+          "success": "Route tegels met succes verzonden"
+        },
+        "reset": {
+          "label": "Herstel"
+        }
+      }
+    },
+    "themes": {
+      "title": "Thema's",
+      "description": "Verzend kaart thema's. Alleen VTM thema's worden momenteel ondersteund ({0}).",
+      "message": {
+        "example": "voorbeeld"
+      },
+      "action": {
+        "selectDirectory": {
+          "label": "Selecteer folder",
+          "foundThemeFiles": "{totalFiles} thema bestanden gevonden",
+          "noFilesFound": "Geen thema bestanden gevonden, selecteer een andere folder",
+          "noThemeFilesFound": "Thema folder moet de volgende bestanden bevatten: vtm-elemnt.xml en optioneel COLORS.html en .svg bestanden, selecteer andere folder"
+        },
+        "upload": {
+          "label": "Verzenden",
+          "progress": "Verzenden...",
+          "noDirectorySelected": "Kies s.v.p. eerst een folder",
+          "success": "Thema met succes verzonden"
+        },
+        "reset": {
+          "label": "Herstel"
+        }
+      }
+    },
+    "screenshot": {
+      "title": "Schermafbeeldingen",
+      "description": "Maak een schermafbeelding.",
+      "action": {
+        "take": {
+          "label": "Maak een schermafbeelding",
+          "progress": "Word gemaakt..."
+        }
+      }
+    },
+    "features": {
+      "title": "Verborgen opties",
+      "description": "Zet verborgen opties aan of uit.",
+      "action": {
+        "save": {
+          "label": "Opslaan",
+          "progress": "Word opgeslagen..."
+        }
+      }
+    },
+    "webserver": {
+      "title": "Web Server",
+      "description": "Start Web Server (gebruik \"Herstel\" of \"Herstart\" om te stoppen). Een actieve web server voorkomt dat het apparaat automatisch uitschakeld.",
+      "action": {
+        "start": {
+          "label": "Start",
+          "progress": "Word gestart..."
+        }
+      },
+      "status": {
+        "running": "ACTIEF",
+        "notRunning": "NIET ACTIEF"
+      },
+      "runningAddress": "op {0}"
+    },
+    "backupAndRestore": {
+      "title": "Reserve kopie maken / Terugzetten",
+      "description": "Apparaat configuratie opslaan/herstellen.",
+      "backup": {
+        "title": "Instellingen opslaan",
+        "notAvailable": {
+          "description": "Geen herstelbestand beschikbaar, maak er eerst een. Dit kan een minuut of twee duren. Als het niet werkt herstart de  Wahoo applicatie dan vanuit de systeem instellingen hieronder."
+        },
+        "available": {
+          "description": "Herstelbestand op apparaat beschikbaar."
+        },
+        "action": {
+          "backup": {
+            "label": "Herstelbestand",
+            "progress": "Herstelbestand word gemaakt..."
+          },
+          "download": {
+            "label": "Opslaan",
+            "progress": "Word opgeslagen...",
+            "note": "LET OP: Als het doelbestand al bestaat dan word het overschreven",
+            "destinationLabel": "Opslaan in",
+            "downloadedTo": "Herstelbestand opslaan in: {path}",
+            "message": {
+              "to": "naar"
+            }
+          },
+          "delete": {
+            "description": "Actueel herstelbestand op apparaat verwijderen (lokale bestanden worden niet verwijderd).",
+            "label": "Verwijderen",
+            "progress": "Word verwijderd..."
+          }
+        }
+      },
+      "restore": {
+        "title": "Herstel",
+        "action": {
+          "selectFile": {
+            "label": "Selecteer bestand",
+            "filter": {
+              "zipFiles": "Zip bestanden",
+              "allFiles": "Alle bestanden"
+            }
+          },
+          "upload": {
+            "label": "Verzenden",
+            "progress": "Verzenden...",
+            "success": "Herstelbestand verzonden, je kunt het apparaat nu herstarten",
+            "failure": "Verzenden herstelbestand mislukt"
+          }
+        }
+      }
+    },
+    "system": {
+      "title": "Systeem",
+      "description": "Verschillende systeem acties.",
+      "action": {
+        "clearCache": {
+          "label": "Cache legen",
+          "progress": "Cache word geleegd..."
+        },
+        "restartApp": {
+          "label": "Herstart Wahoo applicatie",
+          "progress": "Word herstart..."
+        },
+        "reboot": {
+          "label": "Herstart apparaat",
+          "progress": "Word herstart..."
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,198 @@
+{
+  "menu": {
+    "language": {
+      "label": "Sprache",
+      "selection": { "label": "Deutsch (German)" }
+    }
+  },
+  "devices": {
+    "title": "Geräte"
+  },
+  "noDevices": {
+    "title": "Kein nutzbares Gerät verfügbar",
+    "description": "Stelle sicher, dass dein Gerät im \"Debugging\" Modus ist und mit dem Computer über ein USB Datenkabel verbunden ist (nicht nur ein Ladekabel)."
+  },
+  "deviceAuthorization": {
+    "step1": "schalte das Gerät ein (verbinde es noch nicht)",
+    "step2": "Drücke Tasten auf dem Gerät",
+    "step3": "Verbinde das Gerät mit dem Computer",
+    "bolt1AndRoam1": "BOLT v1 und ROAM",
+    "bolt2AndRoam2": "BOLT v2 und ROAM v2",
+    "instruction": {
+      "bolt1AndRoam1": {
+        "step1": "Drücke die An/Aus Taste (du kommst in das Einstellungen Menü)",
+        "step2": "Drücke die An/Aus Taste erneut (du kommst zum normalen Menü zurück)"
+      },
+      "bolt2AndRoam2": {
+        "step1": "Drücke die An/Aus, Hoch und Runter Taste zur selben Zeit (das kann herausfordernd sein)"
+      }
+    }
+  },
+  "card": {
+    "software": {
+      "title": "Software",
+      "version": "Version",
+      "lastUpdated": "Letztes Update"
+    },
+    "mapUpload": {
+      "title": "Karten Kacheln",
+      "description": "Lade zuvor generierte Karten direkt auf dein Gerät. Bitte wähle ein Verzeichnis, dass die Karten Kacheln enthält. Karten werden mithilfe von {0} generiert.",
+      "action": {
+        "selectDirectory": {
+          "label": "Wähle Verzeichnis",
+          "foundTiles": "{totalFiles} Kachel(n) gefunden mit einer Gesamtgröße von {totalSize}",
+          "noTilesFound": "Keine Karten Kacheln gefunden (*.map.lzma), wähle ein anderes Verzeichnis"
+        },
+        "upload": {
+          "label": "Hochladen",
+          "progress": "Wird hochgeladen...",
+          "noDirectorySelected": "Bitte wähle zuerst ein Verzeichnis",
+          "success": "Karten Kacheln erfolgreich hochgeladen"
+        },
+        "reset": {
+          "label": "Zurücksetzen"
+        }
+      }
+    },
+    "routingUpload": {
+      "title": "Routing Kacheln",
+      "description": "Lade zuvor generierte Routing Kacheln direkt auf dein Gerät. Bitte wähle ein Verzeichnis, dass die Routing Kacheln enthält. Hier kannst du mehr zu Routing Kacheln lesen: {0}.",
+      "action": {
+        "selectDirectory": {
+          "label": "Wähle Verzeichnis",
+          "foundTiles": "{totalFiles} Kachel(n) gefunden mit einer Gesamtgröße von {totalSize}",
+          "noTilesFound": "Keine Routing Kacheln gefunden (*.gph.lzma), wähle ein anderes Verzeichnis"
+        },
+        "upload": {
+          "label": "Hochladen",
+          "progress": "Wird hochgeladen...",
+          "noDirectorySelected": "Bitte wähle zuerst ein Verzeichnis",
+          "success": "Routing Kacheln erfolgreich hochgeladen"
+        },
+        "reset": {
+          "label": "Zurücksetzen"
+        }
+      }
+    },
+    "themes": {
+      "title": "Themes",
+      "description": "Lade map Themes hoch. Nur VTM Themes sind aktuell unterstützt ({0}).",
+      "message": {
+        "example": "Beispiel"
+      },
+      "action": {
+        "selectDirectory": {
+          "label": "Wähle Verzeichnis",
+          "foundThemeFiles": "{totalFiles} Theme Datei(en) gefunden",
+          "noFilesFound": "Keine Theme Dateien gefunden, wähle ein anderes Verzeichnis",
+          "noThemeFilesFound": "Das Theme sollte beinhalten: vtm-elemnt.xml und optional COLORS.html und .svg Dateien, wähle ein anderes Verzeichni"
+        },
+        "upload": {
+          "label": "Hochladen",
+          "progress": "Wird hochgeladen...",
+          "noDirectorySelected": "Bitte wähle zuerst ein Verzeichnis",
+          "success": "Theme erfolgreich hochgeladen"
+        },
+        "reset": {
+          "label": "Zurücksetzen"
+        }
+      }
+    },
+    "screenshot": {
+      "title": "Screenshots",
+      "description": "Mache einen Screenshot.",
+      "action": {
+        "take": {
+          "label": "Mache Screenshot",
+          "progress": "Erstellen..."
+        }
+      }
+    },
+    "features": {
+      "title": "Versteckte Funktionen",
+      "description": "Aktiviere oder Deaktiviere versteckte Funktionen.",
+      "action": {
+        "save": {
+          "label": "Sichern",
+          "progress": "Sichern..."
+        }
+      }
+    },
+    "webserver": {
+      "title": "Web Server",
+      "description": "Starte Web Server (um zu stoppen nutze \"Restart\" oder \"Reboot\"). Ein laufender Web Server lässt das Gerät nicht automatisch herunterfahren.",
+      "action": {
+        "start": {
+          "label": "Start",
+          "progress": "Startet..."
+        }
+      },
+      "status": {
+        "running": "RUNNING",
+        "notRunning": "NOT RUNNING"
+      },
+      "runningAddress": "at {0}"
+    },
+    "backupAndRestore": {
+      "title": "Backup / Wiederherstellen",
+      "description": "Backup/Wiederherstellen Geräte Konfiguration.",
+      "backup": {
+        "title": "Backup",
+        "notAvailable": {
+          "description": "Kein Backup ist verfügbar, erstelle ein Backup. Das kann eine oder zwei Minuten dauern, wenn sich  nichts tut, starte die Wahoo App über die System Rubrik weiter unten."
+        },
+        "available": {
+          "description": "Backup ist verfügbar auf dem Gerät."
+        },
+        "action": {
+          "backup": {
+            "label": "Backup",
+            "progress": "Backing wird erstellt..."
+          },
+          "download": {
+            "label": "Download",
+            "progress": "Downloading...",
+            "note": "HINWEIS: Wenn die Zieldatei bereits existiert wird sie überschrieben",
+            "destinationLabel": "Downloads",
+            "downloadedTo": "Backup heruntergeladen zu: {path}",
+            "message": {
+              "to": "zu"
+            }
+          },
+          "delete": {
+            "description": "Lösche das aktuelle Backup vom Gerät (lokale Dateien werden nicht gelöscht).",
+            "label": "Löschen",
+            "progress": "Löschen..."
+          }
+        }
+      },
+      "restore": {
+        "title": "Wiederherstellen",
+        "action": {
+          "upload": {
+            "label": "Hochladen",
+            "progress": "Wird hochgeladen..."
+          }
+        }
+      }
+    },
+    "system": {
+      "title": "System",
+      "description": "Verschiedene System Maßnahmen.",
+      "action": {
+        "clearCache": {
+          "label": "Cache leeren",
+          "progress": "Cache wird geleert..."
+        },
+        "restartApp": {
+          "label": "Wahoo App neustarten",
+          "progress": "Wird neugestartet..."
+        },
+        "reboot": {
+          "label": "Gerät neustarten",
+          "progress": "Wird neugestartet..."
+        }
+      }
+    }
+  }
+}

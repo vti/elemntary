@@ -1,26 +1,26 @@
 <template>
   <div class="card">
-    <h5 class="card-header">System</h5>
+    <h5 class="card-header">{{ $t("card.system.title") }}</h5>
     <div class="">
-      <p class="text-gray-700 text-base">Various system actions.</p>
+      <p class="text-gray-700 text-base">{{ $t("card.system.description") }}</p>
       <div class="pt-4">
         <action-button
-          label="Clear cache"
-          loadingLabel="Clearing..."
+          :label="$t('card.system.action.clearCache.label')"
+          :loadingLabel="$t('card.system.action.clearCache.progress')"
           :action="clearCache"
         />
       </div>
       <div class="pt-4">
         <action-button
-          label="Restart Wahoo application"
-          loadingLabel="Restarting..."
+          :label="$t('card.system.action.restartApp.label')"
+          :loadingLabel="$t('card.system.action.restartApp.label')"
           :action="restartWahooApplication"
         />
       </div>
       <div class="pt-4">
         <action-button
-          label="Reboot device"
-          loadingLabel="Rebooting..."
+          :label="$t('card.system.action.reboot.label')"
+          :loadingLabel="$t('card.system.action.reboot.progress')"
           :action="rebootDevice"
         />
       </div>

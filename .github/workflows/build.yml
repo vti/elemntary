@@ -15,7 +15,7 @@ jobs:
       - name: get version
         run: |
           VERSION="$(node -p "require('./package.json').version")"
-          echo "::set-output name=VERSION::$VERSION"
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
         id: version
       - uses: actions/upload-artifact@v3
         with:
@@ -37,7 +37,7 @@ jobs:
       - name: get version
         run: |
           VERSION="$(node -p "require('./package.json').version")"
-          echo "::set-output name=VERSION::$VERSION"
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
         id: version
       - uses: actions/upload-artifact@v3
         with:
@@ -59,7 +59,7 @@ jobs:
       - name: get version
         run: |
           $VERSION=(node -p "require('./package.json').version")
-          Write-Output "::set-output name=VERSION::$VERSION"
+          Write-Output "VERSION=$VERSION" | Out-File -FilePath $env:GITHUB_OUTPUT
         id: version
       - uses: actions/upload-artifact@v3
         with:
