@@ -1,7 +1,7 @@
 # Elemntary
 
-Elemntary is a GUI application that allows to control your Wahoo Elemnt computers from a desktop PC providing some
-insights and hidden features.
+Elemntary is a GUI application that allows your to control Wahoo Elemnt bicycle computers from a desktop PC providing
+some insights and hidden features.
 
 ## Screenshot
 
@@ -47,7 +47,7 @@ This is an Electron app, so JavaScript/Node knowledge is required.
 
 ### Environment
 
-You need to have the following software to be installed:
+You need to have the following software installed:
 
 - `node` (>= v16)
 - `yarn` (or use `npm`)
