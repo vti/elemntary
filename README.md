@@ -36,7 +36,7 @@ depends on the model. Follow the instructions:
     - BOLT v1 and ROAM
         - press the power button (you enter the settings menu)
         - press the power button again (you return to the normal screen)
-    - BOLT v2
+    - BOLT v2 and ROAM v2
         - press the power, up and down buttons at the same time (this is a bit hard, but give it several tries if it
           doesn't work)
 3. connect the device to your pc
