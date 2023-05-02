@@ -27,9 +27,20 @@ describe("suite", () => {
     expect(I18n.translate(messages, "de", "greeting")).toEqual("Hallo");
   });
 
+  test("translates compound", () => {
+    expect(I18n.translate(messages, "en-US", "greeting")).toEqual("Hello");
+    expect(I18n.translate(messages, "de-DE", "greeting")).toEqual("Hallo");
+  });
+
   test("deeply nested", () => {
     expect(I18n.translate(messages, "en", "menu.file.quit")).toEqual("Quit");
     expect(I18n.translate(messages, "de", "menu.file.quit")).toEqual("Beenden");
+  });
+
+  test("deeply nested not existing", () => {
+    expect(I18n.translate(messages, "en", "menu.bar.baz")).toEqual(
+      "menu.bar.baz"
+    );
   });
 
   test("falls back when not present", () => {
@@ -38,6 +49,10 @@ describe("suite", () => {
 
     expect(I18n.translate(messages, "en", "menu.file.edit")).toEqual("Edit");
     expect(I18n.translate(messages, "de", "menu.file.edit")).toEqual("Edit");
+  });
+
+  test("falls back when unknown locale", () => {
+    expect(I18n.translate(messages, "xx", "greeting")).toEqual("Hello");
   });
 
   test("handles empty values", () => {

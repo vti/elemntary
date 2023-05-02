@@ -97,6 +97,8 @@ const loadSettings = () => {
     log.info(`Settings: ${JSON.stringify(settings)}`);
   } catch (e) {
     log.error(`Error loading settings: ${e}`);
+
+    settings = {};
   }
 };
 
@@ -119,7 +121,10 @@ const changeLocale = (win, newLocale) => {
   Menu.setApplicationMenu(menu);
 
   menu.getMenuItemById("language").submenu.items.forEach((sm) => {
-    if (sm.id === "language-" + newLocale) {
+    if (
+      sm.id === "language-" + newLocale ||
+      sm.id === "language-" + newLocale.split("-")[0]
+    ) {
       sm.checked = true;
     } else {
       sm.checked = false;

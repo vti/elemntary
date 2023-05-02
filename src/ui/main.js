@@ -52,7 +52,18 @@ if (window.electronAPI) {
   });
 
   window.electronAPI.onLocaleChange(async (event, newLocale) => {
-    const messages = await import(`../messages/${newLocale}.json`);
+    let messages = {};
+
+    let locales = [newLocale, newLocale.split("-")[0], "en"];
+
+    for (var i = 0; i < locales.length; i++) {
+      try {
+        messages = await import(`../messages/${locales[i]}.json`);
+        newLocale = locales[i];
+
+        break;
+      } catch (e) {}
+    }
 
     i18n.global.setLocaleMessage(newLocale, messages);
     i18n.global.locale = newLocale;
