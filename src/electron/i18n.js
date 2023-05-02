@@ -1,4 +1,10 @@
 function translate(messages, locale, messageId) {
+  if (!messages[locale]) {
+    locale = locale.split("-")[0];
+
+    if (!messages[locale]) locale = "en";
+  }
+
   const translated = locate(messages[locale], messageId);
 
   if (translated) return translated;
