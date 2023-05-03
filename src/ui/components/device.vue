@@ -7,6 +7,8 @@
 
         <device-software-card :deviceId="device.id" />
 
+         <device-hardware-card :deviceId="device.id" />
+
         <device-upload-map-card :deviceId="device.id" />
 
         <device-upload-routing-card :deviceId="device.id" />
@@ -29,6 +31,7 @@
 
 <script>
 import DeviceSoftwareCard from "./device-software-card.vue";
+import DeviceHardwareCard from "./device-hardware-card.vue";
 import DeviceUploadMapCard from "./device-upload-map-card.vue";
 import DeviceUploadRoutingCard from "./device-upload-routing-card.vue";
 import DeviceUploadThemeCard from "@/ui/components/device-upload-theme-card.vue";
@@ -43,6 +46,7 @@ export default {
   inject: ["backend"],
   components: {
     DeviceSoftwareCard,
+    DeviceHardwareCard,
     DeviceUploadMapCard,
     DeviceUploadRoutingCard,
     DeviceUploadThemeCard,

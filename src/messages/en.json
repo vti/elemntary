@@ -34,8 +34,8 @@
     "description": "Make sure your device is in \"Debugging\" mode and is connected to your computer via a Data cable (not just a charging one)."
   },
   "deviceAuthorization": {
-    "step1": "turn the device on (do not plug it in yet)",
-    "step2": "press keys on device",
+    "step1": "Turn the device on (do not plug it in yet)",
+    "step2": "Press keys on device",
     "step3": "connect the device to your pc",
     "bolt1AndRoam1": "BOLT v1 and ROAM v1",
     "bolt2AndRoam2": "BOLT v2 and ROAM v2",
@@ -54,6 +54,11 @@
       "title": "Software",
       "version": "Version",
       "lastUpdated": "Last updated"
+    },
+    "hardware": {
+      "title": "Hardware",
+      "cpu": "CPU",
+      "model": "Model"
     },
     "mapUpload": {
       "title": "Map Tiles",
