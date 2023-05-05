@@ -1,20 +1,43 @@
 {
   "menu": {
+    "file": {
+      "label": "Datei",
+      "quit": {
+        "label": "Schließen"
+      }
+    },
+    "view": {
+      "label": "Ansicht",
+      "reload": { "label": "Neu laden" },
+      "forceReload": { "label": "Neu laden erzwingen" },
+      "toggleDevTools": { "label": "Dev Tools ein-/ausschalten" },
+      "screenshot": { "label": "Screenshot" },
+      "resetZoom": { "label": "Zoom zurücksetzen" },
+      "zoomIn": { "label": "Hereinzoomen" },
+      "zoomOut": { "label": "Herauszoomen" },
+      "togglefullscreen": { "label": "Vollbild ein-/ausschalten" }
+    },
     "language": {
       "label": "Sprache",
       "selection": { "label": "Deutsch (German)" }
+    },
+    "help": {
+      "label": "Hilfe",
+      "about": {
+        "label": "Über"
+      }
     }
   },
   "devices": {
-    "title": "Geräte"
+    "title": "Gerät(e)"
   },
   "noDevices": {
     "title": "Kein nutzbares Gerät verfügbar",
     "description": "Stelle sicher, dass dein Gerät im \"Debugging\" Modus ist und mit dem Computer über ein USB Datenkabel verbunden ist (nicht nur ein Ladekabel)."
   },
   "deviceAuthorization": {
-    "step1": "schalte das Gerät ein (verbinde es noch nicht)",
-    "step2": "Drücke Tasten auf dem Gerät",
+    "step1": "Schalte das Gerät ein (verbinde es noch nicht)",
+    "step2": "Drücke Tasten auf dem Gerät (siehe unten)",
     "step3": "Verbinde das Gerät mit dem Computer",
     "bolt1AndRoam1": "BOLT v1 und ROAM",
     "bolt2AndRoam2": "BOLT v2 und ROAM v2",
@@ -24,7 +47,7 @@
         "step2": "Drücke die An/Aus Taste erneut (du kommst zum normalen Menü zurück)"
       },
       "bolt2AndRoam2": {
-        "step1": "Drücke die An/Aus, Hoch und Runter Taste zur selben Zeit (das kann herausfordernd sein)"
+        "step1": "Drücke die An/Aus, Hoch und Runter Taste zur selben Zeit (hier könnten mehrere Versuche erforderlich sein)"
       }
     }
   },
@@ -35,19 +58,19 @@
       "lastUpdated": "Letztes Update"
     },
     "mapUpload": {
-      "title": "Karten Kacheln",
-      "description": "Lade zuvor generierte Karten direkt auf dein Gerät. Bitte wähle ein Verzeichnis, dass die Karten Kacheln enthält. Karten werden mithilfe von {0} generiert.",
+      "title": "Karten Dateien",
+      "description": "Lade zuvor generierte Karten direkt auf dein Gerät. Bitte wähle ein Verzeichnis, dass die Karten Dateien enthält. Karten werden mithilfe von {0} generiert.",
       "action": {
         "selectDirectory": {
           "label": "Wähle Verzeichnis",
-          "foundTiles": "{totalFiles} Kachel(n) gefunden mit einer Gesamtgröße von {totalSize}",
-          "noTilesFound": "Keine Karten Kacheln gefunden (*.map.lzma), wähle ein anderes Verzeichnis"
+          "foundTiles": "{totalFiles} Datei(en) gefunden mit einer Gesamtgröße von {totalSize}",
+          "noTilesFound": "Keine Karten Dateien gefunden (*.map.lzma), wähle ein anderes Verzeichnis"
         },
         "upload": {
           "label": "Hochladen",
           "progress": "Wird hochgeladen...",
           "noDirectorySelected": "Bitte wähle zuerst ein Verzeichnis",
-          "success": "Karten Kacheln erfolgreich hochgeladen"
+          "success": "Karten Dateien erfolgreich hochgeladen"
         },
         "reset": {
           "label": "Zurücksetzen"
@@ -55,19 +78,19 @@
       }
     },
     "routingUpload": {
-      "title": "Routing Kacheln",
-      "description": "Lade zuvor generierte Routing Kacheln direkt auf dein Gerät. Bitte wähle ein Verzeichnis, dass die Routing Kacheln enthält. Hier kannst du mehr zu Routing Kacheln lesen: {0}.",
+      "title": "Routing Dateien",
+      "description": "Lade zuvor generierte Routing Dateien direkt auf dein Gerät. Bitte wähle ein Verzeichnis, dass die Routing Dateien enthält. Hier kannst du mehr zu Routing Dateien lesen: {0}.",
       "action": {
         "selectDirectory": {
           "label": "Wähle Verzeichnis",
-          "foundTiles": "{totalFiles} Kachel(n) gefunden mit einer Gesamtgröße von {totalSize}",
-          "noTilesFound": "Keine Routing Kacheln gefunden (*.gph.lzma), wähle ein anderes Verzeichnis"
+          "foundTiles": "{totalFiles} Datei(en) gefunden mit einer Gesamtgröße von {totalSize}",
+          "noTilesFound": "Keine Routing Dateien gefunden (*.gph.lzma), wähle ein anderes Verzeichnis"
         },
         "upload": {
           "label": "Hochladen",
           "progress": "Wird hochgeladen...",
           "noDirectorySelected": "Bitte wähle zuerst ein Verzeichnis",
-          "success": "Routing Kacheln erfolgreich hochgeladen"
+          "success": "Routing Dateien erfolgreich hochgeladen"
         },
         "reset": {
           "label": "Zurücksetzen"
@@ -76,7 +99,7 @@
     },
     "themes": {
       "title": "Themes",
-      "description": "Lade map Themes hoch. Nur VTM Themes sind aktuell unterstützt ({0}).",
+      "description": "Lade map Themes hoch. Nur VTM Themes werden aktuell unterstützt ({0}).",
       "message": {
         "example": "Beispiel"
       },
@@ -128,8 +151,8 @@
         }
       },
       "status": {
-        "running": "RUNNING",
-        "notRunning": "NOT RUNNING"
+        "running": "LÄUFT",
+        "notRunning": "LÄUFT NICHT"
       },
       "runningAddress": "at {0}"
     },
@@ -139,7 +162,7 @@
       "backup": {
         "title": "Backup",
         "notAvailable": {
-          "description": "Kein Backup ist verfügbar, erstelle ein Backup. Das kann eine oder zwei Minuten dauern, wenn sich  nichts tut, starte die Wahoo App über die System Rubrik weiter unten."
+          "description": "Kein Backup verfügbar, erstelle ein Backup. Dies kann ein oder zwei Minuten dauern, wenn sich  nichts tut, starte die Wahoo App, über die System Rubrik weiter unten, neu."
         },
         "available": {
           "description": "Backup ist verfügbar auf dem Gerät."
@@ -147,16 +170,16 @@
         "action": {
           "backup": {
             "label": "Backup",
-            "progress": "Backing wird erstellt..."
+            "progress": "Backup wird erstellt..."
           },
           "download": {
             "label": "Download",
             "progress": "Downloading...",
             "note": "HINWEIS: Wenn die Zieldatei bereits existiert wird sie überschrieben",
             "destinationLabel": "Downloads",
-            "downloadedTo": "Backup heruntergeladen zu: {path}",
+            "downloadedTo": "Backup heruntergeladen nach: {path}",
             "message": {
-              "to": "zu"
+              "to": "nach"
             }
           },
           "delete": {
@@ -169,9 +192,18 @@
       "restore": {
         "title": "Wiederherstellen",
         "action": {
+          "selectFile": {
+            "label": "Wähle Datei",
+            "filter": {
+              "zipFiles": "Zip Datei(en)",
+              "allFiles": "Alle Datei(en)"
+            }
+          },
           "upload": {
             "label": "Hochladen",
-            "progress": "Wird hochgeladen..."
+            "progress": "Wird hochgeladen...",
+            "success": "Backup hochgeladen, bitte Gerät neu starten",
+            "failure": "Hochladen vom Backup fehlgeschlagen"
           }
         }
       }

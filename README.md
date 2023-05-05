@@ -97,7 +97,7 @@ This project is standing on the shoulders of the giants:
 ### Translations
 
 - Dutch — [Ebe66](https://github.com/Ebe66)
-- German — [@treee111](https://github.com/treee111)
+- German — [@treee111](https://github.com/treee111) & Maolda
 
 ## Author
 
