@@ -459,6 +459,12 @@ app.whenReady().then(() => {
     });
   });
 
+  ipcMain.handle("getHardwareInfo", (_event, deviceId) => {
+    deviceService.getHardwareInfo(deviceId).then((info) => {
+      win.webContents.send("hardware-info", info);
+    });
+  });
+
   ipcMain.handle("clearCache", (_event, deviceId) => {
     deviceService.clearCache(deviceId).then(() => {
       win.webContents.send("cache-cleared");

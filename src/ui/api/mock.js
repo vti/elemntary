@@ -109,6 +109,17 @@ class MockApi {
     });
   }
 
+  loadHardwareInfo(deviceid) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve({
+          cpu: "ARMv7 Processor rev 5 (v7l)",
+          model: "Qualcomm Technologies, Inc APQ8009",
+        });
+      }, this.delay);
+    });
+  }
+
   loadApkInfo(deviceid) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
@@ -120,7 +131,6 @@ class MockApi {
       }, this.delay);
     });
   }
-
   clearCache(deviceid) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
