@@ -441,7 +441,7 @@ app.whenReady().then(() => {
     });
 
     if (promises.length) {
-      Promise.all(promises).then(() => {
+      Promise.allSettled(promises).then(() => {
         win.webContents.send("features-saved");
       });
     }

@@ -270,7 +270,7 @@ class DeviceService {
   }
 
   clearCache(deviceId) {
-    return Promise.all([
+    return Promise.allSettled([
       this.adb.run([
         "-s",
         deviceId,
