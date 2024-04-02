@@ -1,4 +1,4 @@
-class ElectronApi {
+export default class ElectronApi {
   constructor() {
     window.electronAPI.onMapUploadedProgress((_event, progress) => {
       if (this.onMapUploadedProgress) {
@@ -302,4 +302,3 @@ class ElectronApi {
   }
 }
 
-module.exports = ElectronApi;

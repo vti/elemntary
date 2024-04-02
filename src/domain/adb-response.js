@@ -1,4 +1,4 @@
-class AdbResponse {
+export default class AdbResponse {
   parseDevices(data) {
     let devices = data
       .split(/\r?\n/)
@@ -186,5 +186,3 @@ class AdbResponse {
     return [address, port];
   }
 }
-
-module.exports = AdbResponse;

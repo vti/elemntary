@@ -2,43 +2,41 @@
   "name": "elemntary",
   "version": "0.5.7-unstabl-unstablee",
   "description": "Wahoo Missing Configuration GUI App",
-  "main": "src/electron/main.js",
+  "main": ".vite/build/main.js",
   "author": "Viacheslav Tykhanovskyi",
   "license": "GPL-3.0-or-later",
   "scripts": {
-    "start": "vue-cli-service build && cross-env NODE_ENV=development electron-forge start",
+    "start": "cross-env NODE_ENV=development electron-forge start",
     "start-local-server": "cross-env NODE_ENV=development LOCAL_SERVER=http://localhost:8080 electron-forge start",
-    "serve": "yarn run vue-cli-service serve",
-    "serve-mock": "yarn run vue-cli-service serve --mode mock",
-    "package": "vue-cli-service build && electron-forge package",
-    "make": "vue-cli-service build && electron-forge make",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
     "format": "prettier --write '{src,tests}/**/*.{js,jsx,ts,tsx,css,md,json,vue}'",
     "test": "jest"
   },
   "devDependencies": {
-    "@babel/core": "^7.21.4",
-    "@electron-forge/cli": "^6.1.1",
-    "@electron-forge/maker-deb": "^6.1.1",
-    "@electron-forge/maker-rpm": "^6.1.1",
-    "@electron-forge/maker-squirrel": "^6.1.1",
-    "@electron-forge/maker-zip": "^6.1.1",
-    "@vue/cli-plugin-babel": "~5.0.0",
-    "@vue/cli-service": "~5.0.0",
+    "@babel/core": "^7.24.3",
+    "@babel/preset-env": "^7.24.3",
+    "@electron-forge/cli": "^7.3.1",
+    "@electron-forge/maker-deb": "^7.3.1",
+    "@electron-forge/maker-rpm": "^7.3.1",
+    "@electron-forge/maker-squirrel": "^7.3.1",
+    "@electron-forge/maker-zip": "^7.3.1",
+    "@electron-forge/plugin-auto-unpack-natives": "^7.3.1",
+    "@electron-forge/plugin-fuses": "^7.2.0",
+    "@electron-forge/plugin-vite": "^7.3.1",
+    "@electron/fuses": "^1.7.0",
+    "@vitejs/plugin-vue": "^5.0.4",
     "autoprefixer": "^10.4.14",
+    "babel-jest": "^29.7.0",
     "compare-json": "^0.4.0",
-    "core-js": "^3.30.0",
-    "electron": "^24.0.0",
+    "electron": "29.1.6",
     "html-to-image": "^1.11.11",
-    "imports-loader": "^4.0.1",
-    "jest": "^29.5.0",
+    "jest": "^29.7.0",
     "mitt": "^3.0.0",
     "postcss": "^8.4.21",
     "prettier": "^2.8.7",
     "tailwindcss": "^3.3.1",
-    "vue": "^3.2.47",
-    "vue-i18n": "^9.2.2",
-    "webpack": "^5.78.0",
-    "webpack-cli": "^5.0.1"
+    "vite": "^5.0.12"
   },
   "dependencies": {
     "cross-env": "^7.0.3",
@@ -47,27 +45,9 @@
     "electron-unhandled": "^4.0.1",
     "extract-zip": "^2.0.1",
     "log4js": "^6.9.1",
+    "vue": "^3.2.47",
+    "vue-i18n": "^9.10.2",
     "walker": "^1.0.8"
-  },
-  "config": {
-    "forge": {
-      "packagerConfig": {
-        "ignore": [
-          "tests/",
-          "tmp/"
-        ]
-      },
-      "makers": [
-        {
-          "name": "@electron-forge/maker-zip",
-          "platforms": [
-            "linux",
-            "win32",
-            "darwin"
-          ]
-        }
-      ]
-    }
   },
   "browserslist": [
     "> 1%",

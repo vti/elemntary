@@ -1,18 +1,16 @@
-const process = require("process");
-const fs = require("fs");
-const path = require("path");
+import process from "process";
+import path from "path";
 
-const Walker = require("walker");
-const extract = require("extract-zip");
+import Walker from "walker";
 
-const AdbWrapper = require("./adb-wrapper.js");
-const AdbResponse = require("./adb-response.js");
-const Feature = require("./feature.js");
-const Features = require("./features.js");
+import AdbWrapper from "./adb-wrapper.js";
+import AdbResponse from "./adb-response.js";
+import Feature from "./feature.js";
+import Features from "./features.js";
 
 const BACKUP_FILE = "elemnt_config.zip";
 
-class DeviceService {
+export default class DeviceService {
   constructor(options) {
     this.adb = options.adbWrapper || new AdbWrapper();
   }
@@ -500,5 +498,3 @@ class DeviceService {
       });
   }
 }
-
-module.exports = DeviceService;

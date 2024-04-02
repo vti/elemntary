@@ -1,4 +1,4 @@
-const AdbWrapper = require("../../src/domain/adb-wrapper.js");
+import AdbWrapper from "../../src/domain/adb-wrapper.js";
 
 describe("suite", () => {
   test("successfully executes", async () => {

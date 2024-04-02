@@ -1,29 +1,28 @@
-const path = require("path");
-const log4js = require("log4js");
-const unhandled = require("electron-unhandled");
+import path from "path";
+import log4js from "log4js";
+import unhandled from "electron-unhandled";
 
-const {
+import {
   app,
   Menu,
-  MenuItem,
   BrowserWindow,
   ipcMain,
   dialog,
-} = require("electron");
+} from "electron";
 
 if (app.getGPUFeatureStatus().gpu_compositing.includes("disabled")) {
   app.disableHardwareAcceleration();
 }
 
-const contextMenu = require("electron-context-menu");
+import contextMenu from "electron-context-menu";
 
-const AdbWrapper = require("../domain/adb-wrapper.js");
-const DeviceService = require("../domain/device-service.js");
-const Resources = require("./resources.js");
-const i18n = require("./i18n.js");
+import AdbWrapper from "src/domain/adb-wrapper.js";
+import DeviceService from "src/domain/device-service.js";
+import {resolveResources} from "./resources.js";
+import {translate} from "./i18n.js";
 
 // Stop the app launching multiple times during install on Windows
-if (require("electron-squirrel-startup")) return app.quit();
+if (require("electron-squirrel-startup")) app.quit();
 
 contextMenu({ showSaveImageAs: true });
 
@@ -69,7 +68,7 @@ const setupLogger = () => {
 const loadI18n = () => {
   const fs = require("fs");
   const path = require("path");
-  const files = fs.readdirSync(Resources.resolve("src", "messages"));
+  const files = fs.readdirSync(resolveResources("src", "messages"));
 
   var messages = {};
 
@@ -79,7 +78,7 @@ const loadI18n = () => {
       let lang = f.replace(/\.json$/, "");
 
       messages[lang] = JSON.parse(
-        fs.readFileSync(Resources.resolve("src", "messages", f))
+        fs.readFileSync(resolveResources("src", "messages", f))
       );
     });
 
@@ -153,8 +152,8 @@ const buildMenuTemplate = (messages, locale) => {
   locales.sort();
   locales.unshift("en");
 
-  const translate = (locale, messageId) => {
-    return i18n.translate(messages, locale, messageId);
+  const translateLabel = (locale, messageId) => {
+    return translate(messages, locale, messageId);
   };
 
   const template = [
@@ -179,57 +178,57 @@ const buildMenuTemplate = (messages, locale) => {
       : []),
     // { role: 'fileMenu' }
     {
-      label: translate(locale, "menu.file.label"),
+      label: translateLabel(locale, "menu.file.label"),
       submenu: [
         isMac
           ? { role: "close" }
-          : { label: translate(locale, "menu.file.quit.label"), role: "quit" },
+          : { label: translateLabel(locale, "menu.file.quit.label"), role: "quit" },
       ],
     },
     // { role: 'viewMenu' }
     {
-      label: translate(locale, "menu.view.label"),
+      label: translateLabel(locale, "menu.view.label"),
       submenu: [
-        { label: translate(locale, "menu.view.reload.label"), role: "reload" },
+        { label: translateLabel(locale, "menu.view.reload.label"), role: "reload" },
         {
-          label: translate(locale, "menu.view.forceReload.label"),
+          label: translateLabel(locale, "menu.view.forceReload.label"),
           role: "forceReload",
         },
         {
-          label: translate(locale, "menu.view.toggleDevTools.label"),
+          label: translateLabel(locale, "menu.view.toggleDevTools.label"),
           role: "toggleDevTools",
         },
         {
-          label: translate(locale, "menu.view.screenshot.label"),
+          label: translateLabel(locale, "menu.view.screenshot.label"),
           click: (e) => {
             win.webContents.send("capture-body");
           },
         },
         { type: "separator" },
         {
-          label: translate(locale, "menu.view.resetZoom.label"),
+          label: translateLabel(locale, "menu.view.resetZoom.label"),
           role: "resetZoom",
         },
-        { label: translate(locale, "menu.view.zoomIn.label"), role: "zoomIn" },
+        { label: translateLabel(locale, "menu.view.zoomIn.label"), role: "zoomIn" },
         {
-          label: translate(locale, "menu.view.zoomOut.label"),
+          label: translateLabel(locale, "menu.view.zoomOut.label"),
           role: "zoomOut",
         },
         { type: "separator" },
         {
-          label: translate(locale, "menu.view.togglefullscreen.label"),
+          label: translateLabel(locale, "menu.view.togglefullscreen.label"),
           role: "togglefullscreen",
         },
       ],
     },
     {
       id: "language",
-      label: translate(locale, "menu.language.label"),
+      label: translateLabel(locale, "menu.language.label"),
       submenu: locales.map((locale) => {
         return {
           id: "language-" + locale,
           type: "checkbox",
-          label: translate(locale, "menu.language.selection.label"),
+          label: translateLabel(locale, "menu.language.selection.label"),
           click: (e) => {
             changeLocale(win, locale);
 
@@ -239,11 +238,11 @@ const buildMenuTemplate = (messages, locale) => {
       }),
     },
     {
-      label: translate(locale, "menu.help.label"),
+      label: translateLabel(locale, "menu.help.label"),
       role: "help",
       submenu: [
         {
-          label: translate(locale, "menu.help.about.label"),
+          label: translateLabel(locale, "menu.help.about.label"),
           click: async () => {
             const { shell } = require("electron");
             await shell.openExternal("https://github.com/vti/elemntary");
@@ -270,10 +269,10 @@ const createWindow = () => {
   const menu = Menu.buildFromTemplate(buildMenuTemplate(messages, "en"));
   Menu.setApplicationMenu(menu);
 
-  if (process.env.LOCAL_SERVER) {
-    win.loadURL(process.env.LOCAL_SERVER);
+  if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
+    win.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
   } else {
-    win.loadFile("./dist/index.html");
+    win.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
   }
 
   // When UI is ready

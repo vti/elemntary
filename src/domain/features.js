@@ -3,4 +3,4 @@ const Features = {
   MAP_PAN_ZOOM: "cfg_MapPanZoom",
 };
 
-module.exports = Features;
+export default Features;

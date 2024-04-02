@@ -34,8 +34,8 @@ import DeviceUploadRoutingCard from "./device-upload-routing-card.vue";
 import DeviceUploadThemeCard from "@/ui/components/device-upload-theme-card.vue";
 import DeviceScreenshotsCard from "./device-screenshots-card.vue";
 import DeviceFeaturesCard from "./device-features-card.vue";
-import DeviceWebServerCard from "@/ui/components/device-web-server-card";
-import DeviceBackupRestoreCard from "@/ui/components/device-backup-restore-card";
+import DeviceWebServerCard from "@/ui/components/device-web-server-card.vue";
+import DeviceBackupRestoreCard from "@/ui/components/device-backup-restore-card.vue";
 import DeviceSystemCard from "./device-system-card.vue";
 import Spinner from "./spinner.vue";
 

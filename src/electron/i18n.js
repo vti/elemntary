@@ -1,4 +1,4 @@
-function translate(messages, locale, messageId) {
+export function translate(messages, locale, messageId) {
   if (!messages[locale]) {
     locale = locale.split("-")[0];
 
@@ -29,5 +29,3 @@ function locate(root, messageId) {
 
   return undefined;
 }
-
-module.exports = { translate };

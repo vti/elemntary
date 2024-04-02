@@ -1,6 +1,21 @@
-node_modules/
-out/
 tmp/
 dist/
 *swp
 .idea/
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+.DS_Store
+
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# Vite
+.vite/
+
+# Electron-Forge
+out/

@@ -1,6 +1,6 @@
-const path = require("path");
+import path from "path";
 
-function resolve(...fragments) {
+export function resolveResources(...fragments) {
   const mode = process.env.NODE_ENV || "production";
 
   if (mode === "production" && process.resourcesPath) {
@@ -10,5 +10,3 @@ function resolve(...fragments) {
 
   return path.resolve(...fragments);
 }
-
-module.exports = { resolve };

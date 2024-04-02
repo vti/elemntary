@@ -3,20 +3,19 @@ import { createI18n } from "vue-i18n";
 import App from "./App.vue";
 import mitt from "mitt";
 import "./main.css";
+import ElectronApi from "./api/electron.js";
+import MockApi from "./api/mock.js";
 
 const app = createApp(App);
 
 let backend;
-if (process.env.VUE_APP_BACKEND == "Electron") {
-  const ElectronApi = require("./api/electron.js");
 
+if (import.meta.env.VITE_APP_BACKEND == "Electron") {
   backend = new ElectronApi();
-} else if (process.env.VUE_APP_BACKEND == "Mock") {
-  const MockApi = require("./api/mock.js");
-
+} else if (import.meta.env.VITE_APP_BACKEND == "Mock") {
   backend = new MockApi({ delay: 2000 });
 } else {
-  console.log(`Unknown backend: ${process.env.VUE_APP_BACKEND}`);
+  console.log(`Unknown backend: ${import.meta.env.VITE_APP_BACKEND}`);
 }
 
 app.provide("backend", backend);
@@ -58,7 +57,8 @@ if (window.electronAPI) {
 
     for (var i = 0; i < locales.length; i++) {
       try {
-        messages = await import(`../messages/${locales[i]}.json`);
+        messages = (await import(`../messages/${locales[i]}.json`)).default;
+
         newLocale = locales[i];
 
         break;

@@ -1,4 +1,4 @@
-class MockApi {
+export default class MockApi {
   constructor(options) {
     this.delay = options.delay;
 
@@ -183,5 +183,3 @@ class MockApi {
     });
   }
 }
-
-module.exports = MockApi;

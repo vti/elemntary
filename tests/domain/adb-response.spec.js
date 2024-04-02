@@ -1,4 +1,4 @@
-const AdbResponse = require("../../src/domain/adb-response.js");
+import AdbResponse from "../../src/domain/adb-response.js";
 
 describe("suite", () => {
   test("parses devices list", async () => {

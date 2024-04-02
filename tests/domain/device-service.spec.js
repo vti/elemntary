@@ -1,6 +1,6 @@
-const DeviceService = require("../../src/domain/device-service.js");
-const Feature = require("../../src/domain/feature.js");
-const MockAdbWrapper = require("../lib/mock-adb-wrapper.js");
+import DeviceService from "../../src/domain/device-service.js";
+import Feature from "../../src/domain/feature.js";
+import MockAdbWrapper from "../lib/mock-adb-wrapper.js";
 
 describe("suite", () => {
   test("extracts feature list", async () => {

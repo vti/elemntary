@@ -1,10 +1,10 @@
-const path = require("path");
-const { spawn } = require("child_process");
-const log4js = require("log4js");
+import path from "path";
+import { spawn } from "child_process";
+import log4js from "log4js";
 
 const log = log4js.getLogger("adb");
 
-class AdbWrapper {
+export default class AdbWrapper {
   constructor(options) {
     const mode = process.env.NODE_ENV || "production";
 
@@ -63,5 +63,3 @@ class AdbWrapper {
     });
   }
 }
-
-module.exports = AdbWrapper;

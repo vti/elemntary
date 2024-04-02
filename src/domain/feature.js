@@ -1,4 +1,4 @@
-class Feature {
+export default class Feature {
   constructor(id, name, enabled) {
     this.id = id;
     this.name = name;
@@ -17,5 +17,3 @@ class Feature {
     return this.enabled;
   }
 }
-
-module.exports = Feature;
