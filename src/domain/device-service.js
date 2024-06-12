@@ -99,6 +99,22 @@ class DeviceService {
       .then(({ stdout }) => new AdbResponse().parseApkInfo(stdout.toString()));
   }
 
+  getHardwareInfo(deviceId) {
+    return this.adb
+      .run(
+        [
+          "-s",
+          deviceId,
+          "shell",
+          "cat",
+          "/proc/cpuinfo|grep",
+          "model|sort -u",
+        ],
+        { accumulateStreams: true }
+      )
+      .then(({ stdout }) => new AdbResponse().parseHardwareInfo(stdout.toString()));
+  }
+
   enableFeature(deviceId, feature) {
     return this.adb.run([
       "-s",

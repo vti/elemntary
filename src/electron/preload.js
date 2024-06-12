@@ -55,6 +55,10 @@ contextBridge.exposeInMainWorld("electronAPI", {
   getApkInfo: (deviceId) => ipcRenderer.invoke("getApkInfo", deviceId),
   onApkInfo: (callback) => ipcRenderer.once("apk-info", callback),
 
+
+  getHardwareInfo: (deviceId) => ipcRenderer.invoke("getHardwareInfo", deviceId),
+  onHardwareInfo: (callback) => ipcRenderer.once("hardware-info", callback),
+
   clearCache: (deviceId) => ipcRenderer.invoke("clearCache", deviceId),
   onCacheCleared: (callback) => ipcRenderer.once("cache-cleared", callback),
 

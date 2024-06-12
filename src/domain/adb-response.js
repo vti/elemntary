@@ -1,3 +1,7 @@
+const log4js = require("log4js");
+
+const log = log4js.getLogger("adb");
+
 class AdbResponse {
   parseDevices(data) {
     let devices = data
@@ -26,11 +30,14 @@ class AdbResponse {
           model = $1.replace(/_/, " ");
         });
 
+        log.info(model);
         // Old ELEMNT
         if (model === "ELEMNT" && /product:elemnt_v2/.test(v)) model += " V2";
 
         // Fix versioning
         model = model.replace(/BOLT2/, "BOLT V2");
+        model = model.replace(/ROAM1_1/, "ROAM V1");
+
 
         return {
           id: id,
@@ -83,6 +90,15 @@ class AdbResponse {
     });
 
     return info;
+  }
+
+  parseHardwareInfo(data) {
+       let parts = data.split(":");
+       log.info(data);
+       log.info(parts[1].trim())
+       let info = {};
+       info.model = parts[1].trim()
+       return info;
   }
 
   parseNetstat(data) {

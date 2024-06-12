@@ -191,6 +191,16 @@ class ElectronApi {
     });
   }
 
+  loadHardwareInfo(deviceId) {
+    return new Promise((resolve, reject) => {
+      window.electronAPI.getHardwareInfo(deviceId);
+
+      window.electronAPI.onHardwareInfo((_event, info) => {
+        resolve(info);
+      });
+    });
+  }
+
   clearCache(deviceId) {
     return new Promise((resolve, reject) => {
       window.electronAPI.clearCache(deviceId);

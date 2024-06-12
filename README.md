@@ -33,7 +33,7 @@ depends on the model. Follow the instructions:
 
 1. turn the device on (make sure it's not connected via usb yet)
 2. press keys on device
-    - BOLT v1 and ROAM
+    - BOLT v1 and ROAM v1
         - press the power button (you enter the settings menu)
         - press the power button again (you return to the normal screen)
     - BOLT v2 and ROAM v2
